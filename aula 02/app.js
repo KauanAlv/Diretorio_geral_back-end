@@ -61,7 +61,6 @@
 
 //Não está em maiusculo pois é uma biblioteca que não é minha, se for minha eu posso deixar em maiusculo
 const readline = require("readline") //Import da biblioteca de entrada de dados
-const { isStringObject } = require("util/types")
 
 // Criação do objeto para captar as entradas de dados
 const entradaDeDados = readline.createInterface({
