@@ -32,21 +32,30 @@
 
     Operadores de comparação
 
-        ==  -> Permite a comparação de dois conteúdos
-        !=  -> Permite comparar a diferença de dois conteúdos
-        <   -> Permite validar o valor menor
-        >   -> Permite validar o valor maior
-        <=  -> Permite validar se o valor é menor ou igual
-        >=  -> Permite validar se o valor é maior ou igual
-        === -> Os dois primeiros validam o conteúdo e o último valida a tipagem (com base na lógica E)
-        !== -> Os dois primeiros validam a diferença do conteúdo e o último valida a tipagem (com base na lógica E)
-        ==! -> Permite comparar a igualdade de conteúdos e a diferença de tipagem de dados
+        ==  -> Permite a comparação de dois conteúdos.
+        !=  -> Permite comparar a diferença de dois conteúdos.
+        <   -> Permite validar o valor menor.
+        >   -> Permite validar o valor maior.
+        <=  -> Permite validar se o valor é menor ou igual.
+        >=  -> Permite validar se o valor é maior ou igual.
+        === -> Os dois primeiros validam o conteúdo e o último valida a tipagem (com base na lógica E).
+        !== -> Os dois primeiros validam a diferença do conteúdo e o último valida a tipagem (com base na lógica E).
+        ==! -> Permite comparar a igualdade de conteúdos e a diferença de tipagem de dados.
 
     Operadores lógicos
 
         || / OR  -> Significa "OU"
         && / AND -> Significa "E"
         ! / NOT  -> Significa "NÃO"
+
+    Formas de conversão de tipos de dados
+        paseInt()   -> Permite converter um conteúdo em número do tipo INTEIRO.
+        paseFloar() -> Permite converter um conteúdo em número do tipo DECIMAL.
+        Number()    -> Permite converter um conteúdo para NUMERO, podendo ser inteiro ou decimal.
+        String()    -> Permite converter um conteúdo em STRING.
+        Boolean()   -> Permite converter um conteúdo para BOOLEANO (true ou false).
+
+        typeof()    -> Retorna o tipo de dados de uma variável (String, Number, Boolean ou Object).
 
 */
 
@@ -95,6 +104,24 @@ entradaDeDados.question("Digite o nome do aluno: ", function(nome){
                     //Caso seja letra ele retorna true, caso seja número ele retorna false
                     }else if(isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log("ERRO: Somente números são permitidos na entrada das notas")
+
+                    //Cálculo da média
+                    }else{
+                        let media = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4)) / 4
+
+                        //Validação do status do aluno
+                        let status
+                        if(media >= 70.00){
+                            status = "Aprovado"
+                        }else if(media < 50.00){
+                            status = "Reprovado"
+                        }else{
+                            status = "Recuperação"
+                        }
+
+                        //Exibir boletim do aluno
+                        //toFixed() -> É um método que permite fixar a quantidade de casas decimais
+                        console.log(`\nNOME: ${nomeAluno} \nMÉDIA FINAL: ${media.toFixed(2)} \nSTATUS DE APROVAÇÃO: ${status}`)
                     }
                 }) //Fecha nota 4
             }) //Fecha nota 3
