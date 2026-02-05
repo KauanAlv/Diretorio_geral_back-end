@@ -13,43 +13,73 @@ const entradaDeDados = readline.createInterface({
 })
 
 //ENTRADA DE DADOS
-entradaDeDados.question("Digite o nome do cliente: ", function(nomeCliente){
+entradaDeDados.question("Digite o nome do cliente: ", function (nomeCliente) {
     let nome = nomeCliente
 
-    entradaDeDados.question("Digite o nome do produto: ", function(nomeProduto){
-        let produto = nomeProduto
+    if (nome == "" || !isNaN(nome)) {
+        console.log("ERRO: O CAMPO NOME NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+    } else {
+        entradaDeDados.question("Digite o nome do produto: ", function (nomeProduto) {
+            let produto = nomeProduto
 
-        entradaDeDados.question("Insira o valor da compra: ", function(valorCompra){
-            let compra = Number(valorCompra)
+            if (produto == "" || !isNaN(produto)) {
+                console.log("ERRO: O CAMPO PRODUTO NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+            } else {
+                entradaDeDados.question("Insira o valor da compra: ", function (valorCompra) {
+                    let compra = (Number(valorCompra)).toFixed(2)
 
-            entradaDeDados.question("Insira a taxa de juros sem %: ", function(taxaJuros){
-                let juros = Number(taxaJuros)
+                    if (compra == "" || isNaN(compra)) {
+                        console.log("ERRO: O CAMPO VALOR DA COMPRA NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                    } else {
+                        entradaDeDados.question("Insira a taxa de juros sem %: ", function (taxaJuros) {
+                            let juros = Number(taxaJuros)
+                            let jurosDecimal = juros / 100
 
-                entradaDeDados.question("Insira quantas vezes o produto foi parcelado: ", function(vezesPagamento){
-                    let vezes = Number(vezesPagamento)
+                            if (juros == "" || isNaN(juros)) {
+                                console.log("ERRO: O CAMPO TAXA DE JUROS NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                            } else {
+                                entradaDeDados.question("Insira quantas vezes o produto foi parcelado: ", function (parcelasProduto) {
+                                    let parcelas = Number(parcelasProduto)
 
-                    entradaDeDados.question("O valor inserido foi em anos ou meses? (digite 1 para anos ou 2 para meses): ", function(tempoInformado){
-                        let tempo = Number(tempoInformado)
+                                    if (parcelas == "" || isNaN(parcelas)) {
+                                        console.log("ERRO: O CAMPO DE PARCELAS NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                                    } else {
+                                        entradaDeDados.question("O valor inserido foi em anos ou meses? (digite 1 para anos ou 2 para meses): ", function (tempoInformado) {
+                                            let tempo = Number(tempoInformado)
 
-                    
-                        //VALIDAÇÃO DOS CAMPOS VAZIOS
-                        if(nome == "" || produto == "" || compra == "" || juros == "" || vezes == "" || tempo == ""){
-                            console.log("ERRO: EXISTEM CAMPOS OBRIGATÓRIOS QUE NÂO FORAM PREENCHIDOS!!!")
+                                            if (tempo == "" || isNaN(tempo) || tempo < 1 || tempo > 2) {
+                                                console.log("ERRO: O CAMPO DE ANOS OU MESES NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                                            } else {
 
-                        //VALIDAÇÃO DE NÚMEROS EM CAMPOS DE TEXTO
-                        }else if(!isNaN(nome) || !isNaN(produto)){
-                            console.log("ERRO: SOMENTE TEXTO É PERMITIDO NOS CAMPOS DE NOME")
+                                                let parcelamentoFinal
+                                                if (tempo == 1) {
+                                                    parcelamentoFinal = parcelas * 12
+                                                } else if (tempo == 2) {
+                                                    parcelamentoFinal = parcelas
+                                                }
 
-                        //VALIDAÇÃO DE TEXTO EM CAMPOS DE NÚMEROS
-                        }else if(isNaN(compra) || isNaN(juros) || isNaN(vezes) || isNaN(tempo)){
-                            console.log("ERRO: SOMENTE NÚMEROS SÂO PERMITIDOS NOS CAMPOS DE VALORES")
-                        }else if(tempo == "1"){
-                            tempo * 12
-                            console.log(tempo)
-                        }
-                    })
+                                                let montante
+                                                let valorDiferença
+
+                                                montante = (compra * (1 + jurosDecimal) ** parcelamentoFinal).toFixed(2)
+                                                valorDiferença = (montante - compra).toFixed(2)
+
+                                                console.log("\n******************* [VIVA MODA] *******************\n")
+                                                console.log(`Muito obrigado por realizar a sua compra conosco Sr(a) ${nome}`)
+                                                console.log(`A compra do produto ${produto}, tem um valor de R$${compra}`)
+                                                console.log(`A sua compra será parcelada em ${parcelamentoFinal} vezes e o Sr(a) pagará: R$${montante}`)
+                                                console.log(`O acréscimo realizado ao valor de R$${compra} será de R$${valorDiferença}\n`)
+                                                console.log("Muito obrigado por escolher a [VIVA MODA]")
+                                                console.log("***************************************************\n")
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
                 })
-            })
+            }
         })
-    })
+    }
 })
