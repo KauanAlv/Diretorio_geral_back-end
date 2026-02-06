@@ -1,6 +1,6 @@
 /**************************************************************************
  * Objetivo: Projeto para realizar o cálculo do juros compostos de uma
- * empresa especializada na venda de roupas e acessórios
+ * empresa especializada na venda de roupas e acessórios.
  * Autor: Kauan
  * Data: 04/02/2026 (Quarta-feira)
  * Versão: 1.0
@@ -12,12 +12,15 @@ const entradaDeDados = readline.createInterface({
     output: process.stdout
 })
 
+//Variavél que valida se há símbolos e quantidade mínima de caracteres
+const verificadorSimbolo = /^[\p{L} ]{2,}$/u
+
 //Entrada de dados com o nome do cliente
 entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
     let nome = nomeCliente
 
     //Validação de campo vazio ou número em campo somente de texto
-    if (nome == "" || !isNaN(nome)) {
+    if (nome == "" || !isNaN(nome) || !verificadorSimbolo.test(nome)) {
         console.log("ERRO: O CAMPO NOME NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
     } else {
         //Entrada de dados do nome do produto
@@ -25,7 +28,7 @@ entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
             let produto = nomeProduto
 
             //Validação de campo vazio ou número em campo somente de texto
-            if (produto == "" || !isNaN(produto)) {
+            if (produto == "" || !isNaN(produto) || !verificadorSimbolo.test(produto)) {
                 console.log("ERRO: O CAMPO PRODUTO NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
             } else {
                 //Entrada de dados com o valor da compra
@@ -64,6 +67,7 @@ entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
 
                                                 //Se a parcela informada foi em anos, transformará em meses
                                                 let parcelamentoFinal
+                                                
                                                 if (tempo == 1) {
                                                     parcelamentoFinal = parcelas * 12
                                                 } else if (tempo == 2) {
@@ -71,11 +75,8 @@ entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
                                                 }
 
                                                 //Cálculo do juros composto
-                                                let montante
-                                                let valorDiferença
-
-                                                montante = (compra * (1 + juros) ** parcelamentoFinal).toFixed(2)
-                                                valorDiferença = (montante - compra).toFixed(2)
+                                                let montante = (compra * (1 + juros) ** parcelamentoFinal).toFixed(2)
+                                                let valorDiferença = (montante - compra).toFixed(2)
 
                                                 //Relatório Final
                                                 console.log("\n******************* [VIVA MODA] *******************\n")
