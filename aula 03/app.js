@@ -19,7 +19,7 @@ const verificadorSimbolo = /^[\p{L} ]{2,}$/u
 entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
     let nome = nomeCliente
 
-    //Validação de campo vazio ou número em campo somente de texto
+    //Validação de campo vazio, números ou símbolos em campo somente de texto e quantidade mínima de caracteres
     if (nome == "" || !isNaN(nome) || !verificadorSimbolo.test(nome)) {
         console.log("ERRO: O CAMPO NOME NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
     } else {
@@ -27,7 +27,7 @@ entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
         entradaDeDados.question("Digite o nome do produto: ", function (nomeProduto) {
             let produto = nomeProduto
 
-            //Validação de campo vazio ou número em campo somente de texto
+            //Validação de campo vazio, números ou símbolos em campo somente de texto e quantidade mínima de caracteres
             if (produto == "" || !isNaN(produto) || !verificadorSimbolo.test(produto)) {
                 console.log("ERRO: O CAMPO PRODUTO NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
             } else {
@@ -48,26 +48,26 @@ entradaDeDados.question("\nDigite o nome do cliente: ", function (nomeCliente) {
                             if (juros == "" || isNaN(juros)) {
                                 console.log("ERRO: O CAMPO TAXA DE JUROS NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
                             } else {
-                                //Entrada de dados com o total de parcelas
-                                entradaDeDados.question("Insira quantas vezes o produto foi parcelado: ", function (parcelasProduto) {
-                                    let parcelas = Number(parcelasProduto)
+                                //Entrada de dados com o tempo de parcelas, em meses ou anos
+                                entradaDeDados.question("A quantidade de parcelas será em anos ou meses?\n[1]\n[2]\nDigite 1 para anos ou 2 para meses: ", function (tempoInformado) {
+                                    let tempo = Number(tempoInformado)
 
-                                    //Validação de campo vazio ou texto em campo somente de número
-                                    if (parcelas == "" || isNaN(parcelas)) {
-                                        console.log("ERRO: O CAMPO DE PARCELAS NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                                    //Validação de campo vazio, texto em campo somente de número e se o tempo informado foi somente 1 ou 2
+                                    if (tempo == "" || isNaN(tempo) || tempo < 1 || tempo > 2) {
+                                        console.log("ERRO: O CAMPO DE ANOS OU MESES NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
                                     } else {
-                                        //Entrada de dados com o tempo de parcelas informado
-                                        entradaDeDados.question("O valor inserido foi em anos ou meses?\n[digite 1 para anos]\n[digite 2 para meses]\n: ", function (tempoInformado) {
-                                            let tempo = Number(tempoInformado)
+                                        //Entrada de dados com o total de parcelas
+                                        entradaDeDados.question("Insira em quantos anos ou meses o produto foi parcelado: ", function (parcelasProduto) {
+                                            let parcelas = Number(parcelasProduto)
 
-                                            //Validação de campo vazio, texto em campo somente de número e se o tempo informado foi somente 1 ou 2
-                                            if (tempo == "" || isNaN(tempo) || tempo < 1 || tempo > 2) {
-                                                console.log("ERRO: O CAMPO DE ANOS OU MESES NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
+                                            //Validação de campo vazio ou texto em campo somente de número
+                                            if (parcelas == "" || isNaN(parcelas)) {
+                                                console.log("ERRO: O CAMPO DE PARCELAS NÃO FOI PREENCHIDO CORRETAMENTE!!!\n")
                                             } else {
 
                                                 //Se a parcela informada foi em anos, transformará em meses
                                                 let parcelamentoFinal
-                                                
+
                                                 if (tempo == 1) {
                                                     parcelamentoFinal = parcelas * 12
                                                 } else if (tempo == 2) {
