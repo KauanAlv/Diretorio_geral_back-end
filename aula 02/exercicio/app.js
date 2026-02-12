@@ -91,7 +91,7 @@ entradaDeDados.question("Digite o nome do aluno: ", function (nome) {
                     let nota4 = valor4
 
                     let media = calcularMedia(nota1, nota2, nota3, nota4)
-                    let status = verificarStatus(calcularMedia)
+                    let status = verificarStatus(media)
 
                     if (media) {
                         console.log(`\nNOME: ${nomeAluno} \nMÉDIA FINAL: ${media} \nSTATUS DE APROVAÇÃO: ${status}`)
