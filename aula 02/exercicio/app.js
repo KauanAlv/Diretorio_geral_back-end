@@ -90,8 +90,9 @@ entradaDeDados.question("Digite o nome do aluno: ", function (nome) {
                 entradaDeDados.question("Digite a quarta nota: ", function (valor4) {
                     let nota4 = valor4
 
-                    let media = calcularMedia(nota1, nota2, nota3, nota4)
-                    let status = verificarStatus(media)
+                    let public = require("./modulo/calculos")
+                    let media = public.calcularMedia(nomeAluno, nota1, nota2, nota3, nota4)
+                    let status = public.verificarStatus(media)
 
                     if (media) {
                         console.log(`\nNOME: ${nomeAluno} \nMÉDIA FINAL: ${media} \nSTATUS DE APROVAÇÃO: ${status}`)
@@ -100,62 +101,8 @@ entradaDeDados.question("Digite o nome do aluno: ", function (nome) {
                         entradaDeDados.close
                     }
 
-                    //Cálculo da média
-
-                    //let media = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4)) / 4
-
-                    //Validação do status do aluno
-                    // let status
-                    // if(media >= 70.00){
-                    //     status = "Aprovado"
-                    // }else if(media < 50.00){
-                    //     status = "Reprovado"
-                    // }else{
-                    //     status = "Recuperação"
-                    // }
-
-                    //Exibir boletim do aluno
-                    //toFixed() -> É um método que permite fixar a quantidade de casas decimais
-
-
                 }) //Fecha nota 4
             }) //Fecha nota 3
         }) //Fecha nota 2
     }) //Fecha nota 1
 }) //Fecha nome
-
-function calcularMedia(nota1, nota2, nota3, nota4) {
-    let n1 = Number(nota1)
-    let n2 = Number(nota2)
-    let n3 = Number(nota3)
-    let n4 = Number(nota4)
-
-    if (nota1 == "" || nota1 < 0 || nota1 > 100 ||isNaN(nota1) ||
-        nota2 == "" || nota2 < 0 || nota2 > 100 ||isNaN(nota2) ||
-        nota3 == "" || nota3 < 0 || nota3 > 100 ||isNaN(nota3) ||
-        nota4 == "" || nota4 < 0 || nota4 > 100 ||isNaN(nota4)) {
-        return false
-    } else {
-        let media = (n1 + n2 +n3 + n4) / 4
-        return media.toFixed(2)
-    }
-}
-
-function verificarStatus(calcularMedia) {
-    let media = calcularMedia
-    let status
-
-    if (media) {
-        if (media >= 70.00) {
-            status = "Aprovado"
-        } else if (media < 50.00) {
-            status = "Reprovado"
-        } else {
-            status = "Recuperação"
-        }
-
-        return status
-    }else{
-        return false
-    }
-}
