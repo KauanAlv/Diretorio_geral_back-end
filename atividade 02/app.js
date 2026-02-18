@@ -18,10 +18,10 @@ let moduloValidacao = require("./modulo/validacao.js")
 let moduloCalculo = require("./modulo/calculo.js")
 
 entradaDeDados.question("Digite o primeiro número: ", function (numero1) {
-    let primeiroNumero = Number(numero1.replace(/\./g, '').replace(',', '.'))
+    let primeiroNumero = Number(numero1.trim().replace(',', '.'))
 
     entradaDeDados.question("Digite o segundo número: ", function (numero2) {
-        let segundoNumero = Number(numero2.replace(/\./g, '').replace(',', '.'))
+        let segundoNumero = Number(numero2.trim().replace(',', '.'))
 
         entradaDeDados.question("Qual operação vai utilizar?\n[+] Adição\n[-] Subtração\n[*] Multiplicação\n[/] Divisão\nDigite apenas uma: ", function (operacao) {
             let operacaoEscolhida = operacao
@@ -36,8 +36,10 @@ entradaDeDados.question("Digite o primeiro número: ", function (numero1) {
                 console.log("A operação escolhida foi: " + operacaoValidada)
                 console.log("O resultado final foi: " + calculoFinal)
                 console.log("*******************************************\n")
+                entradaDeDados.close()
             } else {
                 console.log("A operação foi definida incorretamente")
+                entradaDeDados.close()
             }
         })
 

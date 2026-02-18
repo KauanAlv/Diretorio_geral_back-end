@@ -13,15 +13,18 @@ function calcularOperacao(n1, n2, operacao) {
     let resultado = validacao.validarNumeros(valor1, valor2)
     let sinal = validacao.validarOperacao(operacao)
 
-
     if (sinal == "+") {
-        return Number(resultado = n1 + n2)
+        return resultado = n1 + n2
     } else if (sinal == "-") {
         return resultado = n1 - n2
     } else if (sinal == "*") {
         return resultado = n1 * n2
     } else if (sinal == "/") {
-        return resultado = n1 / n2
+        if (n2 === 0) {
+            return "Não é possível dividir por 0!!!"
+        } else {
+            return resultado = n1 / n2
+        }
     } else {
         return false
     }
