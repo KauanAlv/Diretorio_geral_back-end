@@ -7,9 +7,20 @@
 //toUpperCase() -> Retorna uma String em MAIÚSCULO
 //toLowerCase() -> Retorna uma String em minúsculo
 
+const validarDados = function (numero1, numero2, operador) {
+    let valor1 = Number(numero1)
+    let valor2 = Number(numero2)
+    let tipoCalculo = String(operador)
+
+    if(numero1 == '' || isNaN(numero1) || numero2 == '' || isNaN(numero2) || operador == ''){
+        return false
+    }else{
+        return true
+    }
+
+}
 
 //Exemplo de função anonima
-
 //Função para calcular as 4 operações matemáticas
 const calcular = function (numero1, numero2, operador) {
 
@@ -32,10 +43,10 @@ const calcular = function (numero1, numero2, operador) {
     // }
 
     switch (operadorMatematico) {
-        case 'SOMAR': resultado = valor1 + valor2; break;
-        case 'SUBTRAIR': resultado = valor1 - valor2; break;
-        case 'MULTIPLICAR': resultado = valor1 * valor2; break;
-        case 'DIVIDIR': resultado = valor1 / valor2; break;
+        case 'SOMAR': resultado = somar(valor1, valor2); break;
+        case 'SUBTRAIR': resultado = subtrair(valor1, valor2); break;
+        case 'MULTIPLICAR': resultado = multiplicar(valor1, valor2); break;
+        case 'DIVIDIR': resultado = dividir(valor1, valor2); break;
     }
 
     //Saída da função
@@ -47,12 +58,17 @@ const calcular = function (numero1, numero2, operador) {
 
 }
 
-//Chamando a função para testar
-let result = calcular(20, 10, 'multiplicar')
-console.log(result)
+//Função baseada em formato de seta (ARROW FUNCTION)
+const somar         = (numero1, numero2) => Number(numero1) + Number(numero2)
+const subtrair      = (numero1, numero2) => Number(numero1) - Number(numero2)
+const multiplicar   = (numero1, numero2) => Number(numero1) * Number(numero2)
+const dividir       = (numero1, numero2) => Number(numero1) / Number(numero2)
 
-// if(result){
-//     console.log(result)
-// }else{
-//     console.log('ERRO')
-// }
+module.exports = {
+    calcular,
+    somar,
+    subtrair,
+    multiplicar,
+    dividir,
+    validarDados
+}
