@@ -7,6 +7,16 @@
 
 const calculosMatematicos = require('../calculo')
 
+const validarNotasEntre = function (nota) {
+    let notaValor = Number(nota)
+
+    if (notaValor >= 0 && notaValor <= 100) {
+        return true
+    } else {
+        return false
+    }
+}
+
 const calcularMedia = function (nota1, nota2, nota3, nota4) {
     let valorNota1 = Number(nota1)
     let valorNota2 = Number(nota2)
@@ -14,7 +24,7 @@ const calcularMedia = function (nota1, nota2, nota3, nota4) {
     let valorNota4 = Number(nota4)
     let media
 
-    media = calculosMatematicos.dividir(calculosMatematicos.somar(calculosMatematicos.somar(valorNota1, valorNota2),calculosMatematicos.somar(valorNota3, valorNota4)), 4)
+    media = Number(calculosMatematicos.dividir(calculosMatematicos.somar(calculosMatematicos.somar(valorNota1, valorNota2), calculosMatematicos.somar(valorNota3, valorNota4)), 4))
 
     if (media) {
         return media.toFixed(2)
@@ -23,6 +33,41 @@ const calcularMedia = function (nota1, nota2, nota3, nota4) {
     }
 }
 
+const calcularStatusMedia = function (statusMedia) {
+    let media = Number(statusMedia)
+    let status
+
+    if (media) {
+        if (media >= 70) {
+            status = 'aprovado'
+        } else if (media <= 50) {
+            status = 'reprovado'
+        } else {
+            status = 'recuperação'
+        }
+        return status
+    } else {
+        return false
+    }
+}
+
+const calcularMediaExame = function (media, notaExame){
+    let valorMedia = Number(media)
+    let ValorRec = Number(notaExame)
+    let mediaFinal
+
+    mediaFinal = calculosMatematicos.dividir(calculosMatematicos.somar(valorMedia, ValorRec), 2)
+
+    if(mediaFinal >= 60){
+        return 'aprovado'
+    }else{
+        return 'reprovado'
+    }
+}
+
 module.exports = {
-    calcularMedia
+    validarNotasEntre,
+    calcularMedia,
+    calcularStatusMedia,
+    calcularMediaExame
 }
