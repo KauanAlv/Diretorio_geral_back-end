@@ -40,10 +40,10 @@ const calcularStatusMedia = function (statusMedia) {
     if (media) {
         if (media >= 70) {
             status = 'aprovado'
-        } else if (media <= 50) {
-            status = 'reprovado'
-        } else {
+        } else if (media >= 50 && media < 70) {
             status = 'recuperação'
+        } else {
+            status = 'reprovado'
         }
         return status
     } else {
