@@ -64,6 +64,10 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
             })
         }
 
+        if (calculadoraEscolhida == 'MÉDIA') {
+            console.log('media')
+        }
+
     } else {
         console.log("Essa calculadora não existe!!!\n")
         entradaDeDados.close()
