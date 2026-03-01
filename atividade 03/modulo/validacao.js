@@ -8,20 +8,22 @@
 const validarEntradaString = function (dado) {
     let dadoInfor = String(dado)
 
-    if (dado.trim() === '' || !isNaN(dado))
+    if (dado === '' || !isNaN(dado)) {
         return false
-    else
+    } else {
         return true
+    }
 
 }
 
 const validarEntradaNumber = function (valor) {
     let valorInfor = Number(valor)
 
-    if(valor.trim() === '' || isNaN(valor))
+    if (valor.trim() === '' || isNaN(valor)) {
         return false
-    else
+    } else {
         return true
+    }
 }
 
 module.exports = {
