@@ -51,23 +51,53 @@ const calcularStatusMedia = function (statusMedia) {
     }
 }
 
-const calcularMediaExame = function (media, notaExame){
+const calcularMediaExame = function (media, notaExame) {
     let valorMedia = Number(media)
     let ValorRec = Number(notaExame)
     let mediaFinal
 
     mediaFinal = calculosMatematicos.dividir(calculosMatematicos.somar(valorMedia, ValorRec), 2)
 
-    if(mediaFinal >= 60){
+    if (mediaFinal >= 60) {
         return 'aprovado'
-    }else{
+    } else {
         return 'reprovado'
     }
+}
+
+const verificarGeneroProf = function (generoProf) {
+    let generoVerificado = String(generoProf).trim().toUpperCase()
+    let sexo = ''
+
+    if (generoVerificado === 'HOMEM' || generoVerificado === 'MASCULINO') {
+        sexo = 'Professor'
+    } else if (generoVerificado === 'MULHER' || generoVerificado === 'FEMININO') {
+        sexo = 'Professora'
+    } else {
+        return false
+    }
+    return sexo
+}
+
+const verificarGeneroAlun = function (generoAlun) {
+    let generoVerificado = String(generoAlun).trim().toUpperCase()
+    let sexo = ''
+
+    if (generoVerificado === 'HOMEM' || generoVerificado === 'MASCULINO') {
+        sexo = 'Aluno'
+    } else if (generoVerificado === 'MULHER' || generoVerificado === 'FEMININO') {
+        sexo = 'Aluna'
+    } else {
+        return false
+    }
+    return sexo
 }
 
 module.exports = {
     validarNotasEntre,
     calcularMedia,
     calcularStatusMedia,
-    calcularMediaExame
+    calcularMediaExame,
+    verificarGeneroProf,
+    verificarGeneroAlun
 }
