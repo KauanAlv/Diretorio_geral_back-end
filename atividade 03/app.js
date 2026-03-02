@@ -129,6 +129,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                                                                                                 console.log(`${generoProfessor}: ${nomeProf}`)
                                                                                                 console.log(`Notas do ${nomeA}: ${valorN1}, ${valorN2}, ${valorN3} e ${valorN4}.`)
                                                                                                 console.log(`Média final: ${mediaFinal}`)
+                                                                                                entradaDeDados.close()
 
                                                                                             } else if (status == 'recuperação') {
                                                                                                 entradaDeDados.question('Informe a nota da recuperação: ', function (notaRecuperacao) {
@@ -138,12 +139,12 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
 
                                                                                                     if (valorRec && tamanhoRec) {
                                                                                                         let mediaRec = media.calcularMediaExame(mediaFinal, notaRec)
-                                                                                                        let statusFinal = media.calcularStatusMedia(mediaRec)
+                                                                                                        let statusFinal = media.calcularMediaExame(mediaRec)
 
                                                                                                         console.log(`\nRelatório ${generoAluno}:`)
                                                                                                         console.log(`\nO ${generoAluno} ${nomeA} foi ${statusFinal} na disciplina ${nomeDisciplina}.`)
                                                                                                         console.log(`Curso: ${nomeCurso}`)
-                                                                                                        console.log(`${generoProfessor} ${nomeProf}`)
+                                                                                                        console.log(`${generoProfessor}: ${nomeProf}`)
                                                                                                         console.log(`Notas do ${nomeA}: ${valorN1}, ${valorN2}, ${valorN3}, ${valorN4} e ${notaRec}.`)
                                                                                                         console.log(`Média final: ${mediaFinal}`)
                                                                                                         console.log(`Média final do exame: ${mediaRec}`)
