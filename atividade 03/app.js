@@ -139,15 +139,15 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
 
                                                                                                     if (valorRec && tamanhoRec) {
                                                                                                         let mediaRec = media.calcularMediaExame(mediaFinal, notaRec)
-                                                                                                        let statusFinal = media.calcularMediaExame(mediaRec)
+                                                                                                        let statusFinal = media.validarStatusExame(mediaRec)
 
                                                                                                         console.log(`\nRelatório ${generoAluno}:`)
                                                                                                         console.log(`\nO ${generoAluno} ${nomeA} foi ${statusFinal} na disciplina ${nomeDisciplina}.`)
-                                                                                                        console.log(`Curso: ${nomeCurso}`)
-                                                                                                        console.log(`${generoProfessor}: ${nomeProf}`)
+                                                                                                        console.log(`Curso: ${nomeCurso}.`)
+                                                                                                        console.log(`${generoProfessor}: ${nomeProf}.`)
                                                                                                         console.log(`Notas do ${nomeA}: ${valorN1}, ${valorN2}, ${valorN3}, ${valorN4} e ${notaRec}.`)
-                                                                                                        console.log(`Média final: ${mediaFinal}`)
-                                                                                                        console.log(`Média final do exame: ${mediaRec}`)
+                                                                                                        console.log(`Média final: ${mediaFinal}.`)
+                                                                                                        console.log(`Média final do exame: ${mediaRec}.\n`)
                                                                                                         entradaDeDados.close()
 
                                                                                                     } else {

@@ -37,18 +37,14 @@ const calcularStatusMedia = function (statusMedia) {
     let media = Number(statusMedia)
     let status
 
-    if (media) {
-        if (media >= 70) {
-            status = 'aprovado'
-        } else if (media >= 50 && media < 70) {
-            status = 'recuperação'
-        } else {
-            status = 'reprovado'
-        }
-        return status
+    if (media >= 70) {
+        status = 'aprovado'
+    } else if (media >= 50 && media < 70) {
+        status = 'recuperação'
     } else {
-        return false
+        status = 'reprovado'
     }
+    return status
 }
 
 const calcularMediaExame = function (media, notaExame) {
@@ -57,12 +53,19 @@ const calcularMediaExame = function (media, notaExame) {
     let mediaFinal
 
     mediaFinal = calculosMatematicos.dividir(calculosMatematicos.somar(valorMedia, ValorRec), 2)
+    return mediaFinal
+}
 
-    if (mediaFinal >= 60) {
-        return 'aprovado'
+const validarStatusExame = function (media) {
+    let mediaRec = Number(media)
+    let status
+
+    if (mediaRec >= 60) {
+        status = 'aprovado'
     } else {
-        return 'reprovado'
+        status = 'reprovado'
     }
+    return status
 }
 
 const verificarGeneroProf = function (generoProf) {
@@ -98,6 +101,7 @@ module.exports = {
     calcularMedia,
     calcularStatusMedia,
     calcularMediaExame,
+    validarStatusExame,
     verificarGeneroProf,
     verificarGeneroAlun
 }
