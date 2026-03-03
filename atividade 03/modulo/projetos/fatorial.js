@@ -6,7 +6,7 @@
  *************************************************************************/
 
 const validarFatorial = function (valorFatorialE) {
-    let valorF = Number(valorFatorial)
+    let valorF = Number(valorFatorialE)
 
     if (valorF <= 0 || valorF == 1) {
         return false
