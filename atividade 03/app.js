@@ -19,9 +19,9 @@ let calculo = require('./modulo/calculo.js')
 let imc = require('./modulo/projetos/imc.js')
 let media = require('./modulo/projetos/media.js')
 // let par_impar = require('./modulo/projetos/par_impar.js')
-// let tabuada = require('./modulo/projetos/tabuada.js')
+let tabuada = require('./modulo/projetos/tabuada.js')
 
-entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, IMC, Media, Par/impar, Tabuada?): ', function (calculadoraInformada) {
+entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, IMC, Média, Par/impar, Tabuada?): ', function (calculadoraInformada) {
     let calculadoraEscolhida = calculadoraInformada.trim().toUpperCase()
     let validarCalculadora = validacao.validarEntradaString(calculadoraEscolhida)
 
@@ -208,6 +208,59 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                 }
             })
         }
+
+        if (calculadoraEscolhida == 'TABUADA') {
+            entradaDeDados.question('\nDigite um valor maior que 1, onde será iniciado a contagem das tabuadas: ', function (valorTabuadaI) {
+                let tabuadaI = valorTabuadaI.replace(',', '.')
+                let tabuadaIniVal = validacao.validarEntradaNumber(tabuadaI)
+                let entradaTabuadaIniVal = tabuada.validarEntradaTabuada(tabuadaI)
+
+                if (tabuadaIniVal && entradaTabuadaIniVal) {
+                    entradaDeDados.question(`Digite um valor maior que ${tabuadaI}, onde será finalizado a contagem das tabuadas: `, function (valorTabuadaF) {
+                        let tabuadaF = valorTabuadaF.replace(',', '.')
+                        let tabuadaFimVal = validacao.validarEntradaNumber(tabuadaF)
+                        let entradaTabuadaFimVal = tabuada.validarEntradaTabuada(tabuadaF)
+
+                        if (tabuadaFimVal && entradaTabuadaFimVal) {
+                            entradaDeDados.question('Digite o valor que deseja iniciar a contagem da tabuada: ', function (contadorInicial) {
+                                let contadorI = contadorInicial.replace(',', '.')
+                                let contadorIniVal = validacao.validarEntradaNumber(contadorI)
+                                let contadorTabuadaVal = tabuada.validarContadorTabuada(contadorI)
+
+                                if (contadorIniVal && contadorTabuadaVal) {
+                                    entradaDeDados.question(`Digite um valor maior que ${contadorI} para finalizar a contagem da tabuada: `, function (contadorFinal) {
+                                        let contadorF = contadorFinal.replace(',', '.')
+                                        let contadorFimVal = validacao.validarEntradaNumber(contadorF)
+                                        let contadorTabuadaFim = tabuada.validarContadorTabuada(contadorF)
+
+                                        if (contadorFimVal && contadorTabuadaFim) {
+                                            let resultado = tabuada.calcularTabuada(tabuadaI, tabuadaF, contadorI, contadorF)
+
+                                            console.log(`A tabuada de número ${tabuadaI} até o número ${tabuadaF} iniciando no ${contadorI} até o ${contadorF}, resultou em:`)
+                                            console.log(resultado)
+                                            entradaDeDados.close()
+                                        } else {
+                                            console.log('O valor para finalizar a contagem das tabuadas foi digitado incorretamente!!!\n')
+                                            entradaDeDados.close()
+                                        }
+                                    })
+                                } else {
+                                    console.log('O valor para iniciar a contagem das tabuadas foi digitado incorretamente!!!\n')
+                                    entradaDeDados.close()
+                                }
+                            })
+                        } else {
+                            console.log('O segundo valor foi digitado incorretamente!!!\n')
+                            entradaDeDados.close()
+                        }
+                    })
+                } else {
+                    console.log('O primeiro valor foi digitado incorretamente!!!\n')
+                    entradaDeDados.close()
+                }
+            })
+        }
+
     } else {
         console.log('Essa calculadora não existe!!!\n')
         entradaDeDados.close()
