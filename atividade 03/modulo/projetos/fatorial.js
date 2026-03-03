@@ -20,7 +20,7 @@ const calcularFatorial = function (valorFatorial) {
 
     for (let numF = valorFat; numF <= valorFatorial; numF++) {
         valorFat *= numF
-    } return valorFat
+    } return valorFat.toFixed(2)
 }
 
 const formatarNumeroFatorial = function (numeroFatorial) {

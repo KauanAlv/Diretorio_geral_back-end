@@ -15,7 +15,7 @@ const entradaDeDados = readline.createInterface({
 let validacao = require('./modulo/validacao.js')
 let calculo = require('./modulo/calculo.js')
 
-// let fatorial = require('./modulo/projetos/fatorial.js')
+let fatorial = require('./modulo/projetos/fatorial.js')
 let imc = require('./modulo/projetos/imc.js')
 let media = require('./modulo/projetos/media.js')
 // let par_impar = require('./modulo/projetos/par_impar.js')
@@ -256,6 +256,26 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                     })
                 } else {
                     console.log('O primeiro valor foi digitado incorretamente!!!\n')
+                    entradaDeDados.close()
+                }
+            })
+        }
+
+        if (calculadoraEscolhida == 'FATORIAL') {
+            entradaDeDados.question('\nDigite o número para ser fatorial maior que 1: ', function (numFatorial) {
+                let numeroFat = numFatorial.replace(/!/g, '')
+                let numeroFatVal1 = validacao.validarEntradaNumber(numeroFat)
+                let numeroFatVal2 = fatorial.validarFatorial(numeroFat)
+                let fatorialMaior = calculo.maior(numeroFat, 1)
+
+                if (numeroFatVal1 && numeroFatVal2 && fatorialMaior) {
+                    let resultadoFinalFat = fatorial.calcularFatorial(numeroFat)
+                    let fatorialExtenso = fatorial.formatarNumeroFatorial(numeroFat)
+
+                    console.log(`\nO resultado fatorial de ${numeroFat} é: ${fatorialExtenso} = ${resultadoFinalFat}\n`)
+                    entradaDeDados.close()
+                } else {
+                    console.log('Número inválido, digite um número inteiro maior do que 0 e 1!!!\n')
                     entradaDeDados.close()
                 }
             })

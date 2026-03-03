@@ -10,11 +10,13 @@ const subtrair      = (numero1, numero2) => Number(numero1) - Number(numero2)
 const multiplicar   = (numero1, numero2) => Number(numero1) * Number(numero2)
 const dividir       = (numero1, numero2) => Number(numero1) / Number(numero2)
 const elevar        = (numero1, numero2) => Number(numero1) ** Number(numero2)
+const maior         = (numero1, numero2) => Number(numero1) > Number(numero2)
 
 module.exports = {
     somar,
     subtrair,
     multiplicar,
     dividir,
-    elevar
+    elevar,
+    maior
 }
