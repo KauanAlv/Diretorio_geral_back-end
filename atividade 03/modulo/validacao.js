@@ -26,7 +26,21 @@ const validarEntradaNumber = function (valor) {
     }
 }
 
+const validarEscolhaCalculadora = function (escolhaCalculadora) {
+    let escolha = String(escolhaCalculadora.toUpperCase())
+    let calculadoraEscolhida = ['PAR/IMPAR', 'IMPAR/PAR', 'IMPAR OU PAR', 'PAR OU IMPAR', 'IMPAR E PAR', 'PAR E IMPAR', 'IMPAR', 'PAR',
+        'PAR/ÍMPAR', 'ÍMPAR/PAR', 'ÍMPAR OU PAR', 'PAR OU ÍMPAR', 'ÍMPAR E PAR', 'PAR E ÍMPAR', 'ÍMPAR',
+        'IMC', 'MÉDIA', 'MEDIA', 'TABUADA', 'FATORIAL']
+
+        if(calculadoraEscolhida.includes(escolha)) {
+            return true
+        } else {
+            return false
+        }
+}
+
 module.exports = {
     validarEntradaString,
-    validarEntradaNumber
+    validarEntradaNumber,
+    validarEscolhaCalculadora
 }

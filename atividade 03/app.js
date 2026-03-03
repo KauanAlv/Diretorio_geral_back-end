@@ -24,11 +24,12 @@ let tabuada = require('./modulo/projetos/tabuada.js')
 entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, IMC, Média, Par/impar, Tabuada?): ', function (calculadoraInformada) {
     let calculadoraEscolhida = calculadoraInformada.trim().toUpperCase()
     let validarCalculadora = validacao.validarEntradaString(calculadoraEscolhida)
+    let validarEscolhaCalculadora = validacao.validarEscolhaCalculadora(calculadoraEscolhida)
 
-    if (calculadoraEscolhida && validarCalculadora) {
+    if (calculadoraEscolhida && validarCalculadora && validarEscolhaCalculadora) {
 
         if (calculadoraEscolhida == 'IMC') {
-            entradaDeDados.question('Digite o peso em kg, somente o número: ', function (peso) {
+            entradaDeDados.question('\nDigite o peso em kg, somente o número: ', function (peso) {
                 let pesoInfor = peso.replace(',', '.')
                 let pesoValidado = validacao.validarEntradaNumber(pesoInfor)
 
@@ -65,7 +66,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
         }
 
         if (calculadoraEscolhida == 'MÉDIA' || calculadoraEscolhida == 'MEDIA') {
-            entradaDeDados.question('Qual o nome do aluno?: ', function (nomeAluno) {
+            entradaDeDados.question('\nQual o nome do aluno?: ', function (nomeAluno) {
                 let nomeA = nomeAluno.trim()
                 let nomeAlunoVal = validacao.validarEntradaString(nomeAluno)
 
