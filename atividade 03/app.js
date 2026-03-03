@@ -267,12 +267,13 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                 let numeroFatVal1 = validacao.validarEntradaNumber(numeroFat)
                 let numeroFatVal2 = fatorial.validarFatorial(numeroFat)
                 let fatorialMaior = calculo.maior(numeroFat, 1)
+                let fatorialInteiro = fatorial.validarNumeroInteiro(numeroFat)
 
-                if (numeroFatVal1 && numeroFatVal2 && fatorialMaior) {
+                if (numeroFatVal1 && numeroFatVal2 && fatorialMaior && fatorialInteiro) {
                     let resultadoFinalFat = fatorial.calcularFatorial(numeroFat)
                     let fatorialExtenso = fatorial.formatarNumeroFatorial(numeroFat)
 
-                    console.log(`\nO resultado fatorial de ${numeroFat} é: ${fatorialExtenso} = ${resultadoFinalFat}\n`)
+                    console.log(`\nO resultado de ${numeroFat}! é: ${fatorialExtenso} = ${resultadoFinalFat}\n`)
                     entradaDeDados.close()
                 } else {
                     console.log('Número inválido, digite um número inteiro maior do que 0 e 1!!!\n')
