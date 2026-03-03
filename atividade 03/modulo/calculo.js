@@ -1,5 +1,5 @@
 /**********************************************************************************
- * Objetivo: Arquivo responsável por realizar o cálculo dos operadores matématicos
+ * Objetivo: Arquivo responsável por armazenar e manter as funções de cálculo
  * Autor: Kauan
  * Data: 26/02/2026 - (quinta-feira)
  * Versão 1.0
@@ -13,10 +13,6 @@ const elevar        = (numero1, numero2) => Number(numero1) ** Number(numero2)
 const maior         = (numero1, numero2) => Number(numero1) > Number(numero2)
 
 module.exports = {
-    somar,
-    subtrair,
-    multiplicar,
-    dividir,
-    elevar,
-    maior
+    //Deixa as funções de operadores matemáticos públicos
+    somar, subtrair, multiplicar, dividir, elevar, maior
 }
