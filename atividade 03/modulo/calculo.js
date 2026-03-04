@@ -5,6 +5,7 @@
  * Versão 1.0
  **********************************************************************************/
 
+//Funções em seta de operações básicas
 const somar         = (numero1, numero2) => Number(numero1) + Number(numero2)
 const subtrair      = (numero1, numero2) => Number(numero1) - Number(numero2)
 const multiplicar   = (numero1, numero2) => Number(numero1) * Number(numero2)

@@ -7,6 +7,7 @@
 
 const calculosMatematicos = require('../calculo')
 
+//Função para validar se as notas estão escritas entre 0 e 100
 const validarNotasEntre = function (nota) {
     let notaValor = Number(nota)
 
@@ -17,6 +18,7 @@ const validarNotasEntre = function (nota) {
     }
 }
 
+//Função para calcular a média escolar
 const calcularMedia = function (nota1, nota2, nota3, nota4) {
     let valorNota1 = Number(nota1)
     let valorNota2 = Number(nota2)
@@ -33,6 +35,7 @@ const calcularMedia = function (nota1, nota2, nota3, nota4) {
     }
 }
 
+//Função para calcular o status do aluno
 const calcularStatusMedia = function (statusMedia) {
     let media = Number(statusMedia)
     let status
@@ -47,6 +50,7 @@ const calcularStatusMedia = function (statusMedia) {
     return status
 }
 
+//Função para calcular a média do exame
 const calcularMediaExame = function (media, notaExame) {
     let valorMedia = Number(media)
     let ValorRec = Number(notaExame)
@@ -56,6 +60,7 @@ const calcularMediaExame = function (media, notaExame) {
     return mediaFinal
 }
 
+//Função para validar se o aluno foi aprovado ou reprovado no exame
 const validarStatusExame = function (media) {
     let mediaRec = Number(media)
     let status
@@ -68,6 +73,7 @@ const validarStatusExame = function (media) {
     return status
 }
 
+//Função para retornar o genêro do professor ou professora
 const verificarGeneroProf = function (generoProf) {
     let generoVerificado = String(generoProf).trim().toUpperCase()
     let sexo = ''
@@ -82,6 +88,7 @@ const verificarGeneroProf = function (generoProf) {
     return sexo
 }
 
+//Função para retornar o genêro do aluno ou aluna
 const verificarGeneroAlun = function (generoAlun) {
     let generoVerificado = String(generoAlun).trim().toUpperCase()
     let sexo = ''

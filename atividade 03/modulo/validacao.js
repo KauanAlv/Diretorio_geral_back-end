@@ -5,6 +5,7 @@
  * Versão 1.0
  *************************************************************************/
 
+//Função para validar a entrada somente de String
 const validarEntradaString = function (dado) {
     let dadoInfor = String(dado)
 
@@ -16,6 +17,7 @@ const validarEntradaString = function (dado) {
 
 }
 
+//Função para validar a entrada somente de Number
 const validarEntradaNumber = function (valor) {
     let valorInfor = Number(valor)
 
@@ -26,6 +28,7 @@ const validarEntradaNumber = function (valor) {
     }
 }
 
+//Função para validar números inteiros
 const validarNumeroInteiro = function (valorInt) {
     let int = Number(valorInt)
 
@@ -36,6 +39,7 @@ const validarNumeroInteiro = function (valorInt) {
     }
 }
 
+//Função para validar a calculadora que o usuário escolheu
 const validarEscolhaCalculadora = function (escolhaCalculadora) {
     let escolha = String(escolhaCalculadora.toUpperCase())
     let calculadoraEscolhida = ['PAR/IMPAR', 'IMPAR/PAR', 'IMPAR OU PAR', 'PAR OU IMPAR', 'IMPAR E PAR', 'PAR E IMPAR', 'IMPAR', 'PAR',

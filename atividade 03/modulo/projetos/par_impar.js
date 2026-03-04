@@ -1,10 +1,11 @@
-/**************************************************************************************
- * Objetivo: Arquivo responsável por realizar o separamento de número pares e impares
+/********************************************************************************************************
+ * Objetivo: Arquivo responsável por realizar o separamento de número pares e impares e seus cálculos
  * Autor: Kauan
- * Data: 25/02/2026 - (quarta-feira)
+ * Data: 04/03/2026 - (quarta-feira)
  * Versão 1.0
- **************************************************************************************/
+ ********************************************************************************************************/
 
+//Função para validar se o primeiro número é maior ou igual a 0 ou maior ou igual a 500
 const validarParImparI = function (numeroParImparI) {
     let numeroInicial = Number(numeroParImparI)
 
@@ -15,6 +16,7 @@ const validarParImparI = function (numeroParImparI) {
     }
 }
 
+//Função para validar se o último número é maior ou igual a 100 ou maior ou igual a 1000
 const validarParImparF = function (numeroParImparF) {
     let numeroInicial = Number(numeroParImparF)
 
@@ -25,6 +27,7 @@ const validarParImparF = function (numeroParImparF) {
     }
 }
 
+//Função para validar se o número é maior ou igual
 const validarNumeroMaiorIgual = function (numeroInicial, numeroFinal) {
     let numIni = Number(numeroInicial)
     let numFim = Number(numeroFinal)
@@ -36,6 +39,7 @@ const validarNumeroMaiorIgual = function (numeroInicial, numeroFinal) {
     }
 }
 
+//Função para calcular se o número é par
 const calcularNumPar = function (numeroInicio, numeroFim) {
     let numI = Number(numeroInicio)
     let numF = Number(numeroFim)
@@ -52,6 +56,7 @@ const calcularNumPar = function (numeroInicio, numeroFim) {
     return resultado + '|' + contagem
 }
 
+//Função para calcular se o número é impar
 const calcularNumImpar = function (numeroInicio, numeroFim) {
     let numI = Number(numeroInicio)
     let numF = Number(numeroFim)
@@ -68,6 +73,7 @@ const calcularNumImpar = function (numeroInicio, numeroFim) {
     return resultado + '|' + contagem
 }
 
+//Função para formartar o texto da quantidade de números encontrados
 const formatarListaParImpar = function (textoFinal, calculo) {
     let formatoTexto = textoFinal.toUpperCase()
     let retorno = String(calculo)
@@ -82,6 +88,7 @@ const formatarListaParImpar = function (textoFinal, calculo) {
     return textoFormatado
 }
 
+//Função para formatar se vai ser números pares, números impares ou ambos
 const formatarTextoParImpar = function (estiloParImpar, numeroP, numeroI) {
     let formaDesejada = String(estiloParImpar.toUpperCase())
     let texPar = String(numeroP)

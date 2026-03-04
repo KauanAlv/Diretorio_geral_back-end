@@ -7,6 +7,7 @@
 
 const calculosMatematicos = require('../calculo.js')
 
+//Função para validar a entrada de números maior ou igual a 2 e menor ou igual a 100
 const validarEntradaTabuada = function (valorEntre) {
     let entrada = Number(valorEntre)
 
@@ -17,6 +18,7 @@ const validarEntradaTabuada = function (valorEntre) {
     }
 }
 
+//Função para validar a entrada de números maior ou igual a 1 e menor ou igual a 50
 const validarContadorTabuada = function (valorAte) {
     let contador = Number(valorAte)
 
@@ -27,6 +29,7 @@ const validarContadorTabuada = function (valorAte) {
     }
 }
 
+//Função para calcular o resultado final da tabuada
 const calcularTabuada = function (valorInicial, valorFinal, contadorInicial, contadorFinal) {
     let valorTabI = Number(valorInicial)
     let valorTabF = Number(valorFinal)

@@ -31,6 +31,7 @@ const calcularImc = function (peso, altura, unidadeMedida) {
     return imc
 }
 
+//Classificar o imc do usuário
 const verificarClassificacao = function (imc) {
     let imcResult = imc
     let classificacao = ''
