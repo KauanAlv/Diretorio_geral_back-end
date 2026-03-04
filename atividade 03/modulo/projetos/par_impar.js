@@ -67,3 +67,11 @@ const calcularNumImpar = function (numeroInicio, numeroFim) {
 
     return resultado + '|' + contagem
 }
+
+module.exports = {
+    validarParImparI,
+    validarParImparF,
+    validarNumeroMaiorIgual,
+    calcularNumPar,
+    calcularNumImpar
+}
