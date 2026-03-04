@@ -5,6 +5,7 @@
  * Versão 1.0
  *************************************************************************/
 
+//Validar se o número fatorial é igual a 1 ou menor ou igual a 0
 const validarFatorial = function (valorFatorialE) {
     let valorF = Number(valorFatorialE)
 
@@ -15,6 +16,7 @@ const validarFatorial = function (valorFatorialE) {
     }
 }
 
+//Realiza o calculo do número fatorial
 const calcularFatorial = function (valorFatorial) {
     let valorFat = 1
 
@@ -23,6 +25,8 @@ const calcularFatorial = function (valorFatorial) {
     } return valorFat
 }
 
+//Formata o estilo do número fatorial, para aparecer conforme o exemplo:
+// 5! = 5 x 4 x 3 x 2 x 1 = 120
 const formatarNumeroFatorial = function (numeroFatorial) {
     let numeroF = Number(numeroFatorial)
     let resultado = ''

@@ -7,26 +7,25 @@
 
 const calculosMatematicos = require('../calculo')
 
+//Valida a unidade de medida escolhida pelo usuário
 const validarUnidadeMedidaAltura = function (unidadeMedida) {
     let medida = unidadeMedida.toUpperCase()
-    if (medida === "CM" || medida === "M") {
+    if (medida === 'CM' || medida === 'M') {
         return true
     } else {
         return false
     }
 }
 
+//Calcula o imc do usuário
 const calcularImc = function (peso, altura, unidadeMedida) {
     let pesoUsuario = Number(peso)
     let alturaUsuario = Number(altura)
     let medida = unidadeMedida
     let imc
 
-    if (medida === 'CM') {
+    if (medida === 'CM')
         alturaUsuario = calculosMatematicos.dividir(alturaUsuario, 100)
-    } else if (medida !== "M") {
-        return false
-    }
 
     imc = (calculosMatematicos.dividir(pesoUsuario, calculosMatematicos.elevar(alturaUsuario, 2))).toFixed(2)
     return imc
