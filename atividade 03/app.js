@@ -50,8 +50,10 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
 
                                     console.log(`\nO resultado do IMC calculado foi: ${resultadoDoIMC}`)
                                     console.log(`Este IMC está classificado como: ${classificacaoDoIMC}\n`)
-                                    entradaDeDados.close()
+                                } else {
+                                    console.log('\nA altura está escrita incorretamente!!!\n')
                                 }
+                                entradaDeDados.close()
                             })
                         } else {
                             console.log('\nA unidade de medida para a altura está escrita da forma errada!!!\n')

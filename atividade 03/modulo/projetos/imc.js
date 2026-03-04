@@ -45,11 +45,11 @@ const verificarClassificacao = function (imc) {
         classificacao = 'Obesidade I'
     } else if (imcResult <= 39.9) {
         classificacao = 'Obesidade II'
-    } else if (imcResult > 40) {
-        classificacao = 'Obesidade III'
     } else {
-        return false
-    } return classificacao
+        classificacao = 'Obesidade III'
+    } 
+    
+    return classificacao
 }
 
 module.exports = {
