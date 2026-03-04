@@ -36,19 +36,8 @@ const formatarNumeroFatorial = function (numeroFatorial) {
     } return resultado
 }
 
-const validarNumeroInteiro = function (fatorialInteiro) {
-    let intFat = Number(fatorialInteiro)
-
-    if (Number.isInteger(intFat)) {
-        return true
-    } else {
-        return false
-    }
-}
-
 module.exports = {
     validarFatorial,
     calcularFatorial,
-    formatarNumeroFatorial,
-    validarNumeroInteiro
+    formatarNumeroFatorial
 }

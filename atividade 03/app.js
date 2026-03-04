@@ -54,12 +54,12 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                                 }
                             })
                         } else {
-                            console.log('A unidade de medida para a altura está escrita da forma errada!!!\n')
+                            console.log('\nA unidade de medida para a altura está escrita da forma errada!!!\n')
                             entradaDeDados.close()
                         }
                     })
                 } else {
-                    console.log('O peso está escrito de forma errada!!!\n')
+                    console.log('\nO peso está escrito de forma errada!!!\n')
                     entradaDeDados.close()
                 }
             })
@@ -152,59 +152,59 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                                                                                                         entradaDeDados.close()
 
                                                                                                     } else {
-                                                                                                        console.log('A nota da recuperação está escrita incorretamente!!!\n')
+                                                                                                        console.log('\nA nota da recuperação está escrita incorretamente!!!\n')
                                                                                                         entradaDeDados.close()
                                                                                                     }
                                                                                                 })
                                                                                             }
 
                                                                                         } else {
-                                                                                            console.log('A quarta nota está escrita incorretamente!!!\n')
+                                                                                            console.log('\nA quarta nota está escrita incorretamente!!!\n')
                                                                                             entradaDeDados.close()
                                                                                         }
                                                                                     })
                                                                                 } else {
-                                                                                    console.log('A terceira nota está escrita incorretamente!!!\n')
+                                                                                    console.log('\nA terceira nota está escrita incorretamente!!!\n')
                                                                                     entradaDeDados.close()
                                                                                 }
                                                                             })
                                                                         } else {
-                                                                            console.log('A segunda nota está escrita incorretamente!!!\n')
+                                                                            console.log('\nA segunda nota está escrita incorretamente!!!\n')
                                                                             entradaDeDados.close()
                                                                         }
                                                                     })
                                                                 } else {
-                                                                    console.log('A primeira nota está escrita incorretamente!!!\n')
+                                                                    console.log('\nA primeira nota está escrita incorretamente!!!\n')
                                                                     entradaDeDados.close()
                                                                 }
                                                             })
                                                         } else {
-                                                            console.log('O nome da disciplina está escrito incorretamente!!!\n')
+                                                            console.log('\nO nome da disciplina está escrito incorretamente!!!\n')
                                                             entradaDeDados.close()
                                                         }
                                                     })
                                                 } else {
-                                                    console.log('O nome do curso está escrito incorretamente!!!\n')
+                                                    console.log('\nO nome do curso está escrito incorretamente!!!\n')
                                                     entradaDeDados.close()
                                                 }
                                             })
                                         } else {
-                                            console.log('O genêro do professor está escrito incorretamente!!!\n')
+                                            console.log('\nO genêro do professor está escrito incorretamente!!!\n')
                                             entradaDeDados.close()
                                         }
                                     })
                                 } else {
-                                    console.log('O nome do professor está escrito incorretamente!!!\n')
+                                    console.log('\nO nome do professor está escrito incorretamente!!!\n')
                                     entradaDeDados.close()
                                 }
                             })
                         } else {
-                            console.log('O genêro do aluno está escrito incorretamente!!!\n')
+                            console.log('\nO genêro do aluno está escrito incorretamente!!!\n')
                             entradaDeDados.close()
                         }
                     })
                 } else {
-                    console.log('O nome do aluno está escrito incorretamente!!!\n')
+                    console.log('\nO nome do aluno está escrito incorretamente!!!\n')
                     entradaDeDados.close()
                 }
             })
@@ -239,24 +239,23 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
 
                                             console.log(`A tabuada de número ${tabuadaI} até o número ${tabuadaF} iniciando no ${contadorI} até o ${contadorF}, resultou em:`)
                                             console.log(resultado)
-                                            entradaDeDados.close()
                                         } else {
-                                            console.log('O valor para finalizar a contagem das tabuadas foi digitado incorretamente!!!\n')
-                                            entradaDeDados.close()
+                                            console.log('\nO valor para finalizar a contagem das tabuadas foi digitado incorretamente!!!\n')
                                         }
+                                        entradaDeDados.close()
                                     })
                                 } else {
-                                    console.log('O valor para iniciar a contagem das tabuadas foi digitado incorretamente!!!\n')
+                                    console.log('\nO valor para iniciar a contagem das tabuadas foi digitado incorretamente!!!\n')
                                     entradaDeDados.close()
                                 }
                             })
                         } else {
-                            console.log('O segundo valor foi digitado incorretamente!!!\n')
+                            console.log('\nO segundo valor foi digitado incorretamente!!!\n')
                             entradaDeDados.close()
                         }
                     })
                 } else {
-                    console.log('O primeiro valor foi digitado incorretamente!!!\n')
+                    console.log('\nO primeiro valor foi digitado incorretamente!!!\n')
                     entradaDeDados.close()
                 }
             })
@@ -268,18 +267,17 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                 let numeroFatVal1 = validacao.validarEntradaNumber(numeroFat)
                 let numeroFatVal2 = fatorial.validarFatorial(numeroFat)
                 let fatorialMaior = calculo.maior(numeroFat, 1)
-                let fatorialInteiro = fatorial.validarNumeroInteiro(numeroFat)
+                let fatorialInteiro = validacao.validarNumeroInteiro(numeroFat)
 
                 if (numeroFatVal1 && numeroFatVal2 && fatorialMaior && fatorialInteiro) {
                     let resultadoFinalFat = fatorial.calcularFatorial(numeroFat)
                     let fatorialExtenso = fatorial.formatarNumeroFatorial(numeroFat)
 
                     console.log(`\nO resultado de ${numeroFat}! é: ${fatorialExtenso} = ${resultadoFinalFat}\n`)
-                    entradaDeDados.close()
                 } else {
-                    console.log('Número inválido, digite um número inteiro maior do que 0 e 1!!!\n')
-                    entradaDeDados.close()
+                    console.log('\nNúmero inválido, digite um número inteiro maior do que 0 e 1!!!\n')
                 }
+                entradaDeDados.close()
             })
         }
 
@@ -287,7 +285,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
             entradaDeDados.question('\nDigite um número inicial (entre 0 e 500): ', function (numeroInicial) {
                 let numI = numeroInicial.trim()
                 let numValNumber = validacao.validarEntradaNumber(numI)
-                let numValNumInt = fatorial.validarNumeroInteiro(numI)
+                let numValNumInt = validacao.validarNumeroInteiro(numI)
                 let numValInicial = par_impar.validarParImparI(numI)
                 let validarIgual = par_impar.validarNumeroMaiorIgual(numI)
 
@@ -295,7 +293,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                     entradaDeDados.question('Digite um número final (entre 100 e 1000): ', function (numeroFinal) {
                         let numF = numeroFinal.trim()
                         let numValNumber = validacao.validarEntradaNumber(numF)
-                        let numValNumInt = fatorial.validarNumeroInteiro(numF)
+                        let numValNumInt = validacao.validarNumeroInteiro(numF)
                         let numValFinal = par_impar.validarParImparF(numF)
                         let validarIgual = par_impar.validarNumeroMaiorIgual(numF)
 

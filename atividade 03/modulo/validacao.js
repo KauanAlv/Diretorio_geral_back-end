@@ -26,6 +26,16 @@ const validarEntradaNumber = function (valor) {
     }
 }
 
+const validarNumeroInteiro = function (valorInt) {
+    let int = Number(valorInt)
+
+    if (Number.isInteger(int)) {
+        return true
+    } else {
+        return false
+    }
+}
+
 const validarEscolhaCalculadora = function (escolhaCalculadora) {
     let escolha = String(escolhaCalculadora.toUpperCase())
     let calculadoraEscolhida = ['PAR/IMPAR', 'IMPAR/PAR', 'IMPAR OU PAR', 'PAR OU IMPAR', 'IMPAR E PAR', 'PAR E IMPAR', 'IMPAR', 'PAR',
@@ -42,5 +52,6 @@ const validarEscolhaCalculadora = function (escolhaCalculadora) {
 module.exports = {
     validarEntradaString,
     validarEntradaNumber,
+    validarNumeroInteiro,
     validarEscolhaCalculadora
 }
