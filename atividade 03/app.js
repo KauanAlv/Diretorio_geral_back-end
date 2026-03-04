@@ -307,31 +307,30 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                                 if (separacaoValString) {
                                     let numPar = par_impar.calcularNumPar(numI, numF)
                                     let numImpar = par_impar.calcularNumImpar(numI, numF)
-                                    let textoPar = par_impar.formatarListaParImpar('Lista de números Pares ', numPar)
-                                    let textoImpar = par_impar.formatarListaParImpar('Lista de números Ímpares ', numImpar)
+                                    let textoPar = par_impar.formatarListaParImpar('Lista de números Pares', numPar)
+                                    let textoImpar = par_impar.formatarListaParImpar('Lista de números Ímpares', numImpar)
                                     let textoFormatado = par_impar.formatarTextoParImpar(separacaoFinal, textoPar, textoImpar)
 
                                     console.log(textoFormatado)
-
                                 } else {
-                                    console.log('A separação foi digitada incorretamente!!!\n')
-                                    entradaDeDados.close()
+                                    console.log('\nA separação foi digitada incorretamente!!!\n')
                                 }
+                                entradaDeDados.close()
                             })
                         } else {
-                            console.log('O número final está escrito incorretamente!!!\n')
+                            console.log('\nO número final está escrito incorretamente!!!\n')
                             entradaDeDados.close()
                         }
                     })
                 } else {
-                    console.log('O número inicial está escrito incorretamente!!!\n')
+                    console.log('\nO número inicial está escrito incorretamente!!!\n')
                     entradaDeDados.close()
                 }
             })
         }
 
     } else {
-        console.log('Essa calculadora não existe!!!\n')
+        console.log('\nEssa calculadora não existe!!!\n')
         entradaDeDados.close()
     }
 })

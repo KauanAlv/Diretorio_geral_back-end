@@ -82,10 +82,10 @@ const formatarListaParImpar = function (textoFinal, calculo) {
     return textoFormatado
 }
 
-const formatarTextoParImpar = function (numeroP, numeroI, estiloParImpar) {
+const formatarTextoParImpar = function (estiloParImpar, numeroP, numeroI) {
+    let formaDesejada = String(estiloParImpar.toUpperCase())
     let texPar = String(numeroP)
     let texImpar = String(numeroI)
-    let formaDesejada = String(estiloParImpar).toUpperCase()
     let texto = ''
 
     if (formaDesejada === 'PARES' || formaDesejada === 'PAR') {
