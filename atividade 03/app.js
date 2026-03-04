@@ -18,7 +18,7 @@ let calculo = require('./modulo/calculo.js')
 let fatorial = require('./modulo/projetos/fatorial.js')
 let imc = require('./modulo/projetos/imc.js')
 let media = require('./modulo/projetos/media.js')
-// let par_impar = require('./modulo/projetos/par_impar.js')
+let par_impar = require('./modulo/projetos/par_impar.js')
 let tabuada = require('./modulo/projetos/tabuada.js')
 
 entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, IMC, Média, Par/impar, Tabuada?): ', function (calculadoraInformada) {
@@ -66,32 +66,32 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
         }
 
         if (calculadoraEscolhida == 'MÉDIA' || calculadoraEscolhida == 'MEDIA') {
-            entradaDeDados.question('\nQual o nome do aluno?: ', function (nomeAluno) {
+            entradaDeDados.question('\nQual é o nome do aluno?: ', function (nomeAluno) {
                 let nomeA = nomeAluno.trim()
                 let nomeAlunoVal = validacao.validarEntradaString(nomeAluno)
 
                 if (nomeAlunoVal) {
-                    entradaDeDados.question('Qual o sexo do aluno?: ', function (sexoAluno) {
+                    entradaDeDados.question('Qual é o sexo do aluno?: ', function (sexoAluno) {
                         let generoStringAluno = validacao.validarEntradaString(sexoAluno)
                         let generoAluno = media.verificarGeneroAlun(sexoAluno)
 
                         if (generoAluno && generoStringAluno) {
-                            entradaDeDados.question('Qual o nome do professor?: ', function (nomeProfessor) {
+                            entradaDeDados.question('Qual é o nome do professor?: ', function (nomeProfessor) {
                                 let nomeProf = nomeProfessor.trim()
                                 let nomeProfVal = validacao.validarEntradaString(nomeProfessor)
 
                                 if (nomeProfVal) {
-                                    entradaDeDados.question('Qual o sexo do profesor?: ', function (sexoProfessor) {
+                                    entradaDeDados.question('Qual é o sexo do profesor?: ', function (sexoProfessor) {
                                         let generoStringProfessor = validacao.validarEntradaString(sexoProfessor)
                                         let generoProfessor = media.verificarGeneroProf(sexoProfessor)
 
                                         if (generoProfessor && generoStringProfessor) {
-                                            entradaDeDados.question('Qual o nome do curso?: ', function (curso) {
+                                            entradaDeDados.question('Qual é o nome do curso?: ', function (curso) {
                                                 let nomeCurso = curso.trim()
                                                 let nomeCursoVal = validacao.validarEntradaString(curso)
 
                                                 if (nomeCursoVal) {
-                                                    entradaDeDados.question('Qual o nome da disciplina?: ', function (disciplina) {
+                                                    entradaDeDados.question('Qual é o nome da disciplina?: ', function (disciplina) {
                                                         let nomeDisciplina = disciplina.trim()
                                                         let nomeDiscVal = validacao.validarEntradaString(disciplina)
 
@@ -125,7 +125,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
 
                                                                                             if (status == 'aprovado' || status == 'reprovado') {
                                                                                                 console.log(`\nRelatório ${generoAluno}:`)
-                                                                                                console.log(`\nO ${generoAluno} ${nomeA} foi ${status} na disciplina ${nomeDisciplina}.`)
+                                                                                                console.log(`\n${generoAluno} ${nomeA} foi ${status} na disciplina ${nomeDisciplina}.`)
                                                                                                 console.log(`Curso: ${nomeCurso}`)
                                                                                                 console.log(`${generoProfessor}: ${nomeProf}`)
                                                                                                 console.log(`Notas do ${nomeA}: ${valorN1}, ${valorN2}, ${valorN3} e ${valorN4}.`)
@@ -143,7 +143,7 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                                                                                                         let statusFinal = media.validarStatusExame(mediaRec)
 
                                                                                                         console.log(`\nRelatório ${generoAluno}:`)
-                                                                                                        console.log(`\nO ${generoAluno} ${nomeA} foi ${statusFinal} na disciplina ${nomeDisciplina}.`)
+                                                                                                        console.log(`\n${generoAluno} ${nomeA} foi ${statusFinal} na disciplina ${nomeDisciplina}.`)
                                                                                                         console.log(`Curso: ${nomeCurso}.`)
                                                                                                         console.log(`${generoProfessor}: ${nomeProf}.`)
                                                                                                         console.log(`Notas do ${nomeA}: ${valorN1}, ${valorN2}, ${valorN3}, ${valorN4} e ${notaRec}.`)
@@ -278,6 +278,53 @@ entradaDeDados.question('\nQual tipo de calculadora deseja utilizar? (Fatorial, 
                     entradaDeDados.close()
                 } else {
                     console.log('Número inválido, digite um número inteiro maior do que 0 e 1!!!\n')
+                    entradaDeDados.close()
+                }
+            })
+        }
+
+        else {
+            entradaDeDados.question('\nDigite um número inicial (entre 0 e 500): ', function (numeroInicial) {
+                let numI = numeroInicial.trim()
+                let numValNumber = validacao.validarEntradaNumber(numI)
+                let numValNumInt = fatorial.validarNumeroInteiro(numI)
+                let numValInicial = par_impar.validarParImparI(numI)
+                let validarIgual = par_impar.validarNumeroMaiorIgual(numI)
+
+                if (numValNumber && numValNumInt && numValInicial && validarIgual) {
+                    entradaDeDados.question('Digite um número final (entre 100 e 1000): ', function (numeroFinal) {
+                        let numF = numeroFinal.trim()
+                        let numValNumber = validacao.validarEntradaNumber(numF)
+                        let numValNumInt = fatorial.validarNumeroInteiro(numF)
+                        let numValFinal = par_impar.validarParImparF(numF)
+                        let validarIgual = par_impar.validarNumeroMaiorIgual(numF)
+
+                        if (numValNumber && numValNumInt && numValFinal && validarIgual) {
+                            entradaDeDados.question('Deseja calcular apenas os pares, ímpares ou ambos?: ', function (estiloFinal) {
+                                let separacaoFinal = estiloFinal.trim()
+                                let separacaoValString = validacao.validarEntradaString(separacaoFinal)
+
+                                if (separacaoValString) {
+                                    let numPar = par_impar.calcularNumPar(numI, numF)
+                                    let numImpar = par_impar.calcularNumImpar(numI, numF)
+                                    let textoPar = par_impar.formatarListaParImpar('Lista de números Pares ', numPar)
+                                    let textoImpar = par_impar.formatarListaParImpar('Lista de números Ímpares ', numImpar)
+                                    let textoFormatado = par_impar.formatarTextoParImpar(separacaoFinal, textoPar, textoImpar)
+
+                                    console.log(textoFormatado)
+
+                                } else {
+                                    console.log('A separação foi digitada incorretamente!!!\n')
+                                    entradaDeDados.close()
+                                }
+                            })
+                        } else {
+                            console.log('O número final está escrito incorretamente!!!\n')
+                            entradaDeDados.close()
+                        }
+                    })
+                } else {
+                    console.log('O número inicial está escrito incorretamente!!!\n')
                     entradaDeDados.close()
                 }
             })

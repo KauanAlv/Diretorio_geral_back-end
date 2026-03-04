@@ -68,10 +68,46 @@ const calcularNumImpar = function (numeroInicio, numeroFim) {
     return resultado + '|' + contagem
 }
 
+const formatarListaParImpar = function (textoFinal, calculo) {
+    let formatoTexto = textoFinal.toUpperCase()
+    let retorno = String(calculo)
+    let separacao = retorno.split('|')
+    let lista = separacao[0]
+    let numeroQuant = separacao[1]
+    let textoFormatado = `\n${formatoTexto}\n`
+
+    textoFormatado += lista
+    textoFormatado += `Quantidade de números que foram encontrados: ${numeroQuant}\n`
+
+    return textoFormatado
+}
+
+const formatarTextoParImpar = function (numeroP, numeroI, estiloParImpar) {
+    let texPar = String(numeroP)
+    let texImpar = String(numeroI)
+    let formaDesejada = String(estiloParImpar).toUpperCase()
+    let texto = ''
+
+    if (formaDesejada === 'PARES' || formaDesejada === 'PAR') {
+        texto += `${texPar}`
+    } else if (formaDesejada === 'IMPARES' || formaDesejada === 'ÍMPARES' || formaDesejada === 'IMPAR') {
+        texto += `${texImpar}`
+    } else if (formaDesejada === 'AMBOS') {
+        texto += `${texPar}\n`
+        texto += `${texImpar}`
+    } else {
+        texto += `\nOpção inválida!!!`
+    }
+
+    return texto
+}
+
 module.exports = {
     validarParImparI,
     validarParImparF,
     validarNumeroMaiorIgual,
     calcularNumPar,
-    calcularNumImpar
+    calcularNumImpar,
+    formatarTextoParImpar,
+    formatarListaParImpar
 }
