@@ -1,0 +1,95 @@
+/********************************************************************
+ * Objetivo: Manipular dados em ARRAY e JSON
+ * Data: 05/03/2026
+ * Autor: Marcel
+ * Versão 1.0
+ ********************************************************************/
+
+/*
+    [ ] -> representa um objeto do tipo ARRAY
+    { } -> representa um objeto do tipo JSON
+
+    Array -> É um espaço na memória para armazenar dados sem a necessidade de criar outros objetos, trabalhando com índices.
+        Ex:
+            let nome = 'José'
+            let nome2 = 'Maria'
+            let nome3 = 'João'
+
+                índices     0       1       2
+            let nomes = ['José', 'Maria', 'João']
+
+    JSON -> É um espaço na memória para armaenar dados com CHAVE e VALOR, sem trabalhar com índices.
+        Ex: 
+            let nome     =  'José'
+            let telefone =  '123456789'
+            let email    =  'jose@gmail.com
+            
+                    ou     Atributo
+                            Chave   Valor   Chave       Valor       Chave       Valor
+            let cliente = {"nome": "José", "telefone": "123456789", "email": "jose@gmail.com"}
+            Para o JSON é recomendado a utilização de aspas duplas.
+
+    Array trabalha na vertical, em forma de colunas.
+    JSON trabalha na horizontal, em forma de linhas.
+*/
+
+//Criando objetos do tipo ARRAY
+const listaDeAlunos = ['José', 'Maria', 'Luiz', 'Antonio', 'Carlos']
+const listaDeClientes = []
+
+const exibirDados = function () {
+    //Exibe o objeto ARRAY com o seu conteúdo
+    console.log(listaDeAlunos)
+
+    //Exibe o tipo do dado de um índice, String, Number, Object....
+    console.log(typeof (listaDeAlunos[2]))
+
+    //Exibe o objeto ARRAY em formato de tabela, mostrando índice e conteúdo
+    console.table(listaDeAlunos)
+
+    console.log(listaDeAlunos[3])
+    console.log(listaDeAlunos[0])
+
+    console.log(`\nO nome do aluno é: ${listaDeAlunos[0]}`)
+    console.log(`O nome do aluno é: ${listaDeAlunos[1]}`)
+    console.log(`O nome do aluno é: ${listaDeAlunos[2]}`)
+    console.log(`O nome do aluno é: ${listaDeAlunos[3]}`)
+    console.log(`O nome do aluno é: ${listaDeAlunos[4]}`)
+
+    //Usando o While
+    console.log('\n********** Exemplo com While **********')
+    let cont = 0
+    while (cont < listaDeAlunos.length) {
+        console.log(`O nome do aluno é: ${listaDeAlunos[cont]}`)
+        cont += 1
+    }
+
+    //Usand o FOR
+    console.log('\n********** Exemplo com FOR **********')
+    for (let contador = 0; contador < listaDeAlunos.length; contador++) {
+        console.log(`O nome do aluno é: ${listaDeAlunos[contador]}`)
+    }
+
+    //Usando o FOR EACH
+    console.log('\n********** Exemplo com FOR EACH **********')
+    listaDeAlunos.forEach(function (item) {
+        console.log(`O nome do aluno é: ${item}`)
+    })
+
+    //Usando o FOR OF
+    console.log('\n********** Exemplo com FOR OF **********')
+    for (aluno of listaDeAlunos) {
+        console.log(`O nome do aluno é: ${aluno}`)
+    }
+
+    //Usando o FOR IN
+    console.log('\n********** Exemplo com FOR IN **********')
+    for (item in listaDeAlunos) {
+        console.log(`O nome do aluno é: ${listaDeAlunos[item]}`)
+    }
+
+    //Retorna a quantidade de itens em um array
+    console.log(`\n${listaDeAlunos.length}`)
+}
+
+exibirDados()
