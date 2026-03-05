@@ -36,6 +36,7 @@
 //Criando objetos do tipo ARRAY
 const listaDeAlunos = ['José', 'Maria', 'Luiz', 'Antonio', 'Carlos']
 const listaDeClientes = []
+const listaDeFornecedores = []
 
 const exibirDados = function () {
     //Exibe o objeto ARRAY com o seu conteúdo
@@ -92,4 +93,25 @@ const exibirDados = function () {
     console.log(`\n${listaDeAlunos.length}`)
 }
 
-exibirDados()
+const manipularDados = function () {
+    //Adicionando elementos de forma manual pelo índice
+    listaDeClientes[0] = 'José da Silva'
+    listaDeClientes[1] = 'Maria da Silva'
+    listaDeClientes[2] = 'Luiz da Silva'
+    listaDeClientes[3] = 'Ana da Silva'
+    listaDeClientes[5] = 'Beatriz da Silva'
+
+    console.log(listaDeClientes)
+
+    //Permite adicionar novos elementos no ARRAY, sempre no final
+    listaDeFornecedores.push('Antônio')
+    listaDeFornecedores.push('Caio')
+    listaDeFornecedores.push('Luiz')
+    listaDeFornecedores.push('Hugo', 'Maria', 'José', 'André')
+
+    console.log(listaDeFornecedores)
+
+}
+
+//exibirDados()
+manipularDados()
