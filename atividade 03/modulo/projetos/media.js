@@ -28,17 +28,13 @@ const calcularMedia = function (nota1, nota2, nota3, nota4) {
 
     media = Number(calculosMatematicos.dividir(calculosMatematicos.somar(calculosMatematicos.somar(valorNota1, valorNota2), calculosMatematicos.somar(valorNota3, valorNota4)), 4))
 
-    if (media) {
-        return media.toFixed(2)
-    } else {
-        return false
-    }
+    return media.toFixed(2)
 }
 
 //Função para calcular o status do aluno
 const calcularStatusMedia = function (statusMedia) {
     let media = Number(statusMedia)
-    let status
+    let status = ''
 
     if (media >= 70) {
         status = 'aprovado'
@@ -63,7 +59,7 @@ const calcularMediaExame = function (media, notaExame) {
 //Função para validar se o aluno foi aprovado ou reprovado no exame
 const validarStatusExame = function (media) {
     let mediaRec = Number(media)
-    let status
+    let status = ''
 
     if (mediaRec >= 60) {
         status = 'aprovado'
