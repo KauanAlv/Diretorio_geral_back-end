@@ -109,9 +109,64 @@ const manipularDados = function () {
     listaDeFornecedores.push('Luiz')
     listaDeFornecedores.push('Hugo', 'Maria', 'José', 'André')
 
-    console.log(listaDeFornecedores)
+    console.table(listaDeFornecedores)
 
+    //Permite adicionar novos elementos no ARRAY, sempre no INICIO,
+    //Após adicionar o elemento, ele reorganiza todos os outros itens
+    listaDeFornecedores.unshift('Luciano')
+
+    console.table(listaDeFornecedores)
+
+    //Permite adicionar um novo elemento em uma determinada posição do ARRAY
+    //splice(indice, qtdeDeElementos, 'novo conteúdo')
+    listaDeFornecedores.splice(3, 0, 'Bernado')
+
+    console.table(listaDeFornecedores)
+
+    //Permite remover um determinado conteúdo com base no indice do elemento ARRAY
+    //splice(indice, qtde de elementos a ser removido)
+    listaDeFornecedores.splice(6, 1)
+    console.table(listaDeFornecedores)
+
+    //Permite remover o ultimo elemento do ARRAY
+    listaDeFornecedores.pop()
+    console.table(listaDeFornecedores)
+
+    //Permite remover o primeiro elemento do ARRAY, após remover, irá reorganizar
+    //todos os elementos
+    listaDeFornecedores.shift()
+    console.table(listaDeFornecedores)
+}
+
+const removerIndice = function (escolhaDoNome) {
+
+    //CÓDIGO COM indexOf()
+    //indexOf() -> retorna o indice referente ao conteúdo que está sendo pesquisado,
+    //não se deve utiliza-ló quando quer "varrer" mais de 1, porque ele da o valor apenas de 1 indice
+    let indice = listaDeAlunos.indexOf(escolhaDoNome)
+    listaDeAlunos.splice(indice, 1)
+
+    // CÓDIGO COM FOR IN
+    // for (cont in listaDeAlunos) {
+    //     if (escolhaDoNome == listaDeAlunos[cont]) {
+    //         listaDeAlunos.splice(cont, 1)
+    //     }
+    // }
+
+    // CÓDIGO COM FOR
+    // for (nome = 0; listaDeAlunos[nome] !== escolhaDoNome; nome++) { }
+
+    // if (listaDeAlunos[nome] == escolhaDoNome)
+    // listaDeAlunos.splice(nome, 1)
+}
+
+const validarItem = function (nomeAluno) {
+    //Verifica se o conteúdo existe dentro do ARRAY e retorna (true/false)
+    return listaDeAlunos.includes(nomeAluno)
 }
 
 //exibirDados()
-manipularDados()
+//manipularDados()
+// removerIndice('Maria')
+// console.table(listaDeAlunos)
+console.log(validarItem('Maria'))
