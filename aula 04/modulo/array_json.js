@@ -217,12 +217,12 @@ const cadastroDeProdutos = function () {
     // }
 
     let marcas = [
-        { "id": 1, "marca": "Mancer", "telefone": 119123 - 4567, "email": "amd@gmail.com" },
-        { "id": 2, "marca": "Positivo", "telefone": 119321 - 7654, "email": "positivo@gmail.com" },
-        { "id": 3, "marca": "Dell", "telefone": 119456 - 7890, "email": "dell@gmail.com" },
-        { "id": 4, "marca": "Samsung", "telefone": 119987 - 2341, "email": "samsung@gmail.com" },
-        { "id": 5, "marca": "LG", "telefone": 119654 - 1234, "email": "lg@gmail.com" },
-        { "id": 6, "marca": "Attack Shark", "telefone": 119552 - 4321, "email": "attackshark@gmail.com" }
+        { "id": 1, "marca": "Mancer", "telefone": "1191234567", "email": "amd@gmail.com" },
+        { "id": 2, "marca": "Positivo", "telefone": "1193217654", "email": "positivo@gmail.com" },
+        { "id": 3, "marca": "Dell", "telefone": "1194567890", "email": "dell@gmail.com" },
+        { "id": 4, "marca": "Samsung", "telefone": "1199872341", "email": "samsung@gmail.com" },
+        { "id": 5, "marca": "LG", "telefone": "1196541234", "email": "lg@gmail.com" },
+        { "id": 6, "marca": "Attack Shark", "telefone": "1195524321", "email": "attackshark@gmail.com" }
     ]
 
     let produtos = [
@@ -289,22 +289,51 @@ const cadastroDeProdutos = function () {
     // console.table(produtos)
 
     console.log('********************************************')
+    //Permite extrair os produtos
     produtos.forEach(function (itemProduto) {
         console.log(`\nO produto é: ${itemProduto.nome}`)
         console.log(`Quantidade no estoque: ${itemProduto.qtde}`)
         console.log(`Valor do produto: ${itemProduto.valor}`)
+
+        //Permite extrair as cores dentro de cada produto
         console.log('Cores:')
         itemProduto.cor.forEach(function (todasAsCores) {
             console.log(`   ${todasAsCores.cor}`)
         })
-        console.log('')
+
+        //Permite extrair as marcas dentro de cada produto
         console.log('Marcas:')
         itemProduto.marca.forEach(function (todasAsMarcas) {
             console.log(`   ${todasAsMarcas}`)
         })
         console.log("----------------------------------")
     })
-    console.log('\n********************************************')
+    console.log('\n********************************************\n')
+
+    //Filtrando produtos pelo NOME
+    console.log('Exemplo de como pesquisar um produto pelo nome:')
+
+    let nomeProduto = 'monitor'
+    produtos.forEach(function (itemProduto) {
+
+        if (String(itemProduto.nome).toUpperCase() == String(nomeProduto).toUpperCase()) {
+            console.log(itemProduto)
+        }
+    })
+    console.log('\n********************************************\n')
+
+    //Filtrando produtos pela COR
+    console.log('Exemplo de como pesquisa um produto pela cor:')
+
+    let corProduto = 'azul'
+    produtos.forEach(function (itemProduto) {
+
+        itemProduto.cor.forEach(function (itemCor) {
+            if (String(itemCor.cor).toUpperCase() == String(corProduto).toUpperCase()) {
+                console.log(itemProduto)
+            }
+        })
+    })
 }
 
 //exibirDados()
