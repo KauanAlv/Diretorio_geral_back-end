@@ -32,44 +32,52 @@ const getListaDeEstados = function () {
 }
 
 const getDadosEstado = function (siglaEscolhida) {
-    let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
-    let estadoDaSigla
+    let sigla = String(siglaEscolhida).toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
+    let listaEstado = {
+        "uf": sigla,
+        "descricao": false,
+        "capital": false,
+        "regiao": false
+    }
 
-    for (estadoDaSigla of ESTADOS) {
+    for (let estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
-            return {
-                "uf": estadoDaSigla.sigla,
-                "descricao": estadoDaSigla.nome,
-                "capital": estadoDaSigla.capital,
-                "regiao": estadoDaSigla.regiao
-            }
+            listaEstado.descricao = estadoDaSigla.nome
+            listaEstado.capital = estadoDaSigla.capital
+            listaEstado.regiao = estadoDaSigla.regiao
         }
     }
 
-    //Se não haver nada ou algo diferente das siglas corretas, vai retornar false
-    return false
+    if (listaEstado.descricao == false || listaEstado.capital == false || listaEstado.regiao == false)
+        return false
+
+    return listaEstado
 }
 
 const getCapitalEstado = function (siglaEscolhida) {
-    let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
-    let estadoDaSigla
+    let sigla = String(siglaEscolhida).toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
+    let listaCapitalEstado = { //Cria uma variável de um JSON inicial, com a descrição e a capital inicialmente sem valor
+        "uf": sigla,
+        "descricao": false,
+        "capital": false
+    }
 
-    for (estadoDaSigla of ESTADOS) {
+    for (let estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
-            return {
-                "uf": estadoDaSigla.sigla,
-                "descricao": estadoDaSigla.nome,
-                "capital": estadoDaSigla.capital
-            }
+            listaCapitalEstado.descricao = estadoDaSigla.nome
+            listaCapitalEstado.capital = estadoDaSigla.capital
         }
     }
 
-    //Se não haver nada ou algo diferente das siglas corretas, vai retornar false
-    return false
+    if (listaCapitalEstado.descricao === false || listaCapitalEstado.capital === false)
+        //Caso continue false, o return vai ser falso
+        return false
+
+    return listaCapitalEstado
 }
 
 const getEstadosRegiao = function (regiaoEscolhida) {
-    let regEsc = regiaoEscolhida.toUpperCase()
+    let regEsc = String(regiaoEscolhida).toUpperCase()
     let listaEstados = {
         "regiao": regEsc,
         "estados": []
@@ -85,7 +93,7 @@ const getEstadosRegiao = function (regiaoEscolhida) {
         }
     }
 
-    if (listaEstados.estados.length == 0)
+    if (listaEstados.estados.length === 0)
         return false
 
     return listaEstados
@@ -132,7 +140,7 @@ const getCidades = function (siglaEscolhida) {
         }
     }
 
-    if (listaCidades.cidades.length == 0)
+    if (listaCidades.cidades.length === 0)
         return false
 
     return listaCidades
