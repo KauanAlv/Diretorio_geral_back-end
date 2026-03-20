@@ -113,8 +113,34 @@ const getCapitalPais = function () {
     return listaCapitais
 }
 
+const getCidades = function (siglaEscolhida) {
+    let siglaEst = String(siglaEscolhida).toUpperCase()
+    let listaCidades = {
+        "uf": siglaEst,
+        "descricao": false,
+        "quantidade_cidades": false,
+        "cidades": []
+    }
+
+    for (let estado of ESTADOS) {
+        if (estado.sigla.toUpperCase() == siglaEst) {
+            estado.cidades.forEach(function (todasCidades) {
+                listaCidades.cidades.push(todasCidades.nome)
+            })
+            listaCidades.descricao = estado.nome
+            listaCidades.quantidade_cidades = estado.cidades.length
+        }
+    }
+
+    if (listaCidades.cidades.length == 0)
+        return false
+
+    return listaCidades
+}
+
 console.log(getListaDeEstados())
 console.log(getDadosEstado('SP'))
 console.log(getCapitalEstado('AC'))
 console.log(getEstadosRegiao('Sul'))
 console.log(getCapitalPais())
+console.log(getCidades('AC'))
