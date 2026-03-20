@@ -31,19 +31,24 @@ const getListaDeEstados = function () {
     return listagem
 }
 
-getListaDeEstados()
 
-const getDadosEstado = function () {
-    let validacaoSigla = getListaDeEstados()
-    let sigla = 'SP'
-    let geral = {}
+const getDadosEstado = function (siglaEscolhida) {
+    let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
 
-    ESTADOS.forEach(function (itemEstado) {
-
-    })
-    if (validacaoSigla !== sigla) {
-        console.log(validacaoSigla)
+    for (let estadoDaSigla of ESTADOS) {
+        if (estadoDaSigla.sigla == sigla) {
+            return {
+                uf: estadoDaSigla.sigla,
+                descricao: estadoDaSigla.nome,
+                capital: estadoDaSigla.capital,
+                regiao: estadoDaSigla.regiao
+            }
+        }
     }
+
+    //Se não haver nada ou algo diferente das siglas corretas, vai retornar false
+    return false
 }
 
-getDadosEstado()
+console.log(getListaDeEstados())
+console.log(getDadosEstado('SP'))
