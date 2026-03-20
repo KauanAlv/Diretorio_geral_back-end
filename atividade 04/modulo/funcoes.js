@@ -31,7 +31,6 @@ const getListaDeEstados = function () {
     return listagem
 }
 
-
 const getDadosEstado = function (siglaEscolhida) {
     let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
     let estadoDaSigla
@@ -39,10 +38,10 @@ const getDadosEstado = function (siglaEscolhida) {
     for (estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
             return {
-                uf: estadoDaSigla.sigla,
-                descricao: estadoDaSigla.nome,
-                capital: estadoDaSigla.capital,
-                regiao: estadoDaSigla.regiao
+                "uf": estadoDaSigla.sigla,
+                "descricao": estadoDaSigla.nome,
+                "capital": estadoDaSigla.capital,
+                "regiao": estadoDaSigla.regiao
             }
         }
     }
@@ -58,9 +57,9 @@ const getCapitalEstado = function (siglaEscolhida) {
     for (estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
             return {
-                uf: estadoDaSigla.sigla,
-                descricao: estadoDaSigla.nome,
-                capital: estadoDaSigla.capital
+                "uf": estadoDaSigla.sigla,
+                "descricao": estadoDaSigla.nome,
+                "capital": estadoDaSigla.capital
             }
         }
     }
@@ -69,6 +68,30 @@ const getCapitalEstado = function (siglaEscolhida) {
     return false
 }
 
+const getEstadosRegiao = function (regiaoEscolhida) {
+    let regEsc = regiaoEscolhida.toUpperCase()
+    let listaEstados = {
+        "regiao": regEsc,
+        "estados": []
+    }
+    let regioes
+
+    for (regioes of ESTADOS) {
+        if (regioes.regiao.toUpperCase() == regEsc) {
+            listaEstados.estados.push({
+                "uf": regioes.sigla,
+                "descricao": regioes.nome
+            })
+        }
+    }
+
+    if (listaEstados.estados.length == 0)
+        return false
+
+    return listaEstados
+}
+
 console.log(getListaDeEstados())
 console.log(getDadosEstado('SP'))
 console.log(getCapitalEstado('AC'))
+console.log(getEstadosRegiao('sudeste'))
