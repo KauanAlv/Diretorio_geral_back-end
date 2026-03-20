@@ -34,8 +34,9 @@ const getListaDeEstados = function () {
 
 const getDadosEstado = function (siglaEscolhida) {
     let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
+    let estadoDaSigla
 
-    for (let estadoDaSigla of ESTADOS) {
+    for (estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
             return {
                 uf: estadoDaSigla.sigla,
@@ -50,5 +51,24 @@ const getDadosEstado = function (siglaEscolhida) {
     return false
 }
 
+const getCapitalEstado = function (siglaEscolhida) {
+    let sigla = siglaEscolhida.toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
+    let estadoDaSigla
+
+    for (estadoDaSigla of ESTADOS) {
+        if (estadoDaSigla.sigla == sigla) {
+            return {
+                uf: estadoDaSigla.sigla,
+                descricao: estadoDaSigla.nome,
+                capital: estadoDaSigla.capital
+            }
+        }
+    }
+
+    //Se não haver nada ou algo diferente das siglas corretas, vai retornar false
+    return false
+}
+
 console.log(getListaDeEstados())
 console.log(getDadosEstado('SP'))
+console.log(getCapitalEstado('AC'))
