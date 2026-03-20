@@ -91,7 +91,30 @@ const getEstadosRegiao = function (regiaoEscolhida) {
     return listaEstados
 }
 
+const getCapitalPais = function () {
+    let listaCapitais = {
+        "capitais": []
+    }
+
+    ESTADOS.forEach(function (todasCapitais) {
+        if (todasCapitais.capital_pais) {
+            listaCapitais.capitais.push({
+                "capital_atual": todasCapitais.capital_pais.capital,
+                "uf": todasCapitais.sigla,
+                "descricao": todasCapitais.nome,
+                "capital": todasCapitais.capital,
+                "regiao": todasCapitais.regiao,
+                "capital_pais_ano_inicio": todasCapitais.capital_pais.ano_inicio,
+                "capital_pais_ano_termino": todasCapitais.capital_pais.ano_fim
+            })
+        }
+    })
+
+    return listaCapitais
+}
+
 console.log(getListaDeEstados())
 console.log(getDadosEstado('SP'))
 console.log(getCapitalEstado('AC'))
-console.log(getEstadosRegiao('sudeste'))
+console.log(getEstadosRegiao('Sul'))
+console.log(getCapitalPais())
