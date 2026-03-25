@@ -153,10 +153,3 @@ const getCidades = function (siglaEscolhida) {
 
     return listaCidades
 }
-
-console.log(getListaDeEstados())
-console.log(getDadosEstado('SP'))
-console.log(getCapitalEstado('AC'))
-console.log(getEstadosRegiao('Sul'))
-console.log(getCapitalPais())
-console.log(getCidades('AC'))
