@@ -33,13 +33,14 @@ const getListaDeEstados = function () {
 
 const getDadosEstado = function (siglaEscolhida) {
     let sigla = String(siglaEscolhida).toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
-    let listaEstado = {
+    let listaEstado = { //Cria uma variável de um JSON para ser inserido o indice
         "uf": sigla,
         "descricao": false,
         "capital": false,
         "regiao": false
     }
 
+    //Faz um for of para pegar da API a descrição, a capital e a região
     for (let estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
             listaEstado.descricao = estadoDaSigla.nome
@@ -48,6 +49,7 @@ const getDadosEstado = function (siglaEscolhida) {
         }
     }
 
+    //Se algum desses estiverem falso, vai retornar falso
     if (listaEstado.descricao == false || listaEstado.capital == false || listaEstado.regiao == false)
         return false
 
@@ -62,6 +64,7 @@ const getCapitalEstado = function (siglaEscolhida) {
         "capital": false
     }
 
+    //Faz um for of para pegar da API a descrição e a capital
     for (let estadoDaSigla of ESTADOS) {
         if (estadoDaSigla.sigla == sigla) {
             listaCapitalEstado.descricao = estadoDaSigla.nome
@@ -69,22 +72,22 @@ const getCapitalEstado = function (siglaEscolhida) {
         }
     }
 
+    //Se algum desses estiverem falso, vai retornar falso
     if (listaCapitalEstado.descricao === false || listaCapitalEstado.capital === false)
-        //Caso continue false, o return vai ser falso
         return false
 
     return listaCapitalEstado
 }
 
 const getEstadosRegiao = function (regiaoEscolhida) {
-    let regEsc = String(regiaoEscolhida).toUpperCase()
-    let listaEstados = {
+    let regEsc = String(regiaoEscolhida).toUpperCase() //Cria a variável da região escolhida, transformando em maiúsculo
+    let listaEstados = { //Cria uma variável de um JSON inicial, com a região definida e o estado com um array vazio
         "regiao": regEsc,
         "estados": []
     }
-    let regioes
 
-    for (regioes of ESTADOS) {
+    //Faz um for of nos estados da região escolhida e adiciona os estados no array que inicialmente estava vazio
+    for (let regioes of ESTADOS) {
         if (regioes.regiao.toUpperCase() == regEsc) {
             listaEstados.estados.push({
                 "uf": regioes.sigla,
@@ -93,6 +96,7 @@ const getEstadosRegiao = function (regiaoEscolhida) {
         }
     }
 
+    //Se o array inicial estiver vazil, vai retornar falso
     if (listaEstados.estados.length === 0)
         return false
 
@@ -100,10 +104,11 @@ const getEstadosRegiao = function (regiaoEscolhida) {
 }
 
 const getCapitalPais = function () {
-    let listaCapitais = {
+    let listaCapitais = { //Cria uma variável de um JSON, com um array da capital vazio
         "capitais": []
     }
 
+    //Faz um for each nos estados para procurar os estados que já foram capitais e adiciona no array vazio
     ESTADOS.forEach(function (todasCapitais) {
         if (todasCapitais.capital_pais) {
             listaCapitais.capitais.push({
@@ -122,14 +127,16 @@ const getCapitalPais = function () {
 }
 
 const getCidades = function (siglaEscolhida) {
-    let siglaEst = String(siglaEscolhida).toUpperCase()
-    let listaCidades = {
+    let siglaEst = String(siglaEscolhida).toUpperCase() //Cria a variável da sigla escolhida, transformando em maiúsculo
+    let listaCidades = { //Cria uma variável de um JSON inicial, com a sigla escolhida, a descrição e a quantidade de cidades sem valor
+                            //e o atributo chave com um array vazio
         "uf": siglaEst,
         "descricao": false,
         "quantidade_cidades": false,
         "cidades": []
     }
 
+    //Faz um for of dos estados para adicionar a descrição, quantidade de cidades e as cidades de cada estado
     for (let estado of ESTADOS) {
         if (estado.sigla.toUpperCase() == siglaEst) {
             estado.cidades.forEach(function (todasCidades) {
@@ -140,6 +147,7 @@ const getCidades = function (siglaEscolhida) {
         }
     }
 
+    //Se o array das cidades estiver vazio, retorna falso
     if (listaCidades.cidades.length === 0)
         return false
 
