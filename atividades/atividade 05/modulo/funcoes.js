@@ -15,16 +15,16 @@ const getDadosGerais = function () {
 const getDadosUsuario = function (numeroWhatsapp) {
     let dados = {}
 
-    for (let itemContato of contatos) {
-        if (itemContato.number == String(numeroWhatsapp)) {
-            dados.nome = itemContato.account
-            dados.nick = itemContato.nickname
-            dados.foto = itemContato['profile-image']
-            dados.numero = itemContato.number
-            dados.background = itemContato.background
+    for (let itemUsuario of contatos) {
+        if (itemUsuario.number == String(numeroWhatsapp)) {
+            dados.nome = itemUsuario.account
+            dados.nick = itemUsuario.nickname
+            dados.foto = itemUsuario['profile-image']
+            dados.numero = itemUsuario.number
+            dados.background = itemUsuario.background
             dados.dados_conta = {
-                "inicio": itemContato['created-since'].start,
-                "fim": itemContato['created-since'].end
+                "inicio": itemUsuario['created-since'].start,
+                "fim": itemUsuario['created-since'].end
             }
         }
     }
@@ -35,5 +35,28 @@ const getDadosUsuario = function (numeroWhatsapp) {
     return dados
 }
 
+const getContatosUsuario = function (numeroWhatsapp) {
+    let dados = {
+        contatos: []
+    }
+
+    for (let usuario of contatos) {
+        if (usuario.number == String(numeroWhatsapp)) {
+            usuario.contacts.forEach(function (contatoUsuario) {
+                dados.contatos.push({
+                    "nome": contatoUsuario.name,
+                    "foto": contatoUsuario.image,
+                    "descricao": contatoUsuario.description
+                })
+            })
+        }
+    }
+
+    if (dados.contatos.length == 0)
+        return false
+    return dados
+}
+
 console.log(getDadosGerais())
 console.log(getDadosUsuario(11987876567))
+console.log(getContatosUsuario(11987876567))
