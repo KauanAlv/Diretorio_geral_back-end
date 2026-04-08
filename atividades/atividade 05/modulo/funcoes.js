@@ -73,8 +73,31 @@ const getMensagemUsuario = function (numeroWhatsapp) {
     return dados
 }
 
+const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
+    let dados = {
+        "nome": false,
+        "numero": numeroWhatsapp,
+    }
 
-console.log(getDadosGerais())
-console.log(getDadosUsuario(11987876567))
-console.log(getContatosUsuario(11987876567))
-console.log(getMensagemUsuario(11987876567))
+    for (let usuario of contatos) {
+        if (usuario.number == String(numeroWhatsapp)) {
+            usuario.contacts.forEach(function (itemContato) {
+                if (itemContato.name == String(nomeContato)) {
+                    dados.nome = itemContato.name
+                    dados.mensagens = []
+                    itemContato.messages.forEach(function (itensMensagem){
+                        itensMensagem.content
+                    })
+                }
+            })
+        }
+    }
+    return dados
+
+}
+
+// console.log(getDadosGerais())
+// console.log(getDadosUsuario(11987876567))
+// console.log(getContatosUsuario(11987876567))
+// console.log(getMensagemUsuario(11987876567))
+console.log(getContatoMensagem(11987876567, "José Maria da Silva"))
