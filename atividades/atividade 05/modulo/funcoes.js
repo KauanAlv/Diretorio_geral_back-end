@@ -37,7 +37,7 @@ const getDadosUsuario = function (numeroWhatsapp) {
 
 const getContatosUsuario = function (numeroWhatsapp) {
     let dados = {
-        contatos: []
+        "contatos": []
     }
 
     for (let usuario of contatos) {
@@ -57,6 +57,24 @@ const getContatosUsuario = function (numeroWhatsapp) {
     return dados
 }
 
+const getMensagemUsuario = function (numeroWhatsapp) {
+    let dados = {}
+
+    for (let usuario of contatos) {
+        if (usuario.number == String(numeroWhatsapp)) {
+            dados.contatos = usuario.contacts
+        }
+    }
+
+    //Se não receber nenhuma chave no json, retorna 0
+    if (Object.keys(dados) == 0)
+        return false
+
+    return dados
+}
+
+
 console.log(getDadosGerais())
 console.log(getDadosUsuario(11987876567))
 console.log(getContatosUsuario(11987876567))
+console.log(getMensagemUsuario(11987876567))
