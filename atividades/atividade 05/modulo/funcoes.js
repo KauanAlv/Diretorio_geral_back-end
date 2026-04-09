@@ -86,7 +86,11 @@ const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
                     dados.nome = itemContato.name
                     dados.mensagens = []
                     itemContato.messages.forEach(function (itensMensagem){
-                        itensMensagem.content
+                        dados.mensagens.push({
+                            "remetente": itensMensagem.sender,
+                            "conteudo": itensMensagem.content,
+                            "horario": itensMensagem.time
+                        })
                     })
                 }
             })
