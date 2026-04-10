@@ -77,6 +77,7 @@ const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
     let dados = {
         "nome": false,
         "numero": numeroWhatsapp,
+        "mensagens": []
     }
 
     for (let usuario of contatos) {
@@ -84,8 +85,7 @@ const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
             usuario.contacts.forEach(function (itemContato) {
                 if (itemContato.name == String(nomeContato)) {
                     dados.nome = itemContato.name
-                    dados.mensagens = []
-                    itemContato.messages.forEach(function (itensMensagem){
+                    itemContato.messages.forEach(function (itensMensagem) {
                         dados.mensagens.push({
                             "remetente": itensMensagem.sender,
                             "conteudo": itensMensagem.content,
@@ -96,12 +96,14 @@ const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
             })
         }
     }
-    return dados
 
+    if (dados.mensagens.length == 0)
+        return false
+    return dados
 }
 
 // console.log(getDadosGerais())
 // console.log(getDadosUsuario(11987876567))
 // console.log(getContatosUsuario(11987876567))
 // console.log(getMensagemUsuario(11987876567))
-console.log(getContatoMensagem(11987876567, "José Maria da Silva"))
+console.log(getContatoMensagem(11987876567, "Ana Maria"))
