@@ -60,6 +60,7 @@ app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
     }
 })
 
+//Endpoint que lista todos os contatos com as conversas de um determinado usuário
 app.use('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
     let numero = request.params.numero
     let contatos = whatsapp.getMensagemUsuario(numero)
