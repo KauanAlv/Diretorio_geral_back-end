@@ -75,16 +75,23 @@ const getMensagemUsuario = function (numeroWhatsapp) {
 
 const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
     let dados = {
-        "nome": false,
+        "usuario": false,
         "numero": numeroWhatsapp,
+        "contato": false,
         "mensagens": []
     }
+    let nome = String(nomeContato).toLowerCase()
 
     for (let usuario of contatos) {
         if (usuario.number == String(numeroWhatsapp)) {
+            dados.usuario = usuario.account
+
             usuario.contacts.forEach(function (itemContato) {
-                if (itemContato.name == String(nomeContato)) {
-                    dados.nome = itemContato.name
+                let nomeListaContatos = itemContato.name.toLowerCase()
+
+                if (nome === nomeListaContatos) {
+                    dados.contato = itemContato.name
+
                     itemContato.messages.forEach(function (itensMensagem) {
                         dados.mensagens.push({
                             "remetente": itensMensagem.sender,
