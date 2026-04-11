@@ -59,6 +59,7 @@ app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
         response.json({  "message": "Nenhum número de whatsapp foi encontrado"})
     }
 })
+
 // ================= START-API =================
 
 //Fazer o Start na API (aguardando as requisições)
