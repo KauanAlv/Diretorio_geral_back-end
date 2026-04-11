@@ -1,0 +1,42 @@
+/*************************************************************************
+ * Objetivo: Arquivo responsável pela criação da API do projeto Whatsapp
+ * Autor: Kauan Alves
+ * Data: 10/04/2026 - (sexta-feira)
+ * Versão: 1.0
+ ************************************************************************/
+
+//Import das dependências para criar a API
+const express = require('express')
+const cors = require('cors')
+
+//Criando um objeto do express para criar a API
+const app = express()
+
+//Configurações no cors da API
+const corsOptions = {
+    origin: ['*'],
+    methods: 'GET',
+    allowedHeaders: ['Content-type', 'Authorization'],
+}
+
+//Aplica as configurações do CORS no app (EXPRESS)
+app.use(cors(corsOptions))
+
+//Import do arquivo de funções
+const whatsapp = require('./modulo/funcoes.js')
+
+// ================= ENDPOINTS =================
+
+//Endpoint para listar todos os dados de todos os usuários
+app.use('/v1/whatsapp/dados/usuarios', function (request, response) {
+    let usuarios = whatsapp.getDadosGerais()
+    response.status(200)
+    response.json(usuarios)
+})
+
+// ================= START-API =================
+
+//Fazer o Start na API (aguardando as requisições)
+app.listen(8080, function () {
+    console.log('API aguardando novas requisições...')
+})

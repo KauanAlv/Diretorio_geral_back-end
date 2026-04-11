@@ -122,3 +122,12 @@ const filtrarMensagem = function (mensagens, palavraChave) {
 
     return resultado
 }
+
+module.exports = {
+    getDadosGerais,
+    getDadosUsuario,
+    getContatosUsuario,
+    getMensagemUsuario,
+    getContatoMensagem,
+    filtrarMensagem
+}
