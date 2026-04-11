@@ -102,8 +102,23 @@ const getContatoMensagem = function (numeroWhatsapp, nomeContato) {
     return dados
 }
 
-// console.log(getDadosGerais())
-// console.log(getDadosUsuario(11987876567))
-// console.log(getContatosUsuario(11987876567))
-// console.log(getMensagemUsuario(11987876567))
-console.log(getContatoMensagem(11987876567, "Ana Maria"))
+const filtrarMensagem = function (mensagens, palavraChave) {
+    if (!palavraChave)
+        return false
+
+    const busca = palavraChave.toLowerCase()
+    let resultado = []
+
+    for (let msg of mensagens) {
+        let conversas = (msg.content || "").toLowerCase()
+
+        if (conversas.includes(busca)) {
+            resultado.push(msg)
+        }
+    }
+
+    if (resultado.length == 0)
+        return false
+
+    return resultado
+}
