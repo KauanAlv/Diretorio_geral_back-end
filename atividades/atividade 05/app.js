@@ -73,6 +73,21 @@ app.use('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
     }
 })
 
+//Endpoint que lista todas as conversas de um determinado nome de contato, via query ?
+app.use('/v1/whatsapp/usuario/:numero/conversas', function (request, response) {
+    let numero = request.params.numero
+    let nomeContato = request.query.contato
+
+    let dados = whatsapp.getContatoMensagem(numero, nomeContato)
+    if (dados) {
+        response.status(200)
+        response.json(dados)
+    } else {
+        response.status(404)
+        response.json({ "message": "Nenhuma conversa foi encontrada" })
+    }
+})
+
 // ================= START-API =================
 
 //Fazer o Start na API (aguardando as requisições)
