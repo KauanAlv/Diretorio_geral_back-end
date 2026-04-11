@@ -47,6 +47,18 @@ app.use('/v1/whatsapp/dados/usuario/:numero', function (request, response) {
     }
 })
 
+//Endpoint para listar os contatos do usuário
+app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
+    let numero = request.params.numero
+    let contatos = whatsapp.getContatosUsuario(numero)
+    if (contatos) {
+        response.status(200)
+        response.json(contatos)
+    } else {
+        response.status(404)
+        response.json({  "message": "Nenhum número de whatsapp foi encontrado"})
+    }
+})
 // ================= START-API =================
 
 //Fazer o Start na API (aguardando as requisições)
