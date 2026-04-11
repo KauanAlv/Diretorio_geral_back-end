@@ -34,6 +34,19 @@ app.use('/v1/whatsapp/dados/usuarios', function (request, response) {
     response.json(usuarios)
 })
 
+//Endpoint para listar os dados do usuário com base no número do whatsapp
+app.use('/v1/whatsapp/dados/usuario/:numero', function (request, response) {
+    let numero = request.params.numero
+    let usuario = whatsapp.getDadosUsuario(numero)
+    if (usuario) {
+        response.status(200)
+        response.json(usuario)
+    } else {
+        response.status(404)
+        response.json({ "message": "Nenhum número de whatsapp foi encontrado" })
+    }
+})
+
 // ================= START-API =================
 
 //Fazer o Start na API (aguardando as requisições)
