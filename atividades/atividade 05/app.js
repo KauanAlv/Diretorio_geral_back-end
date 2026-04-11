@@ -28,14 +28,14 @@ const whatsapp = require('./modulo/funcoes.js')
 // ================= ENDPOINTS =================
 
 //Endpoint para listar todos os dados de todos os usuários
-app.use('/v1/whatsapp/dados/usuarios', function (request, response) {
+app.get('/v1/whatsapp/dados/usuarios', function (request, response) {
     let usuarios = whatsapp.getDadosGerais()
     response.status(200)
     response.json(usuarios)
 })
 
 //Endpoint para listar os dados do usuário com base no número do whatsapp
-app.use('/v1/whatsapp/dados/usuario/:numero', function (request, response) {
+app.get('/v1/whatsapp/dados/usuario/:numero', function (request, response) {
     let numero = request.params.numero
     let usuario = whatsapp.getDadosUsuario(numero)
     if (usuario) {
@@ -48,7 +48,7 @@ app.use('/v1/whatsapp/dados/usuario/:numero', function (request, response) {
 })
 
 //Endpoint para listar os contatos do usuário
-app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
+app.get('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
     let numero = request.params.numero
     let contatos = whatsapp.getContatosUsuario(numero)
     if (contatos) {
@@ -61,7 +61,7 @@ app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
 })
 
 //Endpoint que lista todos os contatos com as conversas de um determinado usuário
-app.use('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
+app.get('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
     let numero = request.params.numero
     let contatos = whatsapp.getMensagemUsuario(numero)
     if (contatos) {
@@ -74,7 +74,7 @@ app.use('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
 })
 
 //Endpoint que lista todas as conversas de um determinado nome de contato, via query ?
-app.use('/v1/whatsapp/usuario/:numero/conversas', function (request, response) {
+app.get('/v1/whatsapp/usuario/:numero/conversas', function (request, response) {
     let numero = request.params.numero
     let nomeContato = request.query.contato
 
@@ -85,6 +85,37 @@ app.use('/v1/whatsapp/usuario/:numero/conversas', function (request, response) {
     } else {
         response.status(404)
         response.json({ "message": "Nenhuma conversa foi encontrada" })
+    }
+})
+
+//Endpoint que filtra uma palavra específica de uma conversa do usuário com um contato
+app.get('/v1/whatsapp/usuarios/:numero/conversas/filtro', function (request, response) {
+    let numero = request.params.numero
+    let nomeContato = request.query.contato
+    let palavra = request.query.palavra
+
+    if (!nomeContato || !palavra) {
+        response.status(400)
+        response.json({ "message": "Parâmetros 'contato' e 'palavra' são obrigatórios" })
+    }
+
+    let dados = whatsapp.getContatoMensagem(numero, nomeContato)
+    let mensagensFiltradas = dados && whatsapp.filtrarMensagem(dados.mensagens, palavra)
+
+    if (!dados) {
+        response.status(404)
+        response.json({ "message": "Nenhuma conversa foi encontrada" })
+    } else if (!mensagensFiltradas) {
+        response.status(404)
+        response.json({ "message": "Nenhuma mensagem foi encontrada com essa palavra" })
+    } else {
+        response.status(200)
+        response.json({
+            usuario: dados.usuario,
+            contato: dados.contato,
+            numero: dados.numero,
+            mensagens: mensagensFiltradas
+        })
     }
 })
 

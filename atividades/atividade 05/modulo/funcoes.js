@@ -117,7 +117,7 @@ const filtrarMensagem = function (mensagens, palavraChave) {
     let resultado = []
 
     for (let msg of mensagens) {
-        let conversas = (msg.content || "").toLowerCase()
+        let conversas = (msg.conteudo || "").toLowerCase()
 
         if (conversas.includes(busca)) {
             resultado.push(msg)
