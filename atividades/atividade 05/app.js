@@ -119,6 +119,44 @@ app.get('/v1/whatsapp/usuarios/:numero/conversas/filtro', function (request, res
     }
 })
 
+//Endpoint que lista todos os outros endpoints
+app.get('/v1/whatsapp/help', function (request, response) {
+    let docAPI = {
+        "api-description": "API para manipular dados estilo Whatsapp",
+        "date": "2026-04-10",
+        "development": "Kauan Alves Pereira",
+        "version": 1.0,
+        "endpoints": [
+            {
+                "router1": "/v1/whatsapp/dados/usuarios",
+                "description": "Retorna a lista de dados de todos os usuários"
+            },
+            {
+                "router2": "/v1/whatsapp/dados/usuario/:numero",
+                "description": "Retorna os dados do usuário, filtrando pelo seu número de whatsapp"
+            },
+            {
+                "router3": "/v1/whatsapp/dados/contatos/:numero",
+                "description": "Retorna uma lista de contatos, filtrando pelo número de Whatsapp do usuário"
+            },
+            {
+                "router4": "/v1/whatsapp/usuario/:numero/mensagens",
+                "description": "Retorna uma lista de contatos, com as conversas daquele usuário com seus contato, filtrando pelo numero de Whatsapp do usuário"
+            },
+            {
+                "router5": "/v1/whatsapp/usuario/:numero/conversas",
+                "description": "Retorna todas as conversas de um determinado contato, filtrando pelo número de usuário e o nome do contato"
+            },
+            {
+                "router6": "/v1/whatsapp/usuarios/:numero/conversas/filtro",
+                "description": "Retorna todas as conversas de um usuário com um contato, filtradas pelo número de usuário, nome do contato e da palavra que deseja buscar"
+            },
+        ]
+    }
+    response.status(200)
+    response.json(docAPI)
+})
+
 // ================= START-API =================
 
 //Fazer o Start na API (aguardando as requisições)
