@@ -56,7 +56,19 @@ app.use('/v1/whatsapp/dados/contatos/:numero', function (request, response) {
         response.json(contatos)
     } else {
         response.status(404)
-        response.json({  "message": "Nenhum número de whatsapp foi encontrado"})
+        response.json({ "message": "Nenhum número de whatsapp foi encontrado" })
+    }
+})
+
+app.use('/v1/whatsapp/usuario/:numero/mensagens', function (request, response) {
+    let numero = request.params.numero
+    let contatos = whatsapp.getMensagemUsuario(numero)
+    if (contatos) {
+        response.status(200)
+        response.json(contatos)
+    } else {
+        response.status(404)
+        response.json({ "message": "Nenhum número de whatsapp foi encontrado" })
     }
 })
 

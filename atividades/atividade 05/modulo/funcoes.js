@@ -67,7 +67,7 @@ const getMensagemUsuario = function (numeroWhatsapp) {
     }
 
     //Se não receber nenhuma chave no json, retorna 0
-    if (Object.keys(dados) == 0)
+    if (Object.keys(dados).length == 0)
         return false
 
     return dados
