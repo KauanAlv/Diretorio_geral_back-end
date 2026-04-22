@@ -41,8 +41,6 @@ const insertFilme = async function (filme) {
         return true
     else
         return false
-
-
 }
 
 //Função para atualizar um filme existente no banco de dados

@@ -20,19 +20,27 @@ const inserirNovoFilme = async function (filme) {
 
     if (filme.nome == '' || filme.nome == null || filme.nome == undefined || filme.nome.length > 80) {
         customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.sinopse == '' || filme.sinopse == null || filme.sinopse == undefined) {
         customMessage.ERROR_BAD_REQUEST.field = '[SINOPSE] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.capa == '' || filme.capa == null || filme.capa == undefined || filme.capa.length > 255) {
         customMessage.ERROR_BAD_REQUEST.field = '[CAPA] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.data_lancamento == '' || filme.data_lancamento == null || filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {
         customMessage.ERROR_BAD_REQUEST.field = '[DATA DE LANÇAMENTO] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.duracao == '' || filme.duracao == null || filme.duracao == undefined || filme.duracao.length < 5) {
         customMessage.ERROR_BAD_REQUEST.field = '[DURAÇÃO] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.valor == undefined || isNaN(filme.valor) || filme.valor.length > 5) {
         customMessage.ERROR_BAD_REQUEST.field = '[VALOR] INVÁLIDO'
+        return customMessage.ERROR_BAD_REQUEST
     } else if (filme.avaliacao == undefined || isNaN(filme.avaliacao) || filme.avaliacao.length > 3) {
         customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
     } else {
+        //Encaminha os dados do filme para o DAO inserir no Banco de Dados
         let result = await filmeDAO.insertFilme(filme)
 
         if (result) {
