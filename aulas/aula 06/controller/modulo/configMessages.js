@@ -24,6 +24,8 @@ const ERROR_INTERNAL_SERVER_CONTROLLER  = { status: false, status_code: 500, mes
 
 //Mensagens de SUCESSO do projeto de filmes
 const SUCCESS_RESPONSE     = { status: true, status_code: 200}
+const SUCCESS_UPDATED_ITEM = { status: true, status_code: 200, message: "Item atualizado com sucesso"}
+const SUCCESS_DELETED_ITEM = { status: true, status_code: 200, message: "Item deletado com sucesso"}
 const SUCCESS_CREATED_ITEM = { status: true, status_code: 201, message: "Item inserido com sucesso" }
 
 module.exports = {
@@ -34,5 +36,7 @@ module.exports = {
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_INTERNAL_SERVER_CONTROLLER,
     SUCCESS_RESPONSE,
+    SUCCESS_UPDATED_ITEM,
+    SUCCESS_DELETED_ITEM,
     SUCCESS_CREATED_ITEM
 }
