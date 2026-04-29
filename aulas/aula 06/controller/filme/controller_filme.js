@@ -222,7 +222,6 @@ const excluirFilme = async function (id) {
             if (result) {
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_DELETED_ITEM.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_DELETED_ITEM.status_code
-                customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_DELETED_ITEM.message
 
                 return customMessage.DEFAULT_MESSAGE // 200, filme deletado com sucesso
             } else {
