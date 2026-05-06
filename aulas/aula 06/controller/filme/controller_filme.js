@@ -51,6 +51,20 @@ const validarDados = async function (filme) {
     }
 }
 
+//Função para tratar os dados a serem inseridos
+const tratarDados = async function (filme) {
+    //Tratamento para eliminar a chegada da aspas (') como caracter inválido
+    filme.nome              = filme.nome.replaceAll("'", "")
+    filme.sinopse           = filme.sinopse.replaceAll("'", "")
+    filme.capa              = filme.capa.replaceAll("'", "")
+    filme.data_lancamento   = filme.data_lancamento.replaceAll("'", "")
+    filme.duracao           = filme.duracao.replaceAll("'", "")
+    filme.valor             = filme.valor.replaceAll("'", "")
+    filme.avaliacao         = filme.avaliacao.replaceAll("'", "")
+
+    return filme
+}
+
 //Função para inserir um novo filme
 const inserirNovoFilme = async function (filme, contentType) {
     //Cria uma cópia dos JSONs do arquivo de configuração de mensagens
@@ -69,12 +83,16 @@ const inserirNovoFilme = async function (filme, contentType) {
                 return validacao //retorna um status_code 400
             } else {
                 //Encaminha os dados do filme para o DAO inserir no Banco de Dados
-                let result = await filmeDAO.insertFilme(filme)
+                let result = await filmeDAO.insertFilme(await tratarDados(filme))
 
                 if (result) { //retorna um status_code 201
+                    //Cria o ID no JSON do filme e adiciona o ID gerado no DAO
+                    filme.id = result
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
+                    customMessage.DEFAULT_MESSAGE.response = filme
 
                     return customMessage.DEFAULT_MESSAGE // 201
                 } else { //retorna um status_code 500 (Model)
@@ -113,12 +131,13 @@ const atualizarFilme = async function (filme, id, contentType) {
                     filme.id = Number(id)
 
                     //Chama a função para atualizar o filme no Banco de Dados
-                    let result = await filmeDAO.updateFilme(filme)
+                    let result = await filmeDAO.updateFilme(await tratarDados(filme))
 
                     if (result) {
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response = filme
 
                         return customMessage.DEFAULT_MESSAGE // 200 (Atualizado)
                     } else {
@@ -214,16 +233,15 @@ const excluirFilme = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
+        //Chama a função de buscar filme para validar se o filme existe
         let resultBuscarFilme = await buscarFilme(id)
 
         if (resultBuscarFilme.status) {
+            //Chama a função do DAO para excluir o filme
             let result = await filmeDAO.deleteFilme(id)
 
             if (result) {
-                customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_DELETED_ITEM.status
-                customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_DELETED_ITEM.status_code
-
-                return customMessage.DEFAULT_MESSAGE // 200, filme deletado com sucesso
+                return customMessage.SUCCESS_DELETED_ITEM // 200 ou 204, filme deletado com sucesso
             } else {
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
             }

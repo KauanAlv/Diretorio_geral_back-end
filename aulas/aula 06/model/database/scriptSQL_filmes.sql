@@ -45,4 +45,6 @@ insert into tbl_filme (
     '3'
 );
 
-select * from tbl_filme;
+select * from tbl_filme order by id desc;
+
+delete from tbl_filme where id = 44;
