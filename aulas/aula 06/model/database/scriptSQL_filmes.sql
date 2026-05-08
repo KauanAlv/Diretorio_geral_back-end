@@ -10,6 +10,7 @@ use db_filmes_20261_b;
 #Permite visualizar todas as tabelas existentes dentro do database
 show tables;
 
+# Tabela de Filme
 create table tbl_filme (
 id 				int not null auto_increment primary key,
 nome 			varchar(80) not null,
@@ -19,6 +20,45 @@ data_lancamento date not null,
 duracao 		time not null,
 valor 			decimal(5,2) default 0,
 avaliacao 		decimal(3,2) default null
+);
+
+# Tabela de Gênero dos filmes
+create table tbl_genero (
+	id 		int not null auto_increment primary key,
+    genero 	varchar(30) not null
+);
+
+# Tabela de Classificação indicativa
+create table tbl_classificacao (
+	id 				int not null auto_increment primary key,
+    classificacao 	varchar(5) not null,
+    descricao 		text,
+    idade_minima 	int default 0
+);
+
+# Tabela de Sexo
+create table tbl_sexo (
+	id 		int not null auto_increment primary key,
+    sigla 	varchar(3) not null,
+    sexo 	varchar(15) not null
+);
+
+# Tabela de Nacionalidade 
+create table tbl_nacionalidade (
+	id 				int not null auto_increment primary key,
+    nacionalidade 	varchar(25) not null
+);
+
+# Tabela de Foto
+create table tbl_foto (
+	id 		int not null auto_increment primary key,
+    foto 	varchar(255) not null
+);
+
+# Tabela de Atividade ( Ator, Produtor, Figurinista...)
+create table tbl_atividade (
+	id 				int not null auto_increment primary key,
+    area_atuacao 	varchar(40) not null
 );
 
 #Permite apagar tudo da tabela de filmes

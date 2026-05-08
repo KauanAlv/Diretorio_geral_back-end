@@ -79,7 +79,7 @@ const updateFilme = async function (filme) {
 const selectAllFilme = async function () {
     try {
         //Script SQL para listar todos os filmes
-        let sql = 'select * from tbl_filme order by id desc'
+        let sql = 'select * from tbl_filme order by id desc;'
 
         //Executa no banco de dados o script e guarda o retorno do banco,
         //Pode ser um ERRO (false) ou um Array (de acordo com o Knex) com os dados.
@@ -107,7 +107,7 @@ const selectByIdFilme = async function (id) {
 
         //Validação para verificar se o retorno do Banco de Dados é um Array ou um Boolean (false)
         if (Array.isArray(result)) {
-            return result[0] //Retorna somente o indice com a lista de filmes
+            return result[0] //Retorna somente o indice da lista de filmes
         } else {
             return false
         }
