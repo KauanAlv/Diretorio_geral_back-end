@@ -23,6 +23,7 @@ app.use(cors(corsOptions))
 //Import das controllers do projeto
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
+const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
 
 // ================= ENDPOINTS =================
 // ================= FILME =====================
@@ -139,6 +140,54 @@ app.delete('/v1/senai/locadora/genero/:id', async function (request, response) {
     let id = request.params.id
 
     let result = await controllerGenero.excluirGenero(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= NACIONALIDADE ====================
+app.post('/v1/senai/locadora/nacionalidade', bodyParserJSON, async function (request, response) {
+
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerNacionalidade.inserirNovoNacionalidade(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/nacionalidade', async function (request, response) {
+
+    let result = await controllerNacionalidade.listarNacionalidade()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/nacionalidade/:id', async function (request, response) {
+
+    let id = request.params.id
+    let result = await controllerNacionalidade.buscarNacionalidade(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/nacionalidade/:id', bodyParserJSON, async function (request, response) {
+    
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+
+    let result = await controllerNacionalidade.atualizarNacionalidade(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/nacionalidade/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerNacionalidade.excluirNacionalidade(id)
     response.status(result.status_code)
     response.json(result)
 })

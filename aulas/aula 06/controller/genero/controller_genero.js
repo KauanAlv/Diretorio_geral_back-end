@@ -182,7 +182,7 @@ const excluirGenero = async function (id) {
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
             }
         } else {
-            return resultBuscarGenero // 400, 404
+            return resultBuscarGenero // 400, 404, 500 da controller/model
         }
     } catch (error) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller

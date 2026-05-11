@@ -81,7 +81,7 @@ const selectAllGenero = async function () {
 
 const selectByIdGenero = async function (id) {
     try {
-        let sql = `select * from tbl_genero where id = ${id}`
+        let sql = `select * from tbl_genero where id = ${id};`
 
         let result = await knexConection.raw(sql)
 
