@@ -17,7 +17,6 @@ const knexConection = knex(knexDatabaseConfig.development)
 
 const insertFoto = async function (foto) {
     try {
-
         let sql = `insert into tbl_foto (
         foto
         ) values (
@@ -97,7 +96,7 @@ const deleteFoto = async function (id) {
             return true
         else 
             return false
-        
+
     } catch (error) {
         return false
     }

@@ -25,6 +25,7 @@ const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
 const controllerFoto = require('./controller/foto/controller_foto.js')
+const controllerAtividade = require('./controller/atividade/controller_atividade.js')
 
 // ================= ENDPOINTS =================
 // ================= FILME =====================
@@ -232,6 +233,49 @@ app.delete('/v1/senai/locadora/foto/:id', async function (request, response) {
     let id = request.params.id
     
     let result = await controllerFoto.excluirFoto(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= ATIVIDADE ====================
+app.post('/v1/senai/locadora/atividade', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerAtividade.inserirNovaAtividade(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/atividade', async function (request, response) {
+    
+    let result = await controllerAtividade.listarAtividade()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/atividade/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerAtividade.buscarAtividade(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/atividade/:id', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+    
+    let result = await controllerAtividade.atualizarAtividade(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/atividade/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerAtividade.excluirAtividade(id)
     response.status(result.status_code)
     response.json(result)
 })
