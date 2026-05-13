@@ -59,7 +59,7 @@ const atualizarFoto = async function (foto, id, contentType) {
 
                 if (!validar) {
                     foto.id = Number(id)
-                    let result = await fotoDAO.insertFoto(foto)
+                    let result = await fotoDAO.updateFoto(foto)
 
                     if (result) {
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status

@@ -22,7 +22,7 @@ const inserirNovaAtividade = async function (atividade, contentType) {
             if (validacao) {
                 return validacao // 400 (dados)
             } else {
-                let result = await atividadeDAO.insertAtividade(atividade)
+                let result = await atividadeDAO.updateAtividadeAtividade(atividade)
 
                 if (result) {
                     atividade.id = result

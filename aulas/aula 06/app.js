@@ -26,6 +26,7 @@ const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
 const controllerFoto = require('./controller/foto/controller_foto.js')
 const controllerAtividade = require('./controller/atividade/controller_atividade.js')
+const controllerSexo = require('./controller/sexo/controller_sexo.js')
 
 // ================= ENDPOINTS =================
 // ================= FILME =====================
@@ -276,6 +277,49 @@ app.delete('/v1/senai/locadora/atividade/:id', async function (request, response
     let id = request.params.id
 
     let result = await controllerAtividade.excluirAtividade(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= SEXO ====================
+app.post('/v1/senai/locadora/sexo', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerSexo.inserirNovoSexo(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/sexo', async function (request, response) {
+    
+    let result = await controllerSexo.listarSexo()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/sexo/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerSexo.buscarSexo(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/sexo/:id', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+    
+    let result = await controllerSexo.atualizarSexo(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/sexo/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerSexo.excluirSexo(id)
     response.status(result.status_code)
     response.json(result)
 })
