@@ -24,6 +24,7 @@ app.use(cors(corsOptions))
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
+const controllerFoto = require('./controller/foto/controller_foto.js')
 
 // ================= ENDPOINTS =================
 // ================= FILME =====================
@@ -151,7 +152,7 @@ app.post('/v1/senai/locadora/nacionalidade', bodyParserJSON, async function (req
 
     let contentType = request.headers['content-type']
 
-    let result = await controllerNacionalidade.inserirNovoNacionalidade(dados, contentType)
+    let result = await controllerNacionalidade.inserirNovaNacionalidade(dados, contentType)
     response.status(result.status_code)
     response.json(result)
 })
@@ -173,7 +174,7 @@ app.get('/v1/senai/locadora/nacionalidade/:id', async function (request, respons
 })
 
 app.put('/v1/senai/locadora/nacionalidade/:id', bodyParserJSON, async function (request, response) {
-    
+
     let dados = request.body
     let id = request.params.id
     let contentType = request.headers['content-type']
@@ -188,6 +189,49 @@ app.delete('/v1/senai/locadora/nacionalidade/:id', async function (request, resp
     let id = request.params.id
 
     let result = await controllerNacionalidade.excluirNacionalidade(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= FOTO ====================
+app.post('/v1/senai/locadora/foto', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFoto.inserirNovaFoto(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/foto', async function (request, response) {
+
+    let result = await controllerFoto.listarFoto()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/foto/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerFoto.buscarFoto(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/foto/:id', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+
+    let result = await controllerFoto.atualizarFoto(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/foto/:id', async function (request, response) {
+    let id = request.params.id
+    
+    let result = await controllerFoto.excluirFoto(id)
     response.status(result.status_code)
     response.json(result)
 })
