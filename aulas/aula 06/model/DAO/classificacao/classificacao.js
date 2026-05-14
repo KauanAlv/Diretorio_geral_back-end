@@ -44,8 +44,8 @@ const updateClassificacao = async function (classificacao) {
         let sql =
         `update tbl_classificacao set
             classificacao = replace ("${classificacao.classificacao}", "'", ""),
-            descricao = replace ("${classificacao.descricao}", "'", ""),
-            idade_minima = replace ("${classificacao.idade_minima}", "'", "")
+            descricao = if('${classificacao.descricao}' = '', null, replace("${classificacao.descricao}", "'", "")),
+            idade_minima = if('${classificacao.idade_minima}' = '', 0, replace ("${classificacao.idade_minima}", "'", ""))
         where id = ${classificacao.id};`
 
         let result = await knexConection.raw(sql)
