@@ -25,7 +25,7 @@ const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
             if (validacao) {
                 return validacao // 400
             } else {
-                let result = await nacionalidadeDAO.updateNacionalidade(nacionalidade)
+                let result = await nacionalidadeDAO.insertNacionalidade(nacionalidade)
 
                 if (result) {
                     nacionalidade.id = result
