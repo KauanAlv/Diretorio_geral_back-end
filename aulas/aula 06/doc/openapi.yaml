@@ -508,7 +508,7 @@ paths:
   /v1/senai/locadora/genero:
     post:
       tags:
-        - Gênero
+        - Genero
       summary: Adiciona um novo gênero
       description: Endpoint para enviar os dados do gênero a serem cadastrados
       requestBody:
@@ -529,7 +529,7 @@ paths:
           description: Error Internal Server (Controller / Model)
     get:
       tags:
-        - Gênero
+        - Genero
       summary: Lista todos os gêneros
       description: Listagem de todos os gêneros registrados no sistema
       responses:
@@ -548,7 +548,7 @@ paths:
   /v1/senai/locadora/genero/{id}:
     get:
       tags:
-        - Gênero
+        - Genero
       summary: Busca um gênero pelo ID
       description: Retorna um gênero pelo ID
       parameters:
@@ -574,7 +574,7 @@ paths:
           description: Error Internal Server (Controller / Model)
     put:
       tags:
-        - Gênero
+        - Genero
       summary: Atualizar um gênero pelo ID
       description: Buscar e atualizar um gênero pelo ID
       parameters:
@@ -605,7 +605,7 @@ paths:
           description: Error Internal Server (Controller / Model)
     delete:
       tags:
-        - Gênero
+        - Genero
       summary: Excluir um gênero pelo ID
       description: Buscar e excluir um gênero pelo ID
       parameters:
