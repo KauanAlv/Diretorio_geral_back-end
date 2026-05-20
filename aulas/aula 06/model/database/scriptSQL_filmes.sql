@@ -36,6 +36,8 @@ create table tbl_classificacao (
     idade_minima 	int default 0
 );
 
+desc tbl_classificacao;
+
 # Tabela de Sexo
 create table tbl_sexo (
 	id 		int not null auto_increment primary key,
@@ -88,3 +90,39 @@ insert into tbl_filme (
 select * from tbl_filme order by id desc;
 
 delete from tbl_filme where id = 44;
+
+delete from tbl_filme;
+select * from tbl_filme;
+
+alter table tbl_filme
+	add column id_classificacao	int not null,
+    add	constraint 	FK_CLASSIFICACAO_FILME
+		foreign key	(id_classificacao)
+        references	tbl_classificacao(id);
+        
+desc tbl_filme;
+
+create table tbl_ator (
+	id 				int not null auto_increment primary key,
+    nome 			varchar(100) not null,
+    data_nascimento date not null,
+    inicio_carreira	year not null,
+    biografia 		text not null,
+    id_sexo			int not null,
+    
+    constraint 	FK_SEXO_ATOR
+    foreign key	(id_sexo)
+    references 	tbl_sexo(id)
+);
+
+create table tbl_diretor (
+	id 				int not null auto_increment primary key,
+    nome 			varchar(100) not null,
+    data_nascimento date not null,
+    inicio_carreira	year not null,
+    id_sexo			int not null,
+    
+    constraint 	FK_SEXO_DIRETOR
+    foreign key	(id_sexo)
+    references 	tbl_sexo(id)
+);

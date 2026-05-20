@@ -138,6 +138,128 @@ paths:
         '500':
           description: Error Internal Server (Controller / Model)
 
+  # ENDPOINTS DA TABELA - ATOR
+  /v1/senai/locadora/ator:
+    post:
+      tags:
+        - Ator
+      summary: Adiciona um novo ator
+      description: Endpoint para enviar os dados do ator a serem cadastrados
+      requestBody:
+        description: JSON contendo os dados do novo ator a ser inserida no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '201':
+          description: Success Created Item
+        '400':
+          description: Error Bad Request
+        '415':
+          description: Error Content-Type
+        '500':
+          description: Error Internal Server (Controller / Model)
+    get:
+      tags:
+        - Ator
+      summary: Lista todos os atores
+      description: Listagem de todos os atores registradas no sistema
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AtorGet'              
+        '404':
+          description: Error Not Found
+        '500':
+          description: Error Interal Server (Controller / Model)
+  /v1/senai/locadora/ator/{id}:
+    get:
+        tags:
+          - Ator
+        summary: Busca um ator pelo ID
+        description: Retorna um ator pelo ID
+        parameters:
+          - name: id
+            in: path
+            description: ID para realizar a busca do ator
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: Success Response
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/AtorGet'          
+          '400':
+            description: Error Bad Request
+          '404':
+            description: Error Not Found
+          '500':
+            description: Error Internal Server (Controller / Model)
+    put:
+      tags:
+        - Ator
+      summary: Atualizar um ator pelo ID
+      description: Buscar e atualizar um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca do ator
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar um ator
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+        required: true
+      responses:
+        '200':
+          description: Success Updated Item
+        '400':
+          description: Error Bad Request
+        '404':
+          description: Error Not Found
+        '415':
+          description: Error Content-Type
+        '500':
+          description: Error Internal Server (Controller / Model)
+    delete:
+      tags:
+        - Ator
+      summary: Excluir um ator pelo ID
+      description: Buscar e excluir um ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para buscar o ator
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success Deleted Item
+        '400':
+          description: Error Bad Request 
+        '404':
+          description: Error Not Found
+        '500':
+          description: Error Internal Server (Controller / Model)
+
   # ENDPOINTS DA TABELA - CLASSIFICAÇÃO
   /v1/senai/locadora/classificacao:
     post:
@@ -260,6 +382,128 @@ paths:
         '500':
           description: Error Internal Server (Controller / Model)
 
+  # ENDPOINTS DA TABELA - DIRETOR
+  /v1/senai/locadora/diretor:
+    post:
+      tags:
+        - Diretor
+      summary: Adiciona um novo diretor
+      description: Endpoint para enviar os dados do diretor a serem cadastrados
+      requestBody:
+        description: JSON contendo os dados do novo diretor a ser inserida no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diretor'
+        required: true
+      responses:
+        '201':
+          description: Success Created Item
+        '400':
+          description: Error Bad Request
+        '415':
+          description: Error Content-Type
+        '500':
+          description: Error Internal Server (Controller / Model)
+    get:
+      tags:
+        - Diretor
+      summary: Lista todos os diretores
+      description: Listagem de todos os diretores registradas no sistema
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiretorGet'              
+        '404':
+          description: Error Not Found
+        '500':
+          description: Error Interal Server (Controller / Model)
+  /v1/senai/locadora/diretor/{id}:
+    get:
+        tags:
+          - Diretor
+        summary: Busca um diretor pelo ID
+        description: Retorna um diretor pelo ID
+        parameters:
+          - name: id
+            in: path
+            description: ID para realizar a busca do diretor
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: Success Response
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DiretorGet'          
+          '400':
+            description: Error Bad Request
+          '404':
+            description: Error Not Found
+          '500':
+            description: Error Internal Server (Controller / Model)
+    put:
+      tags:
+        - Diretor
+      summary: Atualizar um diretor pelo ID
+      description: Buscar e atualizar um diretor pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca do diretor
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar um diretor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diretor'
+        required: true
+      responses:
+        '200':
+          description: Success Updated Item
+        '400':
+          description: Error Bad Request
+        '404':
+          description: Error Not Found
+        '415':
+          description: Error Content-Type
+        '500':
+          description: Error Internal Server (Controller / Model)
+    delete:
+      tags:
+        - Diretor
+      summary: Excluir um diretor pelo ID
+      description: Buscar e excluir um diretor pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para buscar o diretor
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success Deleted Item
+        '400':
+          description: Error Bad Request 
+        '404':
+          description: Error Not Found
+        '500':
+          description: Error Internal Server (Controller / Model)
+
   # ENDPOINTS DA TABELA - FILME
   /v1/senai/locadora/filme:
     post:
@@ -296,7 +540,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Filme'          
+                  $ref: '#/components/schemas/FilmeGet'          
         '404':
           description: Error Not Found
         '500':
@@ -321,7 +565,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Filme'          
+                $ref: '#/components/schemas/FilmeGet'          
         '400':
           description: Error Bad Request
         '404':
@@ -885,6 +1129,37 @@ components:
           example: "Roteirista"
           description: O número máximo de caracteres é de 40.
 
+    Ator:
+      required:
+      - id
+      - nome
+      - data_nascimento
+      - inicio_carreira
+      - biografia
+      - id_sexo
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          example: Caio
+          description: O número máximo de caracteres é 100.
+        data_nascimento:
+          type: string
+          format: date
+          example: "2000-01-01"
+        inicio_carreira:
+          type: string
+          pattern: '^\d{4}$'
+          example: '2020'
+          description: Ano no formato AAAA (máximo de 4 dígitos).
+        biografia:
+          type: string
+          description: O número máximo de caracteres é ilimitado.
+        id_sexo:
+          type: integer
+
     Classificacao:
       required:
       - id
@@ -903,6 +1178,33 @@ components:
         idade_minima:
           type: integer
 
+    Diretor:
+      required:
+      - id
+      - nome
+      - data_nascimento
+      - inicio_carreira
+      - id_sexo
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          example: José
+          description: O número máximo de caracteres é 100.
+        data_nascimento:
+          type: string
+          format: date
+          example: "2000-01-01"
+        inicio_carreira:
+          type: string
+          pattern: '^\d{4}$'
+          example: '2020'
+          description: Ano no formato AAAA (máximo de 4 dígitos)
+        id_sexo:
+          type: integer
+
     Filme:
       required:
         - id
@@ -911,6 +1213,7 @@ components:
         - capa
         - data_lancamento
         - duracao
+        - id_classificacao
       type: object
       properties:
         id:
@@ -942,6 +1245,8 @@ components:
           format: double
           example: "5.0"
           description: O número máximo de caracteres é de 5 unidade (5) e 1 casa decimal (.9), porém tendo como valor máximo 5.0.
+        id_classificacao:
+          type: integer
 
     Foto:
       required: 
@@ -998,6 +1303,113 @@ components:
           type: string
           example: "Masculino"
           description: O número máximo de caracteres é de 15.
+  
+   # SCHEMAS PARA OS GETS (RELAÇÕES)
+    AtorGet:
+      required:
+      - id
+      - nome
+      - data_nascimento
+      - inicio_carreira
+      - biografia
+      - sexo
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          example: Caio
+          description: O número máximo de caracteres é 100.
+        data_nascimento:
+          type: string
+          format: date
+          example: "2000-01-01"
+        inicio_carreira:
+          type: string
+          pattern: '^\d{4}$'
+          example: '2020'
+          description: Ano no formato AAAA (máximo de 4 dígitos).
+        biografia:
+          type: string
+          description: O número máximo de caracteres é ilimitado.
+        sexo:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sexo'
+
+    DiretorGet:
+      required:
+      - id
+      - nome
+      - data_nascimento
+      - inicio_carreira
+      - sexo
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        data_nascimento:
+          type: string
+          format: date
+          example: "2000-01-01"
+        inicio_carreira:
+          type: string
+          pattern: '^\d{4}$'
+          example: '2020'
+          description: Ano no formato AAAA (máximo de 4 dígitos)
+        sexo:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sexo'
+          
+    FilmeGet:
+        required:
+          - id
+          - nome
+          - sinopse
+          - capa
+          - data_lancamento
+          - duracao
+          - classificacao
+        type: object
+        properties:
+          id:
+            type: integer
+          nome:
+            type: string
+            description: O número máximo de caracteres é 80.
+          sinopse:
+            type: string
+            description: O número máximo de caracteres é ilimitado.
+          capa:
+            type: string
+            description: O número máximo de caracteres é 255.
+          data_lancamento:
+            type: string
+            format: date
+            example: "2026-01-01"
+          duracao:
+            type: string
+            example: "02:30"
+            pattern: '^(?:[01]\d|2[0-3]):[0-5]\d$'
+          valor:
+            type: number
+            format: double
+            example: "999.99"
+            description: O número máximo de caracteres é de 9 centenas, 9 dezenas e 9 unidades (999) e 2 casas decimais (.99).
+          avaliacao:
+            type: number
+            format: double
+            example: "5.0"
+            description: O número máximo de caracteres é de 5 unidade (5) e 1 casa decimal (.9), porém tendo como valor máximo 5.0.
+          classificacao:
+            type: array
+            items:
+              $ref: '#/components/schemas/Classificacao'
+  
   # CAMINHOS PARA DOCUMENTAR
   requestBodies:
     Atividade:
@@ -1007,12 +1419,26 @@ components:
           schema:
             $ref: '#/components/schemas/Atividade'
 
+    Ator:
+      description: Objeto que deve ser enviado no Body das requisições
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Ator'
+
     Classificacao:
       description: Objeto que deve ser enviado no Body das requisições
       content:
         application/json:
           schema:
           $ref: '#/components/schemas/Classificacao'
+
+    Diretor:
+      description: Objeto que deve ser enviado no Body das requisições
+      content:
+        application/json:
+          schema:
+          $ref: '#/components/schemas/Diretor'
 
     Filme:
       description: Objeto que deve ser enviado no Body das requisições
@@ -1048,3 +1474,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Sexo'
+  
+   # CAMINHOS PARA DOCUMENTAR (RELAÇÕES)
+    atorGet:
+      description: Objeto que deve ser enviado no Body das requisições
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/atorGet'
+
+    DiretorGet:
+      description: Objeto que deve ser enviado no Body das requisições
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DiretorGet'
+
+    FilmeGet:
+      description: Objeto que deve ser enviado no Body das requisições
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FilmeGet'

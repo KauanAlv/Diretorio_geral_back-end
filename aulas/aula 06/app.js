@@ -29,6 +29,9 @@ const controllerAtividade = require('./controller/atividade/controller_atividade
 const controllerSexo = require('./controller/sexo/controller_sexo.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 
+//Import das controlles que recebem chave intermediária
+const controllerDiretor = require('./controller/diretor/controller_diretor.js')
+
 // ================= ENDPOINTS =================
 // ================= FILME =====================
 app.post('/v1/senai/locadora/filme', bodyParserJSON, async function (request, response) {
@@ -364,6 +367,49 @@ app.delete('/v1/senai/locadora/classificacao/:id', async function (request, resp
     let id = request.params.id
 
     let result = await controllerClassificacao.excluirClassificacao(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= DIRETOR =====================
+app.post('/v1/senai/locadora/diretor', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerDiretor.inserirNovoDiretor(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/diretor', async function (request, response) {
+    
+    let result = await controllerDiretor.listarDiretor()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/diretor/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerDiretor.buscarDiretor(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/diretor/:id', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+    
+    let result = await controllerDiretor.AtualizarDiretor(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/diretor/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerDiretor.excluirDiretor(id)
     response.status(result.status_code)
     response.json(result)
 })
