@@ -24,15 +24,12 @@ const insertDiretor = async function (diretor) {
         id_sexo
         ) values (
          replace ("${diretor.nome}", "'", ""),
-         replace ("${diretor.data_nascimento}", "'" ""),
+         replace ("${diretor.data_nascimento}", "'", ""),
          ${diretor.inicio_carreira},
          ${diretor.id_sexo} 
          );`
-
-         console.log(sql)
          
         let result = await knexConection.raw(sql)
-        console.log(result)
         
         if (result)
             return result[0].insertId
