@@ -1,7 +1,7 @@
 /***********************************************************************************
  * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados
- *      para realizar o CRUD de diretor.
- * Data: 20/05/2026 - (quarta-feira)
+ *      para realizar o CRUD de ator.
+ * Data: 22/05/2026 - (sexta-feira)
  * Autor: Kauan Alves Pereira
  * Versão: 1.0
  ***********************************************************************************/
@@ -10,31 +10,31 @@
 const configMessages = require('../modulo/configMessages.js')
 
 //Import do arquivo do DAO para manipular os dados de filme no Banco de Dados
-const diretorDAO = require('../../model/DAO/diretor/diretor.js')
+const atorDAO = require('../../model/DAO/ator/ator.js')
 
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
 
-const inserirNovoDiretor = async function (diretor, contentType) {
+const inserirNovoAtor = async function (ator, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
 
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let validacao = await validarDados(diretor)
+            let validacao = await validarDados(ator)
 
             if (validacao) {
                 return validacao // 400
             } else {
-                let result = await diretorDAO.insertDiretor(diretor)
+                let result = await atorDAO.insertAtor(ator)
 
                 if (result) {
-                    diretor.id = result
+                    ator.id = result
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
-                    customMessage.DEFAULT_MESSAGE.response = diretor
+                    customMessage.DEFAULT_MESSAGE.response = ator
 
                     return customMessage.DEFAULT_MESSAGE // 201
                 } else {
@@ -49,25 +49,25 @@ const inserirNovoDiretor = async function (diretor, contentType) {
     }
 }
 
-const AtualizarDiretor = async function (diretor, id, contentType) {
+const AtualizarAtor = async function (ator, id, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let resultBuscarDiretor = await buscarDiretor(id)
+            let resultBuscarAtor = await buscarAtor(id)
 
-            if (resultBuscarDiretor.status) {
-                let validar = await validarDados(diretor)
+            if (resultBuscarAtor.status) {
+                let validar = await validarDados(ator)
 
                 if (!validar) {
-                    diretor.id = Number(id)
-                    let result = await diretorDAO.updateDiretor(diretor)
+                    ator.id = Number(id)
+                    let result = await atorDAO.updateAtor(ator)
 
                     if (result) {
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
-                        customMessage.DEFAULT_MESSAGE.response = diretor
+                        customMessage.DEFAULT_MESSAGE.response = ator
 
                         return customMessage.DEFAULT_MESSAGE // 200 (atualizado)
                     } else {
@@ -87,28 +87,28 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
     }
 }
 
-const listarDiretor = async function () {
+const listarAtor = async function () {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let result = await diretorDAO.selectAllDiretor()
+        let result = await atorDAO.selectAllAtor()
 
         if (result) {
             if (result.length > 0) {
 
-                for (let diretor of result) {
-                    let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
+                for (let ator of result) {
+                    let resultSexo = await controllerSexo.buscarSexo(ator.id_sexo)
 
                     if (resultSexo.status) {
-                        diretor.sexo = resultSexo.response.sexo
-                        delete diretor.id_sexo
+                        ator.sexo = resultSexo.response.sexo
+                        delete ator.id_sexo
                     }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
-                customMessage.DEFAULT_MESSAGE.response.diretor = result
+                customMessage.DEFAULT_MESSAGE.response.ator = result
 
                 return customMessage.DEFAULT_MESSAGE // 200
             } else {
@@ -122,7 +122,7 @@ const listarDiretor = async function () {
     }
 }
 
-const buscarDiretor = async function (id) {
+const buscarAtor = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
@@ -130,23 +130,23 @@ const buscarDiretor = async function (id) {
             customMessage.ERROR_BAD_REQUEST.field = '[ID] INVÁLIDO'
             return customMessage.ERROR_BAD_REQUEST // 400
         } else {
-            let result = await diretorDAO.selectByIdDiretor(id)
+            let result = await atorDAO.selectByIdAtor(id)
 
             if (result) {
                 if (result.length > 0) {
 
-                    for (let diretor of result) {
-                        let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
+                    for (let ator of result) {
+                        let resultSexo = await controllerSexo.buscarSexo(ator.id_sexo)
 
                         if (resultSexo.status) {
-                            diretor.sexo = resultSexo.response.sexo
-                            delete diretor.id_sexo
+                            ator.sexo = resultSexo.response.sexo
+                            delete ator.id_sexo
                         }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
-                    customMessage.DEFAULT_MESSAGE.response.diretor = result
+                    customMessage.DEFAULT_MESSAGE.response.ator = result
 
                     return customMessage.DEFAULT_MESSAGE // 200
                 } else {
@@ -161,14 +161,14 @@ const buscarDiretor = async function (id) {
     }
 }
 
-const excluirDiretor = async function (id) {
+const excluirAtor = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let resultBuscarDiretor = await buscarDiretor(id)
+        let resultBuscarAtor = await buscarAtor(id)
 
-        if (resultBuscarDiretor.status) {
-            let result = await diretorDAO.deleteDiretor(id)
+        if (resultBuscarAtor.status) {
+            let result = await atorDAO.deleteAtor(id)
 
             if (result) {
                 return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
@@ -183,23 +183,28 @@ const excluirDiretor = async function (id) {
     }
 }
 
-const validarDados = async function (diretor) {
+const validarDados = async function (ator) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
-    if (diretor.nome == undefined || diretor.nome == '' || diretor.nome == null || diretor.nome.length > 100) {
+    if (ator.nome == undefined || ator.nome == '' || ator.nome == null || ator.nome.length > 100) {
         customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
 
-    } else if (diretor.data_nascimento == undefined || diretor.data_nascimento == '' || diretor.data_nascimento == null || diretor.data_nascimento.length != 10) {
+    } else if (ator.data_nascimento == undefined || ator.data_nascimento == '' || ator.data_nascimento == null || ator.data_nascimento.length != 10) {
         customMessage.ERROR_BAD_REQUEST.field = '[DATA DE NASCIMENTO] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
 
-    } else if (diretor.inicio_carreira == undefined || diretor.inicio_carreira == '' || diretor.inicio_carreira == null || isNaN(diretor.inicio_carreira) || diretor.inicio_carreira.length != 4) {
+    } else if (ator.inicio_carreira == undefined || ator.inicio_carreira == '' || ator.inicio_carreira == null || isNaN(ator.inicio_carreira) || ator.inicio_carreira.length != 4) {
         customMessage.ERROR_BAD_REQUEST.field = '[INICIO CARREIRA] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
 
+
+    } else if (ator.biografia == undefined || ator.biografia == '' || ator.biografia == null) {
+        customMessage.ERROR_BAD_REQUEST.field = '[BIOGRAFIA] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
+
         // Validação para a FK do sexo (Chave Estrangeira)
-    } else if (diretor.id_sexo == undefined || diretor.id_sexo == '' || diretor.id_sexo == null || isNaN(diretor.id_sexo) || diretor.id_sexo < 1) {
+    } else if (ator.id_sexo == undefined || ator.id_sexo == '' || ator.id_sexo == null || isNaN(ator.id_sexo) || ator.id_sexo < 1) {
         customMessage.ERROR_BAD_REQUEST.field = '[ID_SEXO] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
     } else {
@@ -209,9 +214,9 @@ const validarDados = async function (diretor) {
 }
 
 module.exports = {
-    inserirNovoDiretor,
-    AtualizarDiretor,
-    listarDiretor,
-    buscarDiretor,
-    excluirDiretor
+    inserirNovoAtor,
+    AtualizarAtor,
+    listarAtor,
+    buscarAtor,
+    excluirAtor
 }

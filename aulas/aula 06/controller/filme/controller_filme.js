@@ -14,6 +14,7 @@ const filmeDAO = require('../../model/DAO/filme/filme.js')
 
 //Import das Controlles
 const controllerClassificacao = require('../classificacao/controller_classificacao.js')
+const controllerFilmeGenero = require('./controller_filme_genero.js')
 
 //Função para validar os dados de cadastro do filme
 const validarDados = async function (filme) {
@@ -49,7 +50,7 @@ const validarDados = async function (filme) {
         customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
 
-    // Validação para a FK da classificação (Chave Estrangeira)
+        // Validação para a FK da classificação (Chave Estrangeira)
     } else if (filme.id_classificacao == undefined || filme.id_classificacao == '' || filme.id_classificacao == null || isNaN(filme.id_classificacao) || filme.id_classificacao <= 0) {
         customMessage.ERROR_BAD_REQUEST.field = '[ID_CLASSIFICAÇÃO] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
@@ -61,13 +62,13 @@ const validarDados = async function (filme) {
 //Função para tratar os dados a serem inseridos
 const tratarDados = async function (filme) {
     //Tratamento para eliminar a chegada da aspas (') como caracter inválido
-    filme.nome              = filme.nome.replaceAll("'", "")
-    filme.sinopse           = filme.sinopse.replaceAll("'", "")
-    filme.capa              = filme.capa.replaceAll("'", "")
-    filme.data_lancamento   = filme.data_lancamento.replaceAll("'", "")
-    filme.duracao           = filme.duracao.replaceAll("'", "")
-    filme.valor             = filme.valor.replaceAll("'", "")
-    filme.avaliacao         = filme.avaliacao.replaceAll("'", "")
+    filme.nome = filme.nome.replaceAll("'", "")
+    filme.sinopse = filme.sinopse.replaceAll("'", "")
+    filme.capa = filme.capa.replaceAll("'", "")
+    filme.data_lancamento = filme.data_lancamento.replaceAll("'", "")
+    filme.duracao = filme.duracao.replaceAll("'", "")
+    filme.valor = filme.valor.replaceAll("'", "")
+    filme.avaliacao = filme.avaliacao.replaceAll("'", "")
 
     return filme
 }
@@ -95,6 +96,20 @@ const inserirNovoFilme = async function (filme, contentType) {
                 if (result) { //retorna um status_code 201
                     //Cria o ID no JSON do filme e adiciona o ID gerado no DAO
                     filme.id = result
+
+
+                    /********** Manipulação de dados para Inserir os Generos relacionados ao Filme **********/
+
+                    //Percorre o array de generos que chegará na requisição pelo objeto Filme
+                    for (let genero of filme.genero) {
+                        let filmeGenero = {
+                            "id_filme": filme.id,
+                            "id_genero": genero.id
+                        }
+
+                        let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                        console.log(resultFilmeGenero)
+                    }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
@@ -180,10 +195,10 @@ const listarFilme = async function () {
         if (result) {
             //Validação para verificar se o conteúdo do Array tem dados de retorno ou se está vazio
             if (result.length > 0) {
-                
+
                 //Manipulação dos dados da Classificação
                 //Percorre o array de filmes
-                for (filme of result) {
+                for (let filme of result) {
                     //Busca na controller da classificação o ID referente a FK da classificação
                     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
 
@@ -233,20 +248,20 @@ const buscarFilme = async function (id) {
                 //Validação para verificar se o DAO tem algum dado no Array
                 if (result.length > 0) {
 
-                //Manipulação dos dados da Classificação
-                //Percorre o array de filmes
-                for (filme of result) {
-                    //Busca na controller da classificação o ID referente a FK da classificação
-                    let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+                    //Manipulação dos dados da Classificação
+                    //Percorre o array de filmes
+                    for (let filme of result) {
+                        //Busca na controller da classificação o ID referente a FK da classificação
+                        let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
 
-                    //Se encontrar o ID
-                    if (resultClassificacao.status) {
-                        //Adicionar um atributo classificação no JSON do filme e colocar o resultado com os dados da classificação
-                        filme.classificacao = resultClassificacao.response.classificacao
-                        //Apaga o id_classificação do JSON de filme
-                        delete filme.id_classificacao
+                        //Se encontrar o ID
+                        if (resultClassificacao.status) {
+                            //Adicionar um atributo classificação no JSON do filme e colocar o resultado com os dados da classificação
+                            filme.classificacao = resultClassificacao.response.classificacao
+                            //Apaga o id_classificação do JSON de filme
+                            delete filme.id_classificacao
+                        }
                     }
-                }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code

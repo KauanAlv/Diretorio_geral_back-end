@@ -28,6 +28,7 @@ const controllerFoto = require('./controller/foto/controller_foto.js')
 const controllerAtividade = require('./controller/atividade/controller_atividade.js')
 const controllerSexo = require('./controller/sexo/controller_sexo.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
+const controllerAtor = require('./controller/ator/controller_ator.js')
 
 //Import das controlles que recebem chave intermediária
 const controllerDiretor = require('./controller/diretor/controller_diretor.js')
@@ -236,7 +237,7 @@ app.put('/v1/senai/locadora/foto/:id', bodyParserJSON, async function (request, 
 
 app.delete('/v1/senai/locadora/foto/:id', async function (request, response) {
     let id = request.params.id
-    
+
     let result = await controllerFoto.excluirFoto(id)
     response.status(result.status_code)
     response.json(result)
@@ -253,7 +254,7 @@ app.post('/v1/senai/locadora/atividade', bodyParserJSON, async function (request
 })
 
 app.get('/v1/senai/locadora/atividade', async function (request, response) {
-    
+
     let result = await controllerAtividade.listarAtividade()
     response.status(result.status_code)
     response.json(result)
@@ -271,7 +272,7 @@ app.put('/v1/senai/locadora/atividade/:id', bodyParserJSON, async function (requ
     let dados = request.body
     let id = request.params.id
     let contentType = request.headers['content-type']
-    
+
     let result = await controllerAtividade.atualizarAtividade(dados, id, contentType)
     response.status(result.status_code)
     response.json(result)
@@ -296,7 +297,7 @@ app.post('/v1/senai/locadora/sexo', bodyParserJSON, async function (request, res
 })
 
 app.get('/v1/senai/locadora/sexo', async function (request, response) {
-    
+
     let result = await controllerSexo.listarSexo()
     response.status(result.status_code)
     response.json(result)
@@ -314,7 +315,7 @@ app.put('/v1/senai/locadora/sexo/:id', bodyParserJSON, async function (request, 
     let dados = request.body
     let id = request.params.id
     let contentType = request.headers['content-type']
-    
+
     let result = await controllerSexo.atualizarSexo(dados, id, contentType)
     response.status(result.status_code)
     response.json(result)
@@ -339,7 +340,7 @@ app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function (req
 })
 
 app.get('/v1/senai/locadora/classificacao', async function (request, response) {
-    
+
     let result = await controllerClassificacao.listarClassificacao()
     response.status(result.status_code)
     response.json(result)
@@ -357,7 +358,7 @@ app.put('/v1/senai/locadora/classificacao/:id', bodyParserJSON, async function (
     let dados = request.body
     let id = request.params.id
     let contentType = request.headers['content-type']
-    
+
     let result = await controllerClassificacao.atualizarClassificacao(dados, id, contentType)
     response.status(result.status_code)
     response.json(result)
@@ -382,7 +383,7 @@ app.post('/v1/senai/locadora/diretor', bodyParserJSON, async function (request, 
 })
 
 app.get('/v1/senai/locadora/diretor', async function (request, response) {
-    
+
     let result = await controllerDiretor.listarDiretor()
     response.status(result.status_code)
     response.json(result)
@@ -400,7 +401,7 @@ app.put('/v1/senai/locadora/diretor/:id', bodyParserJSON, async function (reques
     let dados = request.body
     let id = request.params.id
     let contentType = request.headers['content-type']
-    
+
     let result = await controllerDiretor.AtualizarDiretor(dados, id, contentType)
     response.status(result.status_code)
     response.json(result)
@@ -410,6 +411,49 @@ app.delete('/v1/senai/locadora/diretor/:id', async function (request, response) 
     let id = request.params.id
 
     let result = await controllerDiretor.excluirDiretor(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// ================= ATOR =====================
+app.post('/v1/senai/locadora/ator', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerAtor.inserirNovoAtor(dados, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/ator', async function (request, response) {
+
+    let result = await controllerAtor.listarAtor()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/ator/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerAtor.buscarAtor(id)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/ator/:id', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+
+    let result = await controllerAtor.AtualizarAtor(dados, id, contentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/ator/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerAtor.excluirAtor(id)
     response.status(result.status_code)
     response.json(result)
 })
