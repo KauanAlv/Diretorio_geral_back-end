@@ -108,7 +108,11 @@ const inserirNovoFilme = async function (filme, contentType) {
                         }
 
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
-                        console.log(resultFilmeGenero)
+
+                        //Validação para verificar se todos os itens de relacionamento foram inseridos
+                        if (resultFilmeGenero.status) {
+                            return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                        }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
