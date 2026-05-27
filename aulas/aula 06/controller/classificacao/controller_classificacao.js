@@ -166,7 +166,7 @@ const validarDados = async function (classificacao) {
         customMessages.ERROR_BAD_REQUEST.field = '[CLASSIFICAÇÃO INDICATIVA] INVÁLIDA'
     } else if (classificacao.descricao == undefined || classificacao.descricao == '') {
         customMessages.ERROR_BAD_REQUEST.field = '[DESCRIÇÃO] INVÁLIDA'
-    } else if (classificacao.idade_minima !== undefined && (isNaN(classificacao.idade_minima) || classificacao.idade_minima < 0)) {
+    } else if (classificacao.idade_minima == undefined || isNaN(classificacao.idade_minima) || classificacao.idade_minima < 0) {
         customMessages.ERROR_BAD_REQUEST.field = '[IDADE MÍNIMA] INVÁLIDA'
     } else {
         return false

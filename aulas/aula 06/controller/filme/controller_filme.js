@@ -213,6 +213,13 @@ const listarFilme = async function () {
                         //Apaga o id_classificação do JSON de filme
                         delete filme.id_classificacao
                     }
+
+                    //Manipulação de dados para retornar os Gêneros relacionados aos Filmes
+                    let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                    if (resultGeneros.status) {
+                        filme.genero = resultGeneros.response.filme_genero
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -264,6 +271,12 @@ const buscarFilme = async function (id) {
                             filme.classificacao = resultClassificacao.response.classificacao
                             //Apaga o id_classificação do JSON de filme
                             delete filme.id_classificacao
+                        }
+
+                        let resultFilmeGenero = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                        if (resultFilmeGenero.status) {
+                            filme.genero = resultFilmeGenero.response.filme_genero
                         }
                     }
 
