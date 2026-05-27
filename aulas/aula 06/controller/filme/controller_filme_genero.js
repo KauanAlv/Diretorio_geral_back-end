@@ -132,41 +132,6 @@ const buscarFilmeGenero = async function (id) {
     }
 }
 
-const excluirFilmeGenero = async function (id) {
-    let customMessage = JSON.parse(JSON.stringify(configMessages))
-
-    try {
-        let resultBuscarFilmeGenero = await buscarFilmeGenero(id)
-
-        if (resultBuscarFilmeGenero.status) {
-            let result = await filmeGeneroDAO.deleteFilmeGenero(id)
-
-            if (result) {
-                return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
-            } else {
-                return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
-            }
-        } else {
-            return resultBuscarClassificacao // (id) 400, 404, 500 da controller/model
-        }
-    } catch (error) {
-        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
-    }
-}
-
-const validarDados = async function (filmeGenero) {
-    let customMessages = JSON.parse(JSON.stringify(configMessages))
-
-    if (filmeGenero.id_filme == undefined || filmeGenero.id_filme == '' || filmeGenero.id_filme == null || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme.length < 1) {
-        customMessages.ERROR_BAD_REQUEST.field = '[ID_FILME] INVÁLIDO'
-    } else if (filmeGenero.id_genero == undefined || filmeGenero.id_genero == '' || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero.length < 1) {
-        customMessages.ERROR_BAD_REQUEST.field = '[ID_GENERO] INVÁLIDO'
-    } else {
-        return false
-    }
-    return customMessages.ERROR_BAD_REQUEST
-}
-
 //Função para buscar os generos filtrando pelo ID do FIlme
 const buscarGenerosIdFilme = async function (idFilme) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -227,6 +192,59 @@ const buscarFilmesIdGenero = async function (idGenero) {
     }
 }
 
+const excluirFilmeGenero = async function (id) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        let resultBuscarFilmeGenero = await buscarFilmeGenero(id)
+
+        if (resultBuscarFilmeGenero.status) {
+            let result = await filmeGeneroDAO.deleteFilmeGenero(id)
+
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
+            }
+        } else {
+            return resultBuscarClassificacao // (id) 400, 404, 500 da controller/model
+        }
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
+    }
+}
+
+//Função para excluir a relação de gêneros com o Filme
+const excluirGenerosIdFilme = async function (idFilme) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+            let result = await filmeGeneroDAO.deleteGenerosByIdFilme(idFilme)
+
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
+            }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
+    }
+}
+
+const validarDados = async function (filmeGenero) {
+    let customMessages = JSON.parse(JSON.stringify(configMessages))
+
+    if (filmeGenero.id_filme == undefined || filmeGenero.id_filme == '' || filmeGenero.id_filme == null || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme.length < 1) {
+        customMessages.ERROR_BAD_REQUEST.field = '[ID_FILME] INVÁLIDO'
+    } else if (filmeGenero.id_genero == undefined || filmeGenero.id_genero == '' || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero.length < 1) {
+        customMessages.ERROR_BAD_REQUEST.field = '[ID_GENERO] INVÁLIDO'
+    } else {
+        return false
+    }
+    return customMessages.ERROR_BAD_REQUEST
+}
+
 module.exports = {
     inserirNovoFilmeGenero,
     atualizarFilmeGenero,
@@ -234,5 +252,6 @@ module.exports = {
     buscarFilmeGenero,
     excluirFilmeGenero,
     buscarGenerosIdFilme,
-    buscarFilmesIdGenero
+    buscarFilmesIdGenero,
+    excluirGenerosIdFilme
 }

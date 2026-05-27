@@ -103,22 +103,6 @@ const selectByIdFilmeGenero = async function (id) {
     }
 }
 
-//Função para excluir um Filme Genero filtrando pelo ID
-const deleteFilmeGenero = async function (id) {
-    try {
-        let sql = `delete from tbl_filme_genero where id = ${id};`
-
-        let result = await knexConection.raw(sql)
-
-        if (result)
-            return true
-        else
-            return false
-    } catch (error) {
-        return false
-    }
-}
-
 //Função para retonar os dados da tabela do Genero filtrando pelo ID do Filme
 const selectGenerosByIdFilme = async function (idFilme) {
     try {
@@ -171,6 +155,39 @@ const selectFilmesByIdGenero = async function (idGenero) {
     }
 }
 
+//Função para excluir um Filme Genero filtrando pelo ID
+const deleteFilmeGenero = async function (id) {
+    try {
+        let sql = `delete from tbl_filme_genero where id = ${id};`
+
+        let result = await knexConection.raw(sql)
+
+        if (result)
+            return true
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
+//Função para excluir os gêneros relacionados com um filme
+//Obs: Esta função será utilizada no put do filme (apaga o genero de acordo com o id do filme)
+const deleteGenerosByIdFilme = async function (idFilme) {
+    try {
+        let sql = `delete from tbl_filme_genero where id_filme = ${idFilme};`
+
+        let result = await knexConection.raw(sql)
+
+        if (result)
+            return true
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     insertFilmeGenero,
     updateFilmeGenero,
@@ -178,5 +195,6 @@ module.exports = {
     selectByIdFilmeGenero,
     deleteFilmeGenero,
     selectGenerosByIdFilme,
-    selectFilmesByIdGenero
+    selectFilmesByIdGenero,
+    deleteGenerosByIdFilme
 }
