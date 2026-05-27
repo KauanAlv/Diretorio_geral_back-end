@@ -15,6 +15,7 @@ const filmeDAO = require('../../model/DAO/filme/filme.js')
 //Import das Controlles
 const controllerClassificacao = require('../classificacao/controller_classificacao.js')
 const controllerFilmeGenero = require('./controller_filme_genero.js')
+const controllerFilmeDiretor = require('./controller_filme_diretor.js')
 
 //Função para validar os dados de cadastro do filme
 const validarDados = async function (filme) {
@@ -111,6 +112,23 @@ const inserirNovoFilme = async function (filme, contentType) {
 
                         //Validação para verificar se todos os itens de relacionamento foram inseridos
                         if (!resultFilmeGenero.status) {
+                            return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                        }
+                    }
+
+                    /********** Manipulação de dados para Inserir os Diretores relacionados ao Filme **********/
+
+                    //Percorre o array de diretores que chegará na requisição pelo objeto Filme
+                    for (let diretor of filme.diretor) {
+                        let filmeDiretor = {
+                            "id_filme": filme.id,
+                            "id_diretor": diretor.id
+                        }
+
+                        let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
+
+                        //Validação para verificar se todos os itens de relacionamento foram inseridos
+                        if (!resultFilmeDiretor.status) {
                             return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
                         }
                     }
