@@ -17,15 +17,28 @@ const knexConection = knex(knexDatabaseConfig.development)
 
 const insertClassificacao = async function (classificacao) {
     try {
-        let sql = `insert into tbl_classificacao (
+        let sql = ''
+        if(classificacao.idade_minima == undefined) {
+        sql = `insert into tbl_classificacao (
+        classificacao,
+        descricao
+        ) values (
+         replace ("${classificacao.classificacao}", "'", ""),
+         if('${classificacao.descricao}' = '', null, replace("${classificacao.descricao}", "'", ""))
+        );`
+
+        } else {
+        sql = `insert into tbl_classificacao (
         classificacao,
         descricao,
         idade_minima
         ) values (
          replace ("${classificacao.classificacao}", "'", ""),
          if('${classificacao.descricao}' = '', null, replace("${classificacao.descricao}", "'", "")),
-         if('${classificacao.idade_minima}' = '', 0, replace ("${classificacao.idade_minima}", "'", ""))
+         ${classificacao.idade_minima}
          );`
+        }
+        
 
         let result = await knexConection.raw(sql)
 
