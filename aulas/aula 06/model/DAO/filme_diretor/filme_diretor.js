@@ -132,7 +132,7 @@ const selectDiretoresByIdFilme = async function (idFilme) {
 //Função para retonar os dados da tabela do Filme filtrando pelo ID do Diretor
 const selectFilmesByIdDiretor = async function (idDiretor) {
     try {
-        let sql = ` select tbl_diretor.*
+        let sql = ` select tbl_filme.*
 
                     from tbl_filme
                         inner join tbl_filme_diretor

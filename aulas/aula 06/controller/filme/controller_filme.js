@@ -197,6 +197,23 @@ const atualizarFilme = async function (filme, id, contentType) {
                                 }
                             }
                         }
+
+                        let resultDeleteDiretores = await controllerFilmeDiretor.excluirDiretoresIdFilme(filme.id)
+
+                        if (resultDeleteDiretores.status) {
+                            for (let diretor of filme.diretor) {
+                                let filmeDiretor = {
+                                    "id_filme": filme.id,
+                                    "id_diretor": diretor.id
+                                }
+
+                                let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
+
+                                if (!resultFilmeDiretor.status) {
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                }
+                            }
+                        }
                         
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
@@ -258,6 +275,12 @@ const listarFilme = async function () {
                     if (resultGeneros.status) {
                         filme.genero = resultGeneros.response.filme_genero
                     }
+
+                    let resultDiretores = await controllerFilmeDiretor.buscarDiretoresIdFilme(filme.id)
+
+                    if (resultDiretores.status) {
+                        filme.diretor = resultDiretores.response.filme_diretor
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -315,6 +338,12 @@ const buscarFilme = async function (id) {
 
                         if (resultFilmeGenero.status) {
                             filme.genero = resultFilmeGenero.response.filme_genero
+                        }
+
+                        let resultFilmeDiretor = await controllerFilmeDiretor.buscarDiretoresIdFilme(filme.id)
+
+                        if (resultFilmeDiretor.status) {
+                            filme.diretor = resultFilmeDiretor.response.filme_diretor
                         }
                     }
 

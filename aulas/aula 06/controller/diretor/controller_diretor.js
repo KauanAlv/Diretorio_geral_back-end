@@ -14,6 +14,8 @@ const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
+const controllerFilmeDiretor = require('../filme/controller_filme_diretor.js')
+const controllerFilme = require('../filme/controller_filme.js')
 
 const inserirNovoDiretor = async function (diretor, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -102,6 +104,21 @@ const listarDiretor = async function () {
                     if (resultSexo.status) {
                         diretor.sexo = resultSexo.response.sexo
                         delete diretor.id_sexo
+                    }
+
+                    // Buscar todos os filmes feito por aquele diretor
+                    let resultFilmes = await controllerFilmeDiretor.buscarFilmesIdDiretor(diretor.id)
+                    if (resultFilmes.status) {
+                        // Se retornou true, faz uma busca de todos os dados do filme, exceto as ligações da tabela
+                        for (let filme of resultFilmes.response.filme_diretor) {
+                            
+                            // Agora sim motra TODOS os dados do filme, com todas as ligações
+                            let dadosFilme = await controllerFilme.buscarFilme(filme.id) 
+                            if (dadosFilme.status) {
+                                // Se tiver tudo certinho, no response do diretor aparece o filme
+                                diretor.filme = dadosFilme.response.filme
+                            }
+                        }
                     }
                 }
 
