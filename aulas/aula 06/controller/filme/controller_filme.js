@@ -91,6 +91,13 @@ const inserirNovoFilme = async function (filme, contentType) {
             if (validacao) {
                 return validacao //retorna um status_code 400
             } else {
+                if (filme.genero !== undefined && !Array.isArray(filme.genero)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
+                if (filme.diretor !== undefined  && !Array.isArray(filme.diretor)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
                 //Encaminha os dados do filme para o DAO inserir no Banco de Dados
                 let result = await filmeDAO.insertFilme(await tratarDados(filme))
 
@@ -102,34 +109,38 @@ const inserirNovoFilme = async function (filme, contentType) {
                     /********** Manipulação de dados para Inserir os Generos relacionados ao Filme **********/
 
                     //Percorre o array de generos que chegará na requisição pelo objeto Filme
-                    for (let genero of filme.genero) {
-                        let filmeGenero = {
-                            "id_filme": filme.id,
-                            "id_genero": genero.id
-                        }
+                    if (Array.isArray(filme.genero)) {
+                        for (let genero of filme.genero) {
+                            let filmeGenero = {
+                                "id_filme": filme.id,
+                                "id_genero": genero.id
+                            }
 
-                        let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
 
-                        //Validação para verificar se todos os itens de relacionamento foram inseridos
-                        if (!resultFilmeGenero.status) {
-                            return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultFilmeGenero.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
                         }
                     }
 
                     /********** Manipulação de dados para Inserir os Diretores relacionados ao Filme **********/
 
                     //Percorre o array de diretores que chegará na requisição pelo objeto Filme
-                    for (let diretor of filme.diretor) {
-                        let filmeDiretor = {
-                            "id_filme": filme.id,
-                            "id_diretor": diretor.id
-                        }
+                    if (Array.isArray(filme.diretor)) {
+                        for (let diretor of filme.diretor) {
+                            let filmeDiretor = {
+                                "id_filme": filme.id,
+                                "id_diretor": diretor.id
+                            }
 
-                        let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
+                            let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
 
-                        //Validação para verificar se todos os itens de relacionamento foram inseridos
-                        if (!resultFilmeDiretor.status) {
-                            return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultFilmeDiretor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
                         }
                     }
 
@@ -214,7 +225,7 @@ const atualizarFilme = async function (filme, id, contentType) {
                                 }
                             }
                         }
-                        
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message

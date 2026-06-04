@@ -14,8 +14,10 @@ const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
-const controllerFilmeDiretor = require('../filme/controller_filme_diretor.js')
 const controllerFilme = require('../filme/controller_filme.js')
+const controllerFoto = require('../foto/controller_foto.js')
+const controllerFilmeDiretor = require('../filme/controller_filme_diretor.js')
+const controllerDiretorFoto = require('../diretor/controller_diretor_foto.js')
 
 const inserirNovoDiretor = async function (diretor, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -28,10 +30,55 @@ const inserirNovoDiretor = async function (diretor, contentType) {
             if (validacao) {
                 return validacao // 400
             } else {
+                if (diretor.filme !== undefined && !Array.isArray(diretor.filme)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
+                if (diretor.foto !== undefined && !Array.isArray(diretor.foto)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
                 let result = await diretorDAO.insertDiretor(diretor)
 
                 if (result) {
                     diretor.id = result
+
+                    /********** Manipulação de dados para Inserir os Diretores relacionados ao Filme **********/
+
+                    //Percorre o array de diretores que chegará na requisição pelo objeto Filme
+                    if (Array.isArray(diretor.filme)) {
+                        for (let filme of diretor.filme) {
+                            let diretorFilme = {
+                                "id_filme": filme.id,
+                                "id_diretor": diretor.id
+                            }
+
+                            let resultDiretorFilme = await controllerFilmeDiretor.inserirNovoFilmeDiretor(diretorFilme)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultDiretorFilme.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(diretor.foto)) {
+                        for (let foto of diretor.foto) {
+                            let diretorFoto = {
+                                "id_diretor": diretor.id,
+                                "id_foto": foto.id
+                            }
+
+                            let resultDiretorFoto = await controllerDiretorFoto.inserirNovoDiretorFoto(diretorFoto)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultDiretorFoto.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
+
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
@@ -62,6 +109,14 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                 let validar = await validarDados(diretor)
 
                 if (!validar) {
+                    if (diretor.filme !== undefined && !Array.isArray(diretor.filme)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
+
+                    if (diretor.foto !== undefined && !Array.isArray(diretor.foto)) {
+                        return customMessage.ERROR_BAD_REQUEST // 400
+                    }
+
                     diretor.id = Number(id)
                     let result = await diretorDAO.updateDiretor(diretor)
 
@@ -69,19 +124,39 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                         let resultDeleteFilmes = await controllerFilmeDiretor.excluirFilmesIdDiretor(diretor.id)
 
                         if (resultDeleteFilmes.status) {
-                            for (let filme of diretor.filme) {
-                                let diretorFilme = {
-                                    "id_filme": filme.id,
-                                    "id_diretor": diretor.id
-                                }
+                            if (Array.isArray(diretor.filme)) {
+                                for (let filme of diretor.filme) {
+                                    let diretorFilme = {
+                                        "id_filme": filme.id,
+                                        "id_diretor": diretor.id
+                                    }
 
-                                let resultDiretorFilme = await controllerFilmeDiretor.inserirNovoFilmeDiretor(diretorFilme)
+                                    let resultDiretorFilme = await controllerFilmeDiretor.inserirNovoFilmeDiretor(diretorFilme)
 
-                                if (!resultDiretorFilme.status) {
-                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    if (!resultDiretorFilme.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
                                 }
                             }
                         }
+
+                        let resultDeleteFotos = await controllerDiretorFoto.excluirFotosIdDiretor(diretor.id)
+                        if (resultDeleteFotos.status) {
+                            if (Array.isArray(diretor.foto)) {
+                                for (let foto of diretor.foto) {
+                                    let diretorFoto = {
+                                        "id_diretor": diretor.id,
+                                        "id_foto": foto.id
+                                    }
+                                    let resultDiretorFoto = await controllerDiretorFoto.inserirNovoDiretorFoto(diretorFoto)
+
+                                    if (!resultDiretorFoto.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -95,7 +170,7 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                     return validar // 400 de dados
                 }
             } else {
-                return resultBuscarClassificacao // (id) 400, 404, 500 da controller/model
+                return resultBuscarDiretor // (id) 400, 404, 500 da controller/model
             }
         } else {
             return customMessage.ERROR_CONTENT_TYPE // 415
@@ -135,6 +210,19 @@ const listarDiretor = async function () {
                             }
                         }
                     }
+
+                    let resultFotos = await controllerDiretorFoto.buscarFotosIdDiretor(diretor.id)
+                    if (resultFotos.status) {
+
+                        diretor.foto = []
+                        for (let foto of resultFotos.response.diretor_foto) {
+
+                            let dadosFoto = await controllerFoto.buscarFoto(foto.id)
+                            if (dadosFoto.status) {
+                                diretor.foto = diretor.foto.concat(dadosFoto.response.foto)
+                            }
+                        }
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -168,8 +256,8 @@ const buscarDiretor = async function (id) {
                 if (result.length > 0) {
 
                     for (let diretor of result) {
-                        let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
 
+                        let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
                         if (resultSexo.status) {
                             diretor.sexo = resultSexo.response.sexo
                             delete diretor.id_sexo
@@ -178,6 +266,11 @@ const buscarDiretor = async function (id) {
                         let resultDiretorFilme = await controllerFilmeDiretor.buscarFilmesIdDiretor(diretor.id)
                         if (resultDiretorFilme.status) {
                             diretor.filme = resultDiretorFilme.response.filme_diretor
+                        }
+
+                        let resultDiretorFoto = await controllerDiretorFoto.buscarFotosIdDiretor(diretor.id)
+                        if (resultDiretorFoto.status) {
+                            diretor.foto = resultDiretorFoto.response.diretor_foto
                         }
                     }
 
