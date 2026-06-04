@@ -11,6 +11,8 @@ const configMessages = require('../modulo/configMessages.js')
 
 //Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
 const generoDAO = require('../../model/DAO/genero/genero.js')
+const controllerFilmeGenero = require('../filme/controller_filme_genero.js')
+const controllerFilme = require('../filme/controller_filme.js')
 
 const inserirNovoGenero = async function (genero, contentType) {
     //Cria uma cópia dos JSONs do arquivo de configuração de mensagens
@@ -79,6 +81,22 @@ const atualizarGenero = async function (genero, id, contentType) {
                     let result = await generoDAO.updateGenero(genero)
 
                     if (result) {
+                        let resultDeleteFilmes = await controllerFilmeGenero.excluirFilmesIdGenero(genero.id)
+
+                        if (resultDeleteFilmes.status) {
+                            for (let filme of genero.filme) {
+                                let generoFilme = {
+                                    "id_filme": filme.id,
+                                    "id_genero": genero.id
+                                }
+
+                                let resultGeneroFilme = await controllerFilmeGenero.inserirNovoFilmeGenero(generoFilme)
+
+                                if (!resultGeneroFilme.status) {
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                }
+                            }
+                        }
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -112,6 +130,22 @@ const listarGenero = async function () {
 
         if (result) {
             if (result.length > 0) {
+                for (let genero of result) {
+                    // Buscar todos os filmes ligados por aquele genero
+                    let resultFilmes = await controllerFilmeGenero.buscarFilmesIdGenero(genero.id)
+                    if (resultFilmes.status) {
+                        // Se retornou true, faz uma busca de todos os dados do filme, exceto as ligações da tabela
+                        genero.filme = []
+                        for (let filme of resultFilmes.response.filme_genero) {
+                            // Agora sim motra TODOS os dados do filme, com todas as ligações
+                            let dadosFilme = await controllerFilme.buscarFilme(filme.id)
+                            if (dadosFilme.status) {
+                                // Se tiver tudo certinho, no response do diretor aparece o filme
+                                genero.filme = genero.filme.concat(dadosFilme.response.filme)
+                            }
+                        }
+                    }
+                }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
@@ -125,6 +159,7 @@ const listarGenero = async function () {
             return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na Model
         }
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na Controller
     }
 }
@@ -146,6 +181,13 @@ const buscarGenero = async function (id) {
             if (result) {
                 //Validação para verificar se o DAO tem algum dado no Array
                 if (result.length > 0) {
+
+                    for (let genero of result) {
+                        let resultGeneroFilme = await controllerFilmeGenero.buscarFilmesIdGenero(genero.id)
+                        if (resultGeneroFilme.status) {
+                            genero.filme = resultGeneroFilme.response.filme_genero
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                     customMessage.DEFAULT_MESSAGE.response.genero = result
@@ -160,6 +202,7 @@ const buscarGenero = async function (id) {
         }
 
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
     }
 }

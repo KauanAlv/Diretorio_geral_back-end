@@ -69,30 +69,30 @@ create table tbl_atividade (
 #Permite apagar todo o database
 #drop database db_filmes_20261_b;
 
-insert into tbl_filme (
-	nome,
-    sinopse,
-    capa,
-    data_lancamento,
-    duracao,
-    valor,
-    avaliacao
-) values (
-	'Super Mario Galaxy: O Filme',
-    'Uma nova aventura leva Mario a enfrentar um inédito e ameaçador super vilão. Em Super Mario Galaxy: O Filme, o bigodudo encanador italiano e seus aliados embarcam numa aventura galáctica repleta de ação e momentos emocionantes depois de salvar o Reino dos Cogumelos.',
-    'https://br.web.img3.acsta.net/c_310_420/img/5b/ea/5bea1aeac3323aeaaf82449a34fafbbf.jpg',
-    '2026-04-02',
-    '01:39:00',
-    '50.60',
-    '3'
-);
+#insert into tbl_filme (
+#	nome,
+#    sinopse,
+#    capa,
+#    data_lancamento,
+#	duracao,
+#    valor,
+#    avaliacao
+#) values (
+#	'Super Mario Galaxy: O Filme',
+#    'Uma nova aventura leva Mario a enfrentar um inédito e ameaçador super vilão. Em Super Mario Galaxy: O Filme, o bigodudo encanador italiano e seus aliados embarcam numa aventura galáctica repleta de ação e momentos emocionantes depois de salvar o Reino dos Cogumelos.',
+#    'https://br.web.img3.acsta.net/c_310_420/img/5b/ea/5bea1aeac3323aeaaf82449a34fafbbf.jpg',
+#    '2026-04-02',
+#    '01:39:00',
+#    '50.60',
+#    '3'
+#);
 
-select * from tbl_filme order by id desc;
+#select * from tbl_filme order by id desc;
 
-delete from tbl_filme where id = 44;
+#delete from tbl_filme where id = 44;
 
-delete from tbl_filme;
-select * from tbl_filme;
+#delete from tbl_filme;
+#select * from tbl_filme;
 
 alter table tbl_filme
 	add column id_classificacao	int not null,
@@ -100,7 +100,7 @@ alter table tbl_filme
 		foreign key	(id_classificacao)
         references	tbl_classificacao(id);
         
-desc tbl_filme;
+#desc tbl_filme;
 
 create table tbl_ator (
 	id 				int not null auto_increment primary key,
@@ -153,4 +153,18 @@ create table tbl_filme_diretor (
     constraint 	FK_DIRETOR_FILMEDIRETOR
     foreign key (id_diretor)
     references	tbl_diretor(id)
+);
+
+create table tbl_diretor_foto (
+	id int not null auto_increment primary key,
+    id_diretor int not null,
+    id_foto int not null,
+    
+    constraint 	FK_DIRETOR_DIRETORFOTO
+    foreign key (id_diretor)
+    references	tbl_diretor(id),
+    
+    constraint 	FK_FOTO_DIRETORFOTO
+    foreign key (id_foto)
+    references	tbl_foto(id)
 );

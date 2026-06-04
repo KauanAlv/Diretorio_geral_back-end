@@ -232,6 +232,23 @@ const excluirGenerosIdFilme = async function (idFilme) {
     }
 }
 
+const excluirFilmesIdGenero = async function (idGenero) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+            let result = await filmeGeneroDAO.deleteFilmesByIdGenero(idGenero)
+
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
+            }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
+    }
+}
+
 const validarDados = async function (filmeGenero) {
     let customMessages = JSON.parse(JSON.stringify(configMessages))
 
@@ -253,5 +270,6 @@ module.exports = {
     excluirFilmeGenero,
     buscarGenerosIdFilme,
     buscarFilmesIdGenero,
-    excluirGenerosIdFilme
+    excluirGenerosIdFilme,
+    excluirFilmesIdGenero
 }
