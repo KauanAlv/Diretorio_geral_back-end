@@ -117,7 +117,7 @@ const buscarFilmeDiretor = async function (id) {
                 if (result.length > 0) {
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
-                    customMessage.DEFAULT_MESSAGE.response.filme_genero = result
+                    customMessage.DEFAULT_MESSAGE.response.filme_diretor = result
 
                     return customMessage.DEFAULT_MESSAGE // 200
                 } else {
@@ -232,6 +232,23 @@ const excluirDiretoresIdFilme = async function (idFilme) {
     }
 }
 
+const excluirFilmesIdDiretor = async function (idDiretor) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+            let result = await filmeDiretorDAO.deleteFilmesByIdDiretor(idDiretor)
+
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM // 200, 204 deletado com sucesso
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
+            }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
+    }
+}
+
 const validarDados = async function (filmeDiretor) {
     let customMessages = JSON.parse(JSON.stringify(configMessages))
 
@@ -253,5 +270,6 @@ module.exports = {
     excluirFilmeDiretor,
     buscarDiretoresIdFilme,
     buscarFilmesIdDiretor,
-    excluirDiretoresIdFilme
+    excluirDiretoresIdFilme,
+    excluirFilmesIdDiretor
 }

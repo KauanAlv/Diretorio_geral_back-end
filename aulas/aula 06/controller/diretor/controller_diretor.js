@@ -66,6 +66,22 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                     let result = await diretorDAO.updateDiretor(diretor)
 
                     if (result) {
+                        let resultDeleteFilmes = await controllerFilmeDiretor.excluirFilmesIdDiretor(diretor.id)
+
+                        if (resultDeleteFilmes.status) {
+                            for (let filme of diretor.filme) {
+                                let diretorFilme = {
+                                    "id_filme": filme.id,
+                                    "id_diretor": diretor.id
+                                }
+
+                                let resultDiretorFilme = await controllerFilmeDiretor.inserirNovoFilmeDiretor(diretorFilme)
+
+                                if (!resultDiretorFilme.status) {
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                }
+                            }
+                        }
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -97,7 +113,6 @@ const listarDiretor = async function () {
 
         if (result) {
             if (result.length > 0) {
-
                 for (let diretor of result) {
                     let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
 
@@ -110,13 +125,13 @@ const listarDiretor = async function () {
                     let resultFilmes = await controllerFilmeDiretor.buscarFilmesIdDiretor(diretor.id)
                     if (resultFilmes.status) {
                         // Se retornou true, faz uma busca de todos os dados do filme, exceto as ligações da tabela
+                        diretor.filme = []
                         for (let filme of resultFilmes.response.filme_diretor) {
-                            
                             // Agora sim motra TODOS os dados do filme, com todas as ligações
-                            let dadosFilme = await controllerFilme.buscarFilme(filme.id) 
+                            let dadosFilme = await controllerFilme.buscarFilme(filme.id)
                             if (dadosFilme.status) {
                                 // Se tiver tudo certinho, no response do diretor aparece o filme
-                                diretor.filme = dadosFilme.response.filme
+                                diretor.filme = diretor.filme.concat(dadosFilme.response.filme)
                             }
                         }
                     }
@@ -158,6 +173,11 @@ const buscarDiretor = async function (id) {
                         if (resultSexo.status) {
                             diretor.sexo = resultSexo.response.sexo
                             delete diretor.id_sexo
+                        }
+
+                        let resultDiretorFilme = await controllerFilmeDiretor.buscarFilmesIdDiretor(diretor.id)
+                        if (resultDiretorFilme.status) {
+                            diretor.filme = resultDiretorFilme.response.filme_diretor
                         }
                     }
 

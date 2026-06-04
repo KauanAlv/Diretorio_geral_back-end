@@ -188,6 +188,23 @@ const deleteDiretoresByIdFilme = async function (idFilme) {
     }
 }
 
+//Função para excluir os filmes relacionados com um diretor
+//Obs: Esta função será utilizada no put do diretor (apaga o filme de acordo com o id do diretor)
+const deleteFilmesByIdDiretor = async function (idDiretor) {
+    try {
+        let sql = `delete from tbl_filme_diretor where id_diretor = ${idDiretor};`
+
+        let result = await knexConection.raw(sql)
+
+        if (result)
+            return true
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     insertFilmeDiretor,
     updateFilmeDiretor,
@@ -196,5 +213,6 @@ module.exports = {
     deleteFilmeDiretor,
     selectDiretoresByIdFilme,
     selectFilmesByIdDiretor,
-    deleteDiretoresByIdFilme
+    deleteDiretoresByIdFilme,
+    deleteFilmesByIdDiretor
 }
