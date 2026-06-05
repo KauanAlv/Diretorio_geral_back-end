@@ -12,7 +12,6 @@ const configMessages = require('../modulo/configMessages.js')
 //Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
 const generoDAO = require('../../model/DAO/genero/genero.js')
 const controllerFilmeGenero = require('../filme/controller_filme_genero.js')
-const controllerFilme = require('../filme/controller_filme.js')
 
 const inserirNovoGenero = async function (genero, contentType) {
     //Cria uma cópia dos JSONs do arquivo de configuração de mensagens
@@ -149,19 +148,11 @@ const listarGenero = async function () {
         if (result) {
             if (result.length > 0) {
                 for (let genero of result) {
-                    // Buscar todos os filmes ligados por aquele genero
+
                     let resultFilmes = await controllerFilmeGenero.buscarFilmesIdGenero(genero.id)
+
                     if (resultFilmes.status) {
-                        // Se retornou true, faz uma busca de todos os dados do filme, exceto as ligações da tabela
-                        genero.filme = []
-                        for (let filme of resultFilmes.response.filme_genero) {
-                            // Agora sim motra TODOS os dados do filme, com todas as ligações
-                            let dadosFilme = await controllerFilme.buscarFilme(filme.id)
-                            if (dadosFilme.status) {
-                                // Se tiver tudo certinho, no response do diretor aparece o filme
-                                genero.filme = genero.filme.concat(dadosFilme.response.filme)
-                            }
-                        }
+                        genero.filme = resultFilmes.response.filme_genero
                     }
                 }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status

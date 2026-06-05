@@ -1,6 +1,6 @@
 /**********************************************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD de dados na tabela de relação entre Diretor e Nacionalidade no Banco de Dados MySQL.
- * Data: 04/06/2026 - (quinta-feira)
+ * Objetivo: Arquivo responsável pelo CRUD de dados na tabela de relação entre Diretor e Atividade no Banco de Dados MySQL.
+ * Data: 05/06/2026 - (sexta-feira)
  * Autor: Kauan Alves Pereira
  * Versão 1.0
 **********************************************************************************************************************/
@@ -15,16 +15,16 @@ const knexDatabaseConfig = require('../../database_config/knexConfig.js')
 const knexConection = knex(knexDatabaseConfig.development)
 
 
-const insertDiretorNacionalidade = async function (diretorNacionalidade) {
+const insertDiretorAtividade = async function (diretorAtividade) {
     try {
 
         //Script SQL para inserção no Banco de Dados
-        let sql = `insert into tbl_diretor_nacionalidade (
+        let sql = `insert into tbl_diretor_atividade (
         id_diretor,
-        id_nacionalidade
+        id_atividade
         ) values (
-         ${diretorNacionalidade.id_diretor},
-         ${diretorNacionalidade.id_nacionalidade}
+         ${diretorAtividade.id_diretor},
+         ${diretorAtividade.id_atividade}
         );`
 
         //Executa para o banco de dados o scriptSQL
@@ -41,13 +41,13 @@ const insertDiretorNacionalidade = async function (diretorNacionalidade) {
     }
 }
 
-const updateDiretorNacionalidade = async function (diretorNacionalidade) {
+const updateDiretorAtividade = async function (diretorAtividade) {
     try {
         let sql =
-            `update tbl_diretor_nacionalidade set
-                id_diretor  = ${diretorNacionalidade.id_diretor},
-                id_nacionalidade = ${diretorNacionalidade.id_nacionalidade}
-            where id = ${diretorNacionalidade.id};`
+            `update tbl_diretor_atividade set
+                id_diretor  = ${diretorAtividade.id_diretor},
+                id_atividade = ${diretorAtividade.id_atividade}
+            where id = ${diretorAtividade.id};`
 
         let result = await knexConection.raw(sql)
 
@@ -61,11 +61,11 @@ const updateDiretorNacionalidade = async function (diretorNacionalidade) {
     }
 }
 
-const selectAllDiretorNacionalidade = async function () {
+const selectAllDiretorAtividade = async function () {
 
     try {
         //Script SQL para listar todos os gêneros
-        let sql = 'select * from tbl_diretor_nacionalidade order by id desc;'
+        let sql = 'select * from tbl_diretor_atividade order by id desc;'
 
         //Executa no banco de dados o script e guarda o retorno do banco,
         //Pode ser um ERRO (false) ou um Array (de acordo com o Knex) com os dados.
@@ -83,9 +83,9 @@ const selectAllDiretorNacionalidade = async function () {
     }
 }
 
-const selectByIdDiretorNacionalidade = async function (id) {
+const selectByIdDiretorAtividade = async function (id) {
     try {
-        let sql = `select * from tbl_diretor_nacionalidade where id = ${id};`
+        let sql = `select * from tbl_diretor_atividade where id = ${id};`
 
         let result = await knexConection.raw(sql)
 
@@ -100,15 +100,15 @@ const selectByIdDiretorNacionalidade = async function (id) {
     }
 }
 
-const selectNacionalidadesByIdDiretor = async function (idDiretor) {
+const selectAtividadesByIdDiretor = async function (idDiretor) {
     try {
-        let sql = ` select tbl_nacionalidade.*
+        let sql = ` select tbl_atividade.*
 
                     from tbl_diretor
-                        inner join tbl_diretor_nacionalidade
-                            on tbl_diretor.id = tbl_diretor_nacionalidade.id_diretor
-                        inner join tbl_nacionalidade
-                            on tbl_nacionalidade.id = tbl_diretor_nacionalidade.id_nacionalidade
+                        inner join tbl_diretor_atividade
+                            on tbl_diretor.id = tbl_diretor_atividade.id_diretor
+                        inner join tbl_atividade
+                            on tbl_atividade.id = tbl_diretor_atividade.id_atividade
                             
                     where tbl_diretor.id = ${idDiretor};`
 
@@ -125,17 +125,17 @@ const selectNacionalidadesByIdDiretor = async function (idDiretor) {
     }
 }
 
-const selectDiretoresByIdNacionalidade = async function (idNacionalidade) {
+const selectDiretoresByIdAtividade = async function (idAtividade) {
     try {
         let sql = ` select tbl_diretor.*
 
                     from tbl_diretor
-                        inner join tbl_diretor_nacionalidade
-                            on tbl_diretor.id = tbl_diretor_nacionalidade.id_diretor
-                        inner join tbl_nacionalidade
-                            on tbl_nacionalidade.id = tbl_diretor_nacionalidade.id_nacionalidade
+                        inner join tbl_diretor_atividade
+                            on tbl_diretor.id = tbl_diretor_atividade.id_diretor
+                        inner join tbl_atividade
+                            on tbl_atividade.id = tbl_diretor_atividade.id_atividade
 
-                    where tbl_nacionalidade.id = ${idNacionalidade};`
+                    where tbl_atividade.id = ${idAtividade};`
 
         let result = await knexConection.raw(sql)
 
@@ -150,9 +150,9 @@ const selectDiretoresByIdNacionalidade = async function (idNacionalidade) {
     }
 }
 
-const deleteDiretorNacionalidade = async function (id) {
+const deleteDiretorAtividade = async function (id) {
     try {
-        let sql = `delete from tbl_diretor_nacionalidade where id = ${id};`
+        let sql = `delete from tbl_diretor_atividade where id = ${id};`
 
         let result = await knexConection.raw(sql)
 
@@ -165,11 +165,11 @@ const deleteDiretorNacionalidade = async function (id) {
     }
 }
 
-//Função para excluir as nacionalidades relacionados com um diretor
-//Obs: Esta função será utilizada no put do diretor (apaga a nacionalidade de acordo com o id do diretor)
-const deleteNacionalidadesByIdDiretor = async function (idDiretor) {
+//Função para excluir as atividades relacionados com um diretor
+//Obs: Esta função será utilizada no put do diretor (apaga a atividade de acordo com o id do diretor)
+const deleteAtividadesByIdDiretor = async function (idDiretor) {
     try {
-        let sql = `delete from tbl_diretor_nacionalidade where id_diretor = ${idDiretor};`
+        let sql = `delete from tbl_diretor_atividade where id_diretor = ${idDiretor};`
 
         let result = await knexConection.raw(sql)
 
@@ -182,11 +182,11 @@ const deleteNacionalidadesByIdDiretor = async function (idDiretor) {
     }
 }
 
-//Função para excluir os diretores relacionados com uma nacionalidade
-//Obs: Esta função será utilizada no put da nacionalidade (apaga o diretor de acordo com o id da nacionalidades)
-const deleteDiretoresByIdNacionalidade = async function (idNacionalidade) {
+//Função para excluir os diretores relacionados com uma atividade
+//Obs: Esta função será utilizada no put da atividade (apaga o diretor de acordo com o id da atividade)
+const deleteDiretoresByIdAtividade = async function (idAtividade) {
     try {
-        let sql = `delete from tbl_diretor_nacionalidade where id_nacionalidade = ${idNacionalidade};`
+        let sql = `delete from tbl_diretor_atividade where id_atividade = ${idAtividade};`
 
         let result = await knexConection.raw(sql)
 
@@ -200,13 +200,13 @@ const deleteDiretoresByIdNacionalidade = async function (idNacionalidade) {
 }
 
 module.exports = {
-    insertDiretorNacionalidade,
-    updateDiretorNacionalidade,
-    selectAllDiretorNacionalidade,
-    selectByIdDiretorNacionalidade,
-    selectNacionalidadesByIdDiretor,
-    selectDiretoresByIdNacionalidade,
-    deleteDiretorNacionalidade,
-    deleteNacionalidadesByIdDiretor,
-    deleteDiretoresByIdNacionalidade
+    insertDiretorAtividade,
+    updateDiretorAtividade,
+    selectAllDiretorAtividade,
+    selectByIdDiretorAtividade,
+    selectAtividadesByIdDiretor,
+    selectDiretoresByIdAtividade,
+    deleteDiretorAtividade,
+    deleteAtividadesByIdDiretor,
+    deleteDiretoresByIdAtividade
 }

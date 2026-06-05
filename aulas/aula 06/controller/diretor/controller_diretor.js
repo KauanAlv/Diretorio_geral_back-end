@@ -16,10 +16,13 @@ const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 const controllerSexo = require('../sexo/controller_sexo.js')
 const controllerFilme = require('../filme/controller_filme.js')
 const controllerFoto = require('../foto/controller_foto.js')
-const controllerNacionalidade = require ('../nacionalidade/controller_nacionalidade.js')
+const controllerNacionalidade = require('../nacionalidade/controller_nacionalidade.js')
+const controllerAtividade = require('../atividade/controller_atividade.js')
+
 const controllerFilmeDiretor = require('../filme/controller_filme_diretor.js')
 const controllerDiretorFoto = require('./controller_diretor_foto.js')
-const controllerDiretorNacionalidade = require ('./controller_diretor_nacionalidade.js')
+const controllerDiretorNacionalidade = require('./controller_diretor_nacionalidade.js')
+const controllerDiretorAtividade = require('./controller_diretor_atividade.js')
 
 const inserirNovoDiretor = async function (diretor, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -41,6 +44,10 @@ const inserirNovoDiretor = async function (diretor, contentType) {
                 }
 
                 if (diretor.nacionalidade !== undefined && !Array.isArray(diretor.nacionalidade)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
+                if (diretor.atividade !== undefined && !Array.isArray(diretor.atividade)) {
                     return customMessage.ERROR_BAD_REQUEST // 400
                 }
 
@@ -100,7 +107,21 @@ const inserirNovoDiretor = async function (diretor, contentType) {
                         }
                     }
 
+                    if (Array.isArray(diretor.atividade)) {
+                        for (let atividade of diretor.atividade) {
+                            let diretorAtividade = {
+                                "id_diretor": diretor.id,
+                                "id_atividade": atividade.id
+                            }
 
+                            let resultDiretorAtividade = await controllerDiretorAtividade.inserirNovoDiretorAtividade(diretorAtividade)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultDiretorAtividade.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
@@ -140,6 +161,10 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                     }
 
                     if (diretor.nacionalidade !== undefined && !Array.isArray(diretor.nacionalidade)) {
+                        return customMessage.ERROR_BAD_REQUEST // 400
+                    }
+
+                    if (diretor.atividade !== undefined && !Array.isArray(diretor.atividade)) {
                         return customMessage.ERROR_BAD_REQUEST // 400
                     }
 
@@ -200,6 +225,23 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                             }
                         }
 
+                        let resultDeleteAtividades = await controllerDiretorAtividade.excluirAtividadesIdDiretor(diretor.id)
+                        if (resultDeleteAtividades.status) {
+                            if (Array.isArray(diretor.atividade)) {
+                                for (let atividade of diretor.atividade) {
+                                    let diretorAtividade = {
+                                        "id_diretor": diretor.id,
+                                        "id_atividade": atividade.id
+                                    }
+                                    let resultDiretorAtividade = await controllerDiretorAtividade.inserirNovoDiretorAtividade(diretorAtividade)
+
+                                    if (!resultDiretorAtividade.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -233,7 +275,6 @@ const listarDiretor = async function () {
             if (result.length > 0) {
                 for (let diretor of result) {
                     let resultSexo = await controllerSexo.buscarSexo(diretor.id_sexo)
-
                     if (resultSexo.status) {
                         diretor.sexo = resultSexo.response.sexo
                         delete diretor.id_sexo
@@ -242,21 +283,11 @@ const listarDiretor = async function () {
                     // Buscar todos os filmes feito por aquele diretor
                     let resultFilmes = await controllerFilmeDiretor.buscarFilmesIdDiretor(diretor.id)
                     if (resultFilmes.status) {
-                        // Se retornou true, faz uma busca de todos os dados do filme, exceto as ligações da tabela
-                        diretor.filme = []
-                        for (let filme of resultFilmes.response.filme_diretor) {
-                            // Agora sim motra TODOS os dados do filme, com todas as ligações
-                            let dadosFilme = await controllerFilme.buscarFilme(filme.id)
-                            if (dadosFilme.status) {
-                                // Se tiver tudo certinho, no response do diretor aparece o filme
-                                diretor.filme = diretor.filme.concat(dadosFilme.response.filme)
-                            }
-                        }
+                        diretor.filme = resultFilmes.response.filme_diretor
                     }
 
                     let resultFotos = await controllerDiretorFoto.buscarFotosIdDiretor(diretor.id)
                     if (resultFotos.status) {
-
                         diretor.foto = []
                         for (let foto of resultFotos.response.diretor_foto) {
 
@@ -269,13 +300,17 @@ const listarDiretor = async function () {
 
                     let resultNacionalidades = await controllerDiretorNacionalidade.buscarNacionalidadeByIdDiretor(diretor.id)
                     if (resultNacionalidades.status) {
+                        diretor.nacionalidade = resultNacionalidades.response.diretor_nacionalidade
+                    }
 
-                        diretor.nacionalidade = []
-                        for (let nacionalidade of resultNacionalidades.response.diretor_nacionalidade) {
+                    let resultAtividades = await controllerDiretorAtividade.buscarAtividadeByIdDiretor(diretor.id)
+                    if (resultAtividades.status) {
+                        diretor.atividade = []
+                        for (let atividade of resultAtividades.response.diretor_atividade) {
 
-                            let dadosNacionalidade = await controllerNacionalidade.buscarNacionalidade(nacionalidade.id)
-                            if (dadosNacionalidade.status) {
-                                diretor.nacionalidade = diretor.nacionalidade.concat(dadosNacionalidade.response.nacionalidade)
+                            let dadosAtividade = await controllerAtividade.buscarAtividade(atividade.id)
+                            if (dadosAtividade.status) {
+                                diretor.atividade = diretor.atividade.concat(dadosAtividade.response.atividade)
                             }
                         }
                     }
@@ -294,6 +329,7 @@ const listarDiretor = async function () {
             return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
         }
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller 
     }
 }
@@ -333,6 +369,11 @@ const buscarDiretor = async function (id) {
                         if (resultDiretorNacionalidade.status) {
                             diretor.nacionalidade = resultDiretorNacionalidade.response.diretor_nacionalidade
                         }
+
+                        let resultDiretorAtividade = await controllerDiretorAtividade.buscarAtividadeByIdDiretor(diretor.id)
+                        if (resultDiretorAtividade.status) {
+                            diretor.atividade = resultDiretorAtividade.response.diretor_atividade
+                        }''
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status

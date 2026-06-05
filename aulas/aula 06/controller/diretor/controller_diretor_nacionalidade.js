@@ -1,7 +1,7 @@
 /***********************************************************************************
  * Objetivo: Arquivo responsável pela validação, tratamento e manipulação de dados
  *      para realizar o CRUD de Diretor Nacionalidade.
- * Data: 22/05/2026 - (sexta-feira)
+ * Data: 04/06/2026 - (sexta-feira)
  * Autor: Kauan Alves Pereira
  * Versão: 1.0
  ***********************************************************************************/
@@ -9,7 +9,6 @@
 //Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-//Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
 const diretorNacionalidadeDAO = require('../../model/DAO/diretor_nacionalidade/diretor_nacionalidade.js')
 
 const inserirNovoDiretorNacionalidade = async function (diretorNacionalidade) {

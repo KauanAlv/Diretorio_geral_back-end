@@ -9,7 +9,6 @@
 //Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-//Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
 const sexoDAO = require('../../model/DAO/sexo/sexo.js')
 
 const inserirNovoSexo = async function (sexo, contentType) {

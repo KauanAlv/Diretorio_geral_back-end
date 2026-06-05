@@ -11,7 +11,6 @@ const configMessages = require('../modulo/configMessages.js')
 
 //Import das controllers
 const nacionalidadeDAO = require('../../model/DAO/nacionalidade/nacionalidade.js')
-const controllerDiretor = require('../diretor/controller_diretor.js')
 const controllerDiretorNacionalidade = require('../diretor/controller_diretor_nacionalidade.js')
 
 const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
@@ -133,16 +132,11 @@ const listarNacionalidade = async function () {
         if (result) {
             if (result.length > 0) {
                 for (let nacionalidade of result) {
-                    let resultDiretores = await controllerDiretorNacionalidade.buscarDiretorByIdNacionalidade(nacionalidade.id)
-                    if (resultDiretores.status) {
 
-                        nacionalidade.diretor = []
-                        for (let diretor of resultDiretores.response.diretor_nacionalidade) {
-                            let dadosDiretor = await controllerDiretor.buscarDiretor(diretor.id)
-                            if (dadosDiretor.status) {
-                                nacionalidade.diretor = nacionalidade.diretor.concat(dadosDiretor.response.diretor)
-                            }
-                        }
+                    let resultDiretores = await controllerDiretorNacionalidade.buscarDiretorByIdNacionalidade(nacionalidade.id)
+
+                    if (resultDiretores.status) {
+                        nacionalidade.diretor = resultDiretores.response.diretor_nacionalidade
                     }
                 }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -225,7 +219,7 @@ const validarDados = async function (nacionalidade) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     if (nacionalidade.nacionalidade == undefined || nacionalidade.nacionalidade == '' || nacionalidade.nacionalidade == null || nacionalidade.nacionalidade.length > 25) {
-        customMessage.ERROR_BAD_REQUEST.field = '[GÊNERO] INVÁLIDO'
+        customMessage.ERROR_BAD_REQUEST.field = '[NACIONALIDADE] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
     } else {
         return false

@@ -9,8 +9,9 @@
 //Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-//Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
+
 const atividadeDAO = require('../../model/DAO/atividade/atividade.js')
+const controllerDiretorAtividade = require('../diretor/controller_diretor_atividade.js')
 
 const inserirNovaAtividade = async function (atividade, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -22,10 +23,26 @@ const inserirNovaAtividade = async function (atividade, contentType) {
             if (validacao) {
                 return validacao // 400 (dados)
             } else {
+                if (atividade.diretor !== undefined && !Array.isArray(atividade.diretor)) {
+                    return customMessage.ERROR_BAD_REQUEST
+                }
                 let result = await atividadeDAO.insertAtividade(atividade)
 
                 if (result) {
                     atividade.id = result
+
+                    if (Array.isArray(atividade.diretor)) {
+                        for (let diretor of atividade.diretor) {
+                            let atividadeDiretor = {
+                                "id_diretor": diretor.id,
+                                "id_atividade": atividade.id
+                            }
+                            let resultAtividadeDiretor = await controllerDiretorAtividade.inserirNovoDiretorAtividade(atividadeDiretor)
+                            if (!resultAtividadeDiretor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
@@ -57,10 +74,29 @@ const atualizarAtividade = async function (atividade, id, contentType) {
                 let validar = await validarDados(atividade)
 
                 if (!validar) {
+                    if (atividade.diretor !== undefined && !Array.isArray(atividade.diretor)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
                     atividade.id = Number(id)
                     let result = await atividadeDAO.updateAtividade(atividade)
 
                     if (result) {
+                        if (Array.isArray(atividade.diretor)) {
+                            let resultDeleteDiretores = await controllerDiretorAtividade.excluirDiretoresIdAtividade(atividade.id)
+                            if (resultDeleteDiretores.status) {
+                                for (let diretor of atividade.diretor) {
+                                    let atividadeDiretor = {
+                                        "id_diretor": diretor.id,
+                                        "id_atividade": atividade.id
+                                    }
+
+                                    let resultAtividadeDiretor = await controllerDiretorAtividade.inserirNovoDiretorAtividade(atividadeDiretor)
+                                    if (!resultAtividadeDiretor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -92,6 +128,14 @@ const listarAtividade = async function () {
 
         if (result) {
             if (result.length > 0) {
+                for (let atividade of result) {
+
+                    let resultDiretores = await controllerDiretorAtividade.buscarDiretorByIdAtividade(atividade.id)
+
+                    if (resultDiretores.status) {
+                        atividade.diretor = resultDiretores.response.diretor_atividade
+                    }
+                }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
@@ -121,6 +165,12 @@ const buscarAtividade = async function (id) {
 
             if (result) {
                 if (result.length > 0) {
+                    for (let atividade of result) {
+                        let resultAtividadeDiretor = await controllerDiretorAtividade.buscarDiretorByIdAtividade(atividade.id)
+                        if (resultAtividadeDiretor.status) {
+                            atividade.diretor = resultAtividadeDiretor.response.diretor_atividade
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                     customMessage.DEFAULT_MESSAGE.response.atividade = result
