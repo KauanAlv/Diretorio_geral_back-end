@@ -182,3 +182,17 @@ create table tbl_diretor_nacionalidade (
     foreign key (id_nacionalidade)
     references	tbl_nacionalidade(id)
 );
+
+create table tbl_diretor_atividade (
+	id int not null auto_increment primary key,
+    id_diretor int not null,
+    id_atividade int not null,
+    
+    constraint 	FK_DIRETOR_DIRETORATIVIDADE
+    foreign key (id_diretor)
+    references	tbl_diretor(id),
+    
+    constraint 	FK_NACIONALIDADE_DIRETORATIVIDADE
+    foreign key (id_atividade)
+    references	tbl_atividade(id)
+);
