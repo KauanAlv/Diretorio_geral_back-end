@@ -168,3 +168,17 @@ create table tbl_diretor_foto (
     foreign key (id_foto)
     references	tbl_foto(id)
 );
+
+create table tbl_diretor_nacionalidade (
+	id int not null auto_increment primary key,
+    id_diretor int not null,
+    id_nacionalidade int not null,
+    
+    constraint 	FK_DIRETOR_DIRETORNACIONALIDADE
+    foreign key (id_diretor)
+    references	tbl_diretor(id),
+    
+    constraint 	FK_NACIONALIDADE_DIRETORNACIONALIDADE
+    foreign key (id_nacionalidade)
+    references	tbl_nacionalidade(id)
+);

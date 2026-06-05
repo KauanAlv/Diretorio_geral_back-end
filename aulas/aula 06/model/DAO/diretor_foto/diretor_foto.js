@@ -127,7 +127,7 @@ const selectFotosByIdDiretor = async function (idDiretor) {
 
 const deleteDiretorFoto = async function (id) {
     try {
-        let sql = `delete from tbl_filme_genero where id = ${id};`
+        let sql = `delete from tbl_diretor_foto where id = ${id};`
 
         let result = await knexConection.raw(sql)
 

@@ -16,8 +16,10 @@ const diretorDAO = require('../../model/DAO/diretor/diretor.js')
 const controllerSexo = require('../sexo/controller_sexo.js')
 const controllerFilme = require('../filme/controller_filme.js')
 const controllerFoto = require('../foto/controller_foto.js')
+const controllerNacionalidade = require ('../nacionalidade/controller_nacionalidade.js')
 const controllerFilmeDiretor = require('../filme/controller_filme_diretor.js')
-const controllerDiretorFoto = require('../diretor/controller_diretor_foto.js')
+const controllerDiretorFoto = require('./controller_diretor_foto.js')
+const controllerDiretorNacionalidade = require ('./controller_diretor_nacionalidade.js')
 
 const inserirNovoDiretor = async function (diretor, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -35,6 +37,10 @@ const inserirNovoDiretor = async function (diretor, contentType) {
                 }
 
                 if (diretor.foto !== undefined && !Array.isArray(diretor.foto)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
+                if (diretor.nacionalidade !== undefined && !Array.isArray(diretor.nacionalidade)) {
                     return customMessage.ERROR_BAD_REQUEST // 400
                 }
 
@@ -73,6 +79,22 @@ const inserirNovoDiretor = async function (diretor, contentType) {
 
                             //Validação para verificar se todos os itens de relacionamento foram inseridos
                             if (!resultDiretorFoto.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(diretor.nacionalidade)) {
+                        for (let nacionalidade of diretor.nacionalidade) {
+                            let diretorNacionalidade = {
+                                "id_diretor": diretor.id,
+                                "id_nacionalidade": nacionalidade.id
+                            }
+
+                            let resultDiretorNacionalidade = await controllerDiretorNacionalidade.inserirNovoDiretorNacionalidade(diretorNacionalidade)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultDiretorNacionalidade.status) {
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
                             }
                         }
@@ -117,6 +139,10 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                         return customMessage.ERROR_BAD_REQUEST // 400
                     }
 
+                    if (diretor.nacionalidade !== undefined && !Array.isArray(diretor.nacionalidade)) {
+                        return customMessage.ERROR_BAD_REQUEST // 400
+                    }
+
                     diretor.id = Number(id)
                     let result = await diretorDAO.updateDiretor(diretor)
 
@@ -151,6 +177,23 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                                     let resultDiretorFoto = await controllerDiretorFoto.inserirNovoDiretorFoto(diretorFoto)
 
                                     if (!resultDiretorFoto.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
+                        let resultDeleteNacionalidades = await controllerDiretorNacionalidade.excluirNacionalidadesIdDiretor(diretor.id)
+                        if (resultDeleteNacionalidades.status) {
+                            if (Array.isArray(diretor.nacionalidade)) {
+                                for (let nacionalidade of diretor.nacionalidade) {
+                                    let diretorNacionalidade = {
+                                        "id_diretor": diretor.id,
+                                        "id_nacionalidade": nacionalidade.id
+                                    }
+                                    let resultDiretorNacionalidade = await controllerDiretorNacionalidade.inserirNovoDiretorNacionalidade(diretorNacionalidade)
+
+                                    if (!resultDiretorNacionalidade.status) {
                                         return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
                                     }
                                 }
@@ -223,6 +266,19 @@ const listarDiretor = async function () {
                             }
                         }
                     }
+
+                    let resultNacionalidades = await controllerDiretorNacionalidade.buscarNacionalidadeByIdDiretor(diretor.id)
+                    if (resultNacionalidades.status) {
+
+                        diretor.nacionalidade = []
+                        for (let nacionalidade of resultNacionalidades.response.diretor_nacionalidade) {
+
+                            let dadosNacionalidade = await controllerNacionalidade.buscarNacionalidade(nacionalidade.id)
+                            if (dadosNacionalidade.status) {
+                                diretor.nacionalidade = diretor.nacionalidade.concat(dadosNacionalidade.response.nacionalidade)
+                            }
+                        }
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -271,6 +327,11 @@ const buscarDiretor = async function (id) {
                         let resultDiretorFoto = await controllerDiretorFoto.buscarFotosIdDiretor(diretor.id)
                         if (resultDiretorFoto.status) {
                             diretor.foto = resultDiretorFoto.response.diretor_foto
+                        }
+
+                        let resultDiretorNacionalidade = await controllerDiretorNacionalidade.buscarNacionalidadeByIdDiretor(diretor.id)
+                        if (resultDiretorNacionalidade.status) {
+                            diretor.nacionalidade = resultDiretorNacionalidade.response.diretor_nacionalidade
                         }
                     }
 

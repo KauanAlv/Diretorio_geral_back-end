@@ -9,8 +9,10 @@
 //Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-//Import do arquivo do DAO para manipular os dados do genero do filme no Banco de Dados
+//Import das controllers
 const nacionalidadeDAO = require('../../model/DAO/nacionalidade/nacionalidade.js')
+const controllerDiretor = require('../diretor/controller_diretor.js')
+const controllerDiretorNacionalidade = require('../diretor/controller_diretor_nacionalidade.js')
 
 const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
     //Cria uma cópia dos JSONs do arquivo de configuração de mensagens
@@ -25,11 +27,26 @@ const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
             if (validacao) {
                 return validacao // 400
             } else {
+                if (nacionalidade.diretor !== undefined && !Array.isArray(nacionalidade.diretor)) {
+                    return customMessage.ERROR_BAD_REQUEST
+                }
                 let result = await nacionalidadeDAO.insertNacionalidade(nacionalidade)
 
                 if (result) {
                     nacionalidade.id = result
 
+                    if (Array.isArray(nacionalidade.diretor)) {
+                        for (let diretor of nacionalidade.diretor) {
+                            let nacionalidadeDiretor = {
+                                "id_diretor": diretor.id,
+                                "id_nacionalidade": nacionalidade.id
+                            }
+                            let resultNacionalidadeDiretor = await controllerDiretorNacionalidade.inserirNovoDiretorNacionalidade(nacionalidadeDiretor)
+                            if (!resultNacionalidadeDiretor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -49,7 +66,6 @@ const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
 }
 
 const atualizarNacionalidade = async function (nacionalidade, id, contentType) {
-
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
@@ -60,11 +76,29 @@ const atualizarNacionalidade = async function (nacionalidade, id, contentType) {
                 let validar = await validarDados(nacionalidade)
 
                 if (!validar) {
+                    if (nacionalidade.diretor !== undefined && !Array.isArray(nacionalidade.diretor)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
                     nacionalidade.id = Number(id)
-
                     let result = await nacionalidadeDAO.updateNacionalidade(nacionalidade)
 
                     if (result) {
+                        if (Array.isArray(nacionalidade.diretor)) {
+                            let resultDeleteDiretores = await controllerDiretorNacionalidade.excluirDiretoresIdNacionalidade(nacionalidade.id)
+                            if (resultDeleteDiretores.status) {
+                                for (let diretor of nacionalidade.diretor) {
+                                    let nacionalidadeDiretor = {
+                                        "id_diretor": diretor.id,
+                                        "id_nacionalidade": nacionalidade.id
+                                    }
+
+                                    let resultNacionalidadeDiretor = await controllerDiretorNacionalidade.inserirNovoDiretorNacionalidade(nacionalidadeDiretor)
+                                    if (!resultNacionalidadeDiretor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -84,7 +118,7 @@ const atualizarNacionalidade = async function (nacionalidade, id, contentType) {
             return customMessage.ERROR_CONTENT_TYPE // 415
         }
     } catch (error) {
-        return customMessage.DEFAULT_MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
     }
 }
 
@@ -98,6 +132,19 @@ const listarNacionalidade = async function () {
 
         if (result) {
             if (result.length > 0) {
+                for (let nacionalidade of result) {
+                    let resultDiretores = await controllerDiretorNacionalidade.buscarDiretorByIdNacionalidade(nacionalidade.id)
+                    if (resultDiretores.status) {
+
+                        nacionalidade.diretor = []
+                        for (let diretor of resultDiretores.response.diretor_nacionalidade) {
+                            let dadosDiretor = await controllerDiretor.buscarDiretor(diretor.id)
+                            if (dadosDiretor.status) {
+                                nacionalidade.diretor = nacionalidade.diretor.concat(dadosDiretor.response.diretor)
+                            }
+                        }
+                    }
+                }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
@@ -128,6 +175,12 @@ const buscarNacionalidade = async function (id) {
 
             if (result) {
                 if (result.length > 0) {
+                    for (let nacionalidade of result) {
+                        let resultNacionalidadeDiretor = await controllerDiretorNacionalidade.buscarDiretorByIdNacionalidade(nacionalidade.id)
+                        if (resultNacionalidadeDiretor.status) {
+                            nacionalidade.diretor = resultNacionalidadeDiretor.response.diretor_nacionalidade
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                     customMessage.DEFAULT_MESSAGE.response.nacionalidade = result

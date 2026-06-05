@@ -30,6 +30,9 @@ const inserirNovoGenero = async function (genero, contentType) {
             if (validacao) {
                 return validacao // 400, validação incorreta
             } else {
+                if (genero.filme !== undefined && !Array.isArray(genero.filme)) {
+                    return customMessage.ERROR_BAD_REQUEST
+                }
                 //Encaminha os dados do genero do filme para o DAO inserir no Banco de Dados
                 let result = await generoDAO.insertGenero(genero)
 
@@ -37,6 +40,18 @@ const inserirNovoGenero = async function (genero, contentType) {
                     //Cria o ID no JSON do genero do filme e adiciona o ID gerado no DAO
                     genero.id = result
 
+                    if (Array.isArray(genero.filme)) {
+                        for (let filme of genero.filme) {
+                            let generoFilme = {
+                                "id_filme": filme.id,
+                                "id_genero": genero.id
+                            }
+                            let resultGeneroFilme = await controllerFilmeGenero.inserirNovoFilmeGenero(generoFilme)
+                            if (!resultGeneroFilme.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -74,6 +89,9 @@ const atualizarGenero = async function (genero, id, contentType) {
                 let validar = await validarDados(genero)
 
                 if (!validar) {
+                    if (genero.filme !== undefined && !Array.isArray(genero.filme)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
                     //Adiciona um atributo ID no JSON de gênero, para enviar ao DAO um único objeto
                     genero.id = Number(id)
 
@@ -81,19 +99,19 @@ const atualizarGenero = async function (genero, id, contentType) {
                     let result = await generoDAO.updateGenero(genero)
 
                     if (result) {
-                        let resultDeleteFilmes = await controllerFilmeGenero.excluirFilmesIdGenero(genero.id)
+                        if (Array.isArray(genero.filme)) {
+                            let resultDeleteFilmes = await controllerFilmeGenero.excluirFilmesIdGenero(genero.id)
+                            if (resultDeleteFilmes.status) {
+                                for (let filme of genero.filme) {
+                                    let generoFilme = {
+                                        "id_filme": filme.id,
+                                        "id_genero": genero.id
+                                    }
 
-                        if (resultDeleteFilmes.status) {
-                            for (let filme of genero.filme) {
-                                let generoFilme = {
-                                    "id_filme": filme.id,
-                                    "id_genero": genero.id
-                                }
-
-                                let resultGeneroFilme = await controllerFilmeGenero.inserirNovoFilmeGenero(generoFilme)
-
-                                if (!resultGeneroFilme.status) {
-                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    let resultGeneroFilme = await controllerFilmeGenero.inserirNovoFilmeGenero(generoFilme)
+                                    if (!resultGeneroFilme.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
                                 }
                             }
                         }
