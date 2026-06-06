@@ -16,6 +16,7 @@ const filmeDAO = require('../../model/DAO/filme/filme.js')
 const controllerClassificacao = require('../classificacao/controller_classificacao.js')
 const controllerFilmeGenero = require('./controller_filme_genero.js')
 const controllerFilmeDiretor = require('./controller_filme_diretor.js')
+const controllerFilmeAtor = require('./controller_filme_ator.js')
 
 //Função para validar os dados de cadastro do filme
 const validarDados = async function (filme) {
@@ -95,9 +96,14 @@ const inserirNovoFilme = async function (filme, contentType) {
                     return customMessage.ERROR_BAD_REQUEST // 400
                 }
 
-                if (filme.diretor !== undefined  && !Array.isArray(filme.diretor)) {
+                if (filme.diretor !== undefined && !Array.isArray(filme.diretor)) {
                     return customMessage.ERROR_BAD_REQUEST // 400
                 }
+
+                if (filme.ator !== undefined && !Array.isArray(filme.ator)) {
+                    return customMessage.ERROR_BAD_REQUEST // 400
+                }
+
                 //Encaminha os dados do filme para o DAO inserir no Banco de Dados
                 let result = await filmeDAO.insertFilme(await tratarDados(filme))
 
@@ -144,6 +150,22 @@ const inserirNovoFilme = async function (filme, contentType) {
                         }
                     }
 
+                    if (Array.isArray(filme.ator)) {
+                        for (let ator of filme.ator) {
+                            let filmeAtor = {
+                                "id_filme": filme.id,
+                                "id_ator": ator.id
+                            }
+
+                            let resultFilmeAtor = await controllerFilmeAtor.inserirNovoFilmeAtor(filmeAtor)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultFilmeAtor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -181,6 +203,17 @@ const atualizarFilme = async function (filme, id, contentType) {
                 let validar = await validarDados(filme)
 
                 if (!validar) {
+                    if (filme.genero !== undefined && !Array.isArray(filme.genero)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
+
+                    if (filme.diretor !== undefined && !Array.isArray(filme.diretor)) {
+                        return customMessage.ERROR_BAD_REQUEST // 400
+                    }
+
+                    if (filme.ator !== undefined && !Array.isArray(filme.ator)) {
+                        return customMessage.ERROR_BAD_REQUEST // 400
+                    }
 
                     //Adiciona um atributo ID no JSON de filme, para enviar ao DAO um único objeto
                     filme.id = Number(id)
@@ -194,17 +227,19 @@ const atualizarFilme = async function (filme, id, contentType) {
                         let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosIdFilme(filme.id)
 
                         if (resultDeleteGeneros.status) {
-                            for (let genero of filme.genero) {
-                                let filmeGenero = {
-                                    "id_filme": filme.id,
-                                    "id_genero": genero.id
-                                }
+                            if (Array.isArray(filme.genero)) {
+                                for (let genero of filme.genero) {
+                                    let filmeGenero = {
+                                        "id_filme": filme.id,
+                                        "id_genero": genero.id
+                                    }
 
-                                let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                                    let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
 
-                                //Validação para verificar se todos os itens de relacionamento foram inseridos
-                                if (!resultFilmeGenero.status) {
-                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                                    //Validação para verificar se todos os itens de relacionamento foram inseridos
+                                    if (!resultFilmeGenero.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                                    }
                                 }
                             }
                         }
@@ -212,16 +247,37 @@ const atualizarFilme = async function (filme, id, contentType) {
                         let resultDeleteDiretores = await controllerFilmeDiretor.excluirDiretoresIdFilme(filme.id)
 
                         if (resultDeleteDiretores.status) {
-                            for (let diretor of filme.diretor) {
-                                let filmeDiretor = {
-                                    "id_filme": filme.id,
-                                    "id_diretor": diretor.id
+                            if (Array.isArray(filme.diretor)) {
+                                for (let diretor of filme.diretor) {
+                                    let filmeDiretor = {
+                                        "id_filme": filme.id,
+                                        "id_diretor": diretor.id
+                                    }
+
+                                    let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
+
+                                    if (!resultFilmeDiretor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
                                 }
+                            }
+                        }
 
-                                let resultFilmeDiretor = await controllerFilmeDiretor.inserirNovoFilmeDiretor(filmeDiretor)
+                        let resultDeleteAtores = await controllerFilmeAtor.excluirAtoresIdFilme(filme.id)
 
-                                if (!resultFilmeDiretor.status) {
-                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                        if (resultDeleteAtores.status) {
+                            if (Array.isArray(filme.ator)) {
+                                for (let ator of filme.ator) {
+                                    let filmeAtor = {
+                                        "id_filme": filme.id,
+                                        "id_ator": ator.id
+                                    }
+
+                                    let resultFilmeAtor = await controllerFilmeAtor.inserirNovoFilmeAtor(filmeAtor)
+
+                                    if (!resultFilmeAtor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
                                 }
                             }
                         }
@@ -271,7 +327,6 @@ const listarFilme = async function () {
                 for (let filme of result) {
                     //Busca na controller da classificação o ID referente a FK da classificação
                     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
-
                     //Se encontrar o ID
                     if (resultClassificacao.status) {
                         //Adicionar um atributo classificação no JSON do filme e colocar o resultado com os dados da classificação
@@ -282,15 +337,18 @@ const listarFilme = async function () {
 
                     //Manipulação de dados para retornar os Gêneros relacionados aos Filmes
                     let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
-
                     if (resultGeneros.status) {
                         filme.genero = resultGeneros.response.filme_genero
                     }
 
                     let resultDiretores = await controllerFilmeDiretor.buscarDiretoresIdFilme(filme.id)
-
                     if (resultDiretores.status) {
                         filme.diretor = resultDiretores.response.filme_diretor
+                    }
+
+                    let resultAtores = await controllerFilmeAtor.buscarAtoresIdFilme(filme.id)
+                    if (resultAtores.status) {
+                        filme.ator = resultAtores.response.filme_ator
                     }
                 }
 
@@ -336,7 +394,6 @@ const buscarFilme = async function (id) {
                     for (let filme of result) {
                         //Busca na controller da classificação o ID referente a FK da classificação
                         let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
-
                         //Se encontrar o ID
                         if (resultClassificacao.status) {
                             //Adicionar um atributo classificação no JSON do filme e colocar o resultado com os dados da classificação
@@ -346,15 +403,18 @@ const buscarFilme = async function (id) {
                         }
 
                         let resultFilmeGenero = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
-
                         if (resultFilmeGenero.status) {
                             filme.genero = resultFilmeGenero.response.filme_genero
                         }
 
                         let resultFilmeDiretor = await controllerFilmeDiretor.buscarDiretoresIdFilme(filme.id)
-
                         if (resultFilmeDiretor.status) {
                             filme.diretor = resultFilmeDiretor.response.filme_diretor
+                        }
+
+                        let resultFilmeAtor = await controllerFilmeAtor.buscarAtoresIdFilme(filme.id)
+                        if (resultFilmeAtor.status) {
+                            filme.ator = resultFilmeAtor.response.filme_ator
                         }
                     }
 

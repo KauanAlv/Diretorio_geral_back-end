@@ -14,6 +14,7 @@ const atorDAO = require('../../model/DAO/ator/ator.js')
 
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
+const controllerFilmeAtor = require('..//filme/controller_filme_ator.js')
 
 const inserirNovoAtor = async function (ator, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -31,6 +32,18 @@ const inserirNovoAtor = async function (ator, contentType) {
                 if (result) {
                     ator.id = result
 
+                    if (Array.isArray(ator.filme)) {
+                        for (let filme of ator.filme) {
+                            let AtorFilme = {
+                                "id_filme": filme.id,
+                                "id_ator": ator.id
+                            }
+                            let resultAtorFilme = await controllerFilmeAtor.inserirNovoFilmeAtor(AtorFilme)
+                            if (!resultAtorFilme.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -64,6 +77,22 @@ const AtualizarAtor = async function (ator, id, contentType) {
                     let result = await atorDAO.updateAtor(ator)
 
                     if (result) {
+                        if (Array.isArray(ator.filme)) {
+                            let resultDeleteFilmes = await controllerFilmeAtor.excluirFilmesIdAtor(ator.id)
+                            if (resultDeleteFilmes.status) {
+                                for (let filme of ator.filme) {
+                                    let atorFilme = {
+                                        "id_filme": filme.id,
+                                        "id_ator": ator.id
+                                    }
+
+                                    let resultAtorFilme = await controllerFilmeAtor.inserirNovoFilmeAtor(atorFilme)
+                                    if (!resultAtorFilme.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -103,6 +132,12 @@ const listarAtor = async function () {
                         ator.sexo = resultSexo.response.sexo
                         delete ator.id_sexo
                     }
+
+                    let resultAtor = await controllerFilmeAtor.buscarFilmesIdAtor(ator.id)
+
+                    if (resultAtor.status) {
+                        ator.filme = resultAtor.response.filme_ator
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -141,6 +176,11 @@ const buscarAtor = async function (id) {
                         if (resultSexo.status) {
                             ator.sexo = resultSexo.response.sexo
                             delete ator.id_sexo
+                        }
+
+                        let resultAtorFilme = await controllerFilmeAtor.buscarFilmesIdAtor(ator.id)
+                        if (resultAtorFilme.status) {
+                            ator.filme = resultAtorFilme.response.filme_ator
                         }
                     }
 
@@ -207,7 +247,10 @@ const validarDados = async function (ator) {
     } else if (ator.id_sexo == undefined || ator.id_sexo == '' || ator.id_sexo == null || isNaN(ator.id_sexo) || ator.id_sexo < 1) {
         customMessage.ERROR_BAD_REQUEST.field = '[ID_SEXO] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
-    } else {
+    } else if (ator.filme !== undefined && !Array.isArray(ator.filme)) {
+        return customMessage.ERROR_BAD_REQUEST
+    }
+    else {
         return false
     }
 
