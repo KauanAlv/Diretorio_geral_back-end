@@ -15,10 +15,12 @@ const atorDAO = require('../../model/DAO/ator/ator.js')
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
 const controllerFoto = require('../foto/controller_foto.js')
+const controllerAtividade = require('../atividade/controller_atividade.js')
 
 const controllerFilmeAtor = require('../filme/controller_filme_ator.js')
 const controllerAtorNacionalidade = require('./controller_ator_nacionalidade.js')
 const controllerAtorFoto = require('./controller_ator_foto.js')
+const controllerAtorAtividade = require('./controller_ator_atividade.js')
 
 const inserirNovoAtor = async function (ator, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -76,6 +78,22 @@ const inserirNovoAtor = async function (ator, contentType) {
 
                             //Validação para verificar se todos os itens de relacionamento foram inseridos
                             if (!resultAtorFoto.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(ator.atividade)) {
+                        for (let atividade of ator.atividade) {
+                            let atorAtividade = {
+                                "id_ator": ator.id,
+                                "id_atividade": atividade.id
+                            }
+
+                            let resultAtorAtividade = await controllerAtorAtividade.inserirNovoAtorAtividade(atorAtividade)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultAtorAtividade.status) {
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
                             }
                         }
@@ -165,6 +183,23 @@ const AtualizarAtor = async function (ator, id, contentType) {
                             }
                         }
 
+                        let resultDeleteAtividades = await controllerAtorAtividade.excluirAtividadesIdAtor(ator.id)
+                        if (resultDeleteAtividades.status) {
+                            if (Array.isArray(ator.atividade)) {
+                                for (let atividade of ator.atividade) {
+                                    let atorAtividade = {
+                                        "id_ator": ator.id,
+                                        "id_atividade": atividade.id
+                                    }
+                                    let resultAtorAtividade = await controllerAtorAtividade.inserirNovoAtorAtividade(atorAtividade)
+
+                                    if (!resultAtorAtividade.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -226,6 +261,18 @@ const listarAtor = async function () {
                             }
                         }
                     }
+
+                    let resultAtividades = await controllerAtorAtividade.buscarAtividadeByIdAtor(ator.id)
+                    if (resultAtividades.status) {
+                        ator.atividade = []
+                        for (let atividade of resultAtividades.response.ator_atividade) {
+
+                            let dadosAtividade = await controllerAtividade.buscarAtividade(atividade.id)
+                            if (dadosAtividade.status) {
+                                ator.atividade = ator.atividade.concat(dadosAtividade.response.atividade)
+                            }
+                        }
+                    }
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -279,6 +326,11 @@ const buscarAtor = async function (id) {
                         let resultAtorFoto = await controllerAtorFoto.buscarFotosIdAtor(ator.id)
                         if (resultAtorFoto.status) {
                             ator.foto = resultAtorFoto.response.ator_foto
+                        }
+
+                        let resultAtorAtividade = await controllerAtorAtividade.buscarAtividadeByIdAtor(ator.id)
+                        if (resultAtorAtividade.status) {
+                            ator.atividade = resultAtorAtividade.response.ator_atividade
                         }
                     }
 
@@ -353,6 +405,9 @@ const validarDados = async function (ator) {
         return customMessage.ERROR_BAD_REQUEST
 
     } else if (ator.foto !== undefined && !Array.isArray(ator.foto)) {
+        return customMessage.ERROR_BAD_REQUEST
+
+    } else if (ator.atividade !== undefined && !Array.isArray(ator.atividade)) {
         return customMessage.ERROR_BAD_REQUEST
 
     } else {

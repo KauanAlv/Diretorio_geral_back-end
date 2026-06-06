@@ -12,6 +12,7 @@ const configMessages = require('../modulo/configMessages.js')
 
 const atividadeDAO = require('../../model/DAO/atividade/atividade.js')
 const controllerDiretorAtividade = require('../diretor/controller_diretor_atividade.js')
+const controllerAtorAtividade = require('../ator/controller_ator_atividade.js')
 
 const inserirNovaAtividade = async function (atividade, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -23,11 +24,8 @@ const inserirNovaAtividade = async function (atividade, contentType) {
             if (validacao) {
                 return validacao // 400 (dados)
             } else {
-                if (atividade.diretor !== undefined && !Array.isArray(atividade.diretor)) {
-                    return customMessage.ERROR_BAD_REQUEST
-                }
-                let result = await atividadeDAO.insertAtividade(atividade)
 
+                let result = await atividadeDAO.insertAtividade(atividade)
                 if (result) {
                     atividade.id = result
 
@@ -39,6 +37,19 @@ const inserirNovaAtividade = async function (atividade, contentType) {
                             }
                             let resultAtividadeDiretor = await controllerDiretorAtividade.inserirNovoDiretorAtividade(atividadeDiretor)
                             if (!resultAtividadeDiretor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(atividade.ator)) {
+                        for (let ator of atividade.ator) {
+                            let atividadeAtor = {
+                                "id_ator": ator.id,
+                                "id_atividade": atividade.id
+                            }
+                            let resultAtividadeAtor = await controllerAtorAtividade.inserirNovoAtorAtividade(atividadeAtor)
+                            if (!resultAtividadeAtor.status) {
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
                             }
                         }
@@ -74,9 +85,6 @@ const atualizarAtividade = async function (atividade, id, contentType) {
                 let validar = await validarDados(atividade)
 
                 if (!validar) {
-                    if (atividade.diretor !== undefined && !Array.isArray(atividade.diretor)) {
-                        return customMessage.ERROR_BAD_REQUEST
-                    }
                     atividade.id = Number(id)
                     let result = await atividadeDAO.updateAtividade(atividade)
 
@@ -92,6 +100,23 @@ const atualizarAtividade = async function (atividade, id, contentType) {
 
                                     let resultAtividadeDiretor = await controllerDiretorAtividade.inserirNovoDiretorAtividade(atividadeDiretor)
                                     if (!resultAtividadeDiretor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
+                        if (Array.isArray(atividade.ator)) {
+                            let resultDeleteAtores = await controllerAtorAtividade.excluirAtoresIdAtividade(atividade.id)
+                            if (resultDeleteAtores.status) {
+                                for (let ator of atividade.ator) {
+                                    let atividadeAtor = {
+                                        "id_ator": ator.id,
+                                        "id_atividade": atividade.id
+                                    }
+
+                                    let resultAtividadeAtor = await controllerAtorAtividade.inserirNovoAtorAtividade(atividadeAtor)
+                                    if (!resultAtividadeAtor.status) {
                                         return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
                                     }
                                 }
@@ -135,6 +160,12 @@ const listarAtividade = async function () {
                     if (resultDiretores.status) {
                         atividade.diretor = resultDiretores.response.diretor_atividade
                     }
+
+                    let resultAtores = await controllerAtorAtividade.buscarAtorByIdAtividade(atividade.id)
+
+                    if (resultAtores.status) {
+                        atividade.ator = resultAtores.response.ator_atividade
+                    }
                 }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
@@ -169,6 +200,11 @@ const buscarAtividade = async function (id) {
                         let resultAtividadeDiretor = await controllerDiretorAtividade.buscarDiretorByIdAtividade(atividade.id)
                         if (resultAtividadeDiretor.status) {
                             atividade.diretor = resultAtividadeDiretor.response.diretor_atividade
+                        }
+
+                        let resultAtividadeAtor = await controllerAtorAtividade.buscarAtorByIdAtividade(atividade.id)
+                        if (resultAtividadeAtor.status) {
+                            atividade.ator = resultAtividadeAtor.response.ator_atividade
                         }
                     }
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -216,7 +252,14 @@ const validarDados = async function (atividade) {
     if (atividade.area_atuacao == undefined || atividade.area_atuacao == '' || atividade.area_atuacao == null || atividade.area_atuacao.length > 40) {
         customMessage.ERROR_BAD_REQUEST.field = '[ATIVIDADE] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
-    } else {
+
+    } else if (atividade.diretor !== undefined && !Array.isArray(atividade.diretor)) {
+        return customMessage.ERROR_BAD_REQUEST
+
+    } else if (atividade.ator !== undefined && !Array.isArray(atividade.ator)) {
+        return customMessage.ERROR_BAD_REQUEST
+    }
+    else {
         return false
     }
 }
