@@ -12,6 +12,7 @@ const configMessages = require('../modulo/configMessages.js')
 //Import das controllers
 const nacionalidadeDAO = require('../../model/DAO/nacionalidade/nacionalidade.js')
 const controllerDiretorNacionalidade = require('../diretor/controller_diretor_nacionalidade.js')
+const controllerAtorNacionalidade = require('../ator/controller_ator_nacionalidade.js')
 
 const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
     //Cria uma cópia dos JSONs do arquivo de configuração de mensagens
@@ -29,6 +30,11 @@ const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
                 if (nacionalidade.diretor !== undefined && !Array.isArray(nacionalidade.diretor)) {
                     return customMessage.ERROR_BAD_REQUEST
                 }
+
+                if (nacionalidade.ator !== undefined && !Array.isArray(nacionalidade.ator)) {
+                    return customMessage.ERROR_BAD_REQUEST
+                }
+
                 let result = await nacionalidadeDAO.insertNacionalidade(nacionalidade)
 
                 if (result) {
@@ -40,12 +46,27 @@ const inserirNovaNacionalidade = async function (nacionalidade, contentType) {
                                 "id_diretor": diretor.id,
                                 "id_nacionalidade": nacionalidade.id
                             }
+
                             let resultNacionalidadeDiretor = await controllerDiretorNacionalidade.inserirNovoDiretorNacionalidade(nacionalidadeDiretor)
                             if (!resultNacionalidadeDiretor.status) {
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
                             }
                         }
                     }
+
+                    if (Array.isArray(nacionalidade.ator)) {
+                        for (let ator of nacionalidade.ator) {
+                            let nacionalidadeAtor = {
+                                "id_ator": ator.id,
+                                "id_nacionalidade": nacionalidade.id
+                            }
+                            let resultNacionalidadeAtor = await controllerAtorNacionalidade.inserirNovoAtorNacionalidade(nacionalidadeAtor)
+                            if (!resultNacionalidadeAtor.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                            }
+                        }
+                    }
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -78,6 +99,11 @@ const atualizarNacionalidade = async function (nacionalidade, id, contentType) {
                     if (nacionalidade.diretor !== undefined && !Array.isArray(nacionalidade.diretor)) {
                         return customMessage.ERROR_BAD_REQUEST
                     }
+
+                    if (nacionalidade.ator !== undefined && !Array.isArray(nacionalidade.ator)) {
+                        return customMessage.ERROR_BAD_REQUEST
+                    }
+
                     nacionalidade.id = Number(id)
                     let result = await nacionalidadeDAO.updateNacionalidade(nacionalidade)
 
@@ -98,6 +124,24 @@ const atualizarNacionalidade = async function (nacionalidade, id, contentType) {
                                 }
                             }
                         }
+
+                        if (Array.isArray(nacionalidade.ator)) {
+                            let resultDeleteAtores = await controllerAtorNacionalidade.excluirAtoresIdNacionalidade(nacionalidade.id)
+                            if (resultDeleteAtores.status) {
+                                for (let ator of nacionalidade.ator) {
+                                    let nacionalidadeAtor = {
+                                        "id_ator": ator.id,
+                                        "id_nacionalidade": nacionalidade.id
+                                    }
+
+                                    let resultNacionalidadeAtor = await controllerAtorNacionalidade.inserirNovoAtorNacionalidade(nacionalidadeAtor)
+                                    if (!resultNacionalidadeAtor.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -138,6 +182,12 @@ const listarNacionalidade = async function () {
                     if (resultDiretores.status) {
                         nacionalidade.diretor = resultDiretores.response.diretor_nacionalidade
                     }
+
+                    let resultAtores = await controllerAtorNacionalidade.buscarAtorByIdNacionalidade(nacionalidade.id)
+
+                    if (resultAtores.status) {
+                        nacionalidade.ator = resultAtores.response.ator_nacionalidade
+                    }
                 }
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
@@ -174,7 +224,13 @@ const buscarNacionalidade = async function (id) {
                         if (resultNacionalidadeDiretor.status) {
                             nacionalidade.diretor = resultNacionalidadeDiretor.response.diretor_nacionalidade
                         }
+
+                        let resultNacionalidadeAtor = await controllerAtorNacionalidade.buscarAtorByIdNacionalidade(nacionalidade.id)
+                        if (resultNacionalidadeAtor.status) {
+                            nacionalidade.ator = resultNacionalidadeAtor.response.ator_nacionalidade
+                        }
                     }
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                     customMessage.DEFAULT_MESSAGE.response.nacionalidade = result

@@ -172,8 +172,8 @@ const AtualizarDiretor = async function (diretor, id, contentType) {
                     let result = await diretorDAO.updateDiretor(diretor)
 
                     if (result) {
-                        let resultDeleteFilmes = await controllerFilmeDiretor.excluirFilmesIdDiretor(diretor.id)
 
+                        let resultDeleteFilmes = await controllerFilmeDiretor.excluirFilmesIdDiretor(diretor.id)
                         if (resultDeleteFilmes.status) {
                             if (Array.isArray(diretor.filme)) {
                                 for (let filme of diretor.filme) {
@@ -373,7 +373,7 @@ const buscarDiretor = async function (id) {
                         let resultDiretorAtividade = await controllerDiretorAtividade.buscarAtividadeByIdDiretor(diretor.id)
                         if (resultDiretorAtividade.status) {
                             diretor.atividade = resultDiretorAtividade.response.diretor_atividade
-                        }''
+                        }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status

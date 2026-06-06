@@ -210,3 +210,17 @@ create table tbl_filme_ator (
     foreign key (id_ator)
     references	tbl_ator(id)
 );
+
+create table tbl_ator_nacionalidade (
+	id int not null auto_increment primary key,
+    id_ator int not null,
+    id_nacionalidade int not null,
+    
+    constraint 	FK_ATOR_ATORNACIONALIDADE
+    foreign key (id_ator)
+    references	tbl_ator(id),
+    
+    constraint 	FK_NACIONALIDADE_ATORNACIONALIDADE
+    foreign key (id_nacionalidade)
+    references	tbl_nacionalidade(id)
+);
