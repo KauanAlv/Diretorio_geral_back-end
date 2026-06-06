@@ -14,9 +14,11 @@ const atorDAO = require('../../model/DAO/ator/ator.js')
 
 //Import das Controlles
 const controllerSexo = require('../sexo/controller_sexo.js')
+const controllerFoto = require('../foto/controller_foto.js')
 
 const controllerFilmeAtor = require('../filme/controller_filme_ator.js')
 const controllerAtorNacionalidade = require('./controller_ator_nacionalidade.js')
+const controllerAtorFoto = require('./controller_ator_foto.js')
 
 const inserirNovoAtor = async function (ator, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
@@ -58,6 +60,22 @@ const inserirNovoAtor = async function (ator, contentType) {
 
                             //Validação para verificar se todos os itens de relacionamento foram inseridos
                             if (!resultAtorNacionalidade.status) {
+                                return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(ator.foto)) {
+                        for (let foto of ator.foto) {
+                            let atorFoto = {
+                                "id_ator": ator.id,
+                                "id_foto": foto.id
+                            }
+
+                            let resultAtorFoto = await controllerAtorFoto.inserirNovoAtorFoto(atorFoto)
+
+                            //Validação para verificar se todos os itens de relacionamento foram inseridos
+                            if (!resultAtorFoto.status) {
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201 com alerta de cadastro
                             }
                         }
@@ -130,6 +148,23 @@ const AtualizarAtor = async function (ator, id, contentType) {
                             }
                         }
 
+                        let resultDeleteFotos = await controllerAtorFoto.excluirFotosIdAtor(ator.id)
+                        if (resultDeleteFotos.status) {
+                            if (Array.isArray(ator.foto)) {
+                                for (let foto of ator.foto) {
+                                    let atorFoto = {
+                                        "id_ator": ator.id,
+                                        "id_foto": foto.id
+                                    }
+                                    let resultAtorFoto = await controllerAtorFoto.inserirNovoAtorFoto(atorFoto)
+
+                                    if (!resultAtorFoto.status) {
+                                        return customMessage.SUCCESS_CREATED_ITEM_WARNING // 201
+                                    }
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -178,6 +213,18 @@ const listarAtor = async function () {
                     let resultNacionalidades = await controllerAtorNacionalidade.buscarNacionalidadeByIdAtor(ator.id)
                     if (resultNacionalidades.status) {
                         ator.nacionalidade = resultNacionalidades.response.ator_nacionalidade
+                    }
+
+                    let resultFotos = await controllerAtorFoto.buscarFotosIdAtor(ator.id)
+                    if (resultFotos.status) {
+                        ator.foto = []
+                        for (let foto of resultFotos.response.ator_foto) {
+
+                            let dadosFoto = await controllerFoto.buscarFoto(foto.id)
+                            if (dadosFoto.status) {
+                                ator.foto = ator.foto.concat(dadosFoto.response.foto)
+                            }
+                        }
                     }
                 }
 
@@ -228,6 +275,11 @@ const buscarAtor = async function (id) {
                         if (resultAtorNacionalidade.status) {
                             ator.nacionalidade = resultAtorNacionalidade.response.ator_nacionalidade
                         }
+
+                        let resultAtorFoto = await controllerAtorFoto.buscarFotosIdAtor(ator.id)
+                        if (resultAtorFoto.status) {
+                            ator.foto = resultAtorFoto.response.ator_foto
+                        }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -262,7 +314,7 @@ const excluirAtor = async function (id) {
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
             }
         } else {
-            return resultBuscarClassificacao // (id) 400, 404, 500 da controller/model
+            return resultBuscarAtor // (id) 400, 404, 500 da controller/model
         }
     } catch (error) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller
@@ -298,6 +350,9 @@ const validarDados = async function (ator) {
         return customMessage.ERROR_BAD_REQUEST
 
     } else if (ator.nacionalidade !== undefined && !Array.isArray(ator.nacionalidade)) {
+        return customMessage.ERROR_BAD_REQUEST
+
+    } else if (ator.foto !== undefined && !Array.isArray(ator.foto)) {
         return customMessage.ERROR_BAD_REQUEST
 
     } else {

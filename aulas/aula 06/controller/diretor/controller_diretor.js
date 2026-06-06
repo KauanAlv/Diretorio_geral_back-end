@@ -408,7 +408,7 @@ const excluirDiretor = async function (id) {
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL // 500, na model
             }
         } else {
-            return resultBuscarClassificacao // (id) 400, 404, 500 da controller/model
+            return resultBuscarDiretor // (id) 400, 404, 500 da controller/model
         }
     } catch (error) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER // 500, na controller

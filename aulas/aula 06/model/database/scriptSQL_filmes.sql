@@ -224,3 +224,17 @@ create table tbl_ator_nacionalidade (
     foreign key (id_nacionalidade)
     references	tbl_nacionalidade(id)
 );
+
+create table tbl_ator_foto (
+	id int not null auto_increment primary key,
+    id_ator int not null,
+    id_foto int not null,
+    
+    constraint 	FK_ATOR_ATORFOTO
+    foreign key (id_ator)
+    references	tbl_ator(id),
+    
+    constraint 	FK_FOTO_ATORFOTO
+    foreign key (id_foto)
+    references	tbl_foto(id)
+);
