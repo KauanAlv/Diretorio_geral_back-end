@@ -1431,14 +1431,14 @@ components:
       content:
         application/json:
           schema:
-          $ref: '#/components/schemas/Classificacao'
+            $ref: '#/components/schemas/Classificacao'
 
     Diretor:
       description: Objeto que deve ser enviado no Body das requisições
       content:
         application/json:
           schema:
-          $ref: '#/components/schemas/Diretor'
+            $ref: '#/components/schemas/Diretor'
 
     Filme:
       description: Objeto que deve ser enviado no Body das requisições
@@ -1481,7 +1481,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/atorGet'
+            $ref: '#/components/schemas/AtorGet'
 
     DiretorGet:
       description: Objeto que deve ser enviado no Body das requisições
