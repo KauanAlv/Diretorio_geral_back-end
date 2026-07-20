@@ -1,4 +1,3 @@
-
 const express = require('express')        //Import do express
 const bodyParser = require('body-parser') //Import do bodyParser
 
@@ -6,7 +5,7 @@ const bodyParserJSON = bodyParser.json()  //Permitindo a utilização do JSON no
 
 const router = express.Router()           //Cria um objeto de rota para os Endpoints de gênero
 
-const controllerGenero = require('../controller/genero/controller_genero') //Import da controller do gênero
+const controllerGenero = require('../controller/genero/controller_genero.js') //Import da controller do gênero
 
 // ================= ENDPOINTS ====================
 router.post('/', bodyParserJSON, async function (request, response) {

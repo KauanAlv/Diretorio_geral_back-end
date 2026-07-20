@@ -20,12 +20,6 @@ const corsOptions = {
 //Aplica as configurações do CORS no app (EXPRESS)
 app.use(cors(corsOptions))
 
-//Import das controllers do projeto
-
-
-
-
-const controllerAtor = require('./controller/ator/controller_ator.js')
 
 // ================= ENDPOINTS =================
 
@@ -57,55 +51,13 @@ app.use('/v1/senai/locadora/sexo', cors(), sexoRouter)
 const classificacaoRouter = require('./routes/classificacao.router.js')
 app.use('/v1/senai/locadora/classificacao', cors(), classificacaoRouter)
 
-
 // ================= DIRETOR =====================
 const diretorRouter = require('./routes/diretor.router.js')
 app.use('/v1/senai/locadora/diretor', cors(), diretorRouter)
 
-
-
 // ================= ATOR =====================
-app.post('/v1/senai/locadora/ator', bodyParserJSON, async function (request, response) {
-    let dados = request.body
-    let contentType = request.headers['content-type']
-
-    let result = await controllerAtor.inserirNovoAtor(dados, contentType)
-    response.status(result.status_code)
-    response.json(result)
-})
-
-app.get('/v1/senai/locadora/ator', async function (request, response) {
-
-    let result = await controllerAtor.listarAtor()
-    response.status(result.status_code)
-    response.json(result)
-})
-
-app.get('/v1/senai/locadora/ator/:id', async function (request, response) {
-    let id = request.params.id
-
-    let result = await controllerAtor.buscarAtor(id)
-    response.status(result.status_code)
-    response.json(result)
-})
-
-app.put('/v1/senai/locadora/ator/:id', bodyParserJSON, async function (request, response) {
-    let dados = request.body
-    let id = request.params.id
-    let contentType = request.headers['content-type']
-
-    let result = await controllerAtor.AtualizarAtor(dados, id, contentType)
-    response.status(result.status_code)
-    response.json(result)
-})
-
-app.delete('/v1/senai/locadora/ator/:id', async function (request, response) {
-    let id = request.params.id
-
-    let result = await controllerAtor.excluirAtor(id)
-    response.status(result.status_code)
-    response.json(result)
-})
+const atorRouter = require('./routes/ator.router.js')
+app.use('/v1/senai/locadora/ator', cors(), atorRouter)
 
 // ================= START-API =================
 //Fazer o Start na API (aguardando as requisições)
