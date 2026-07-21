@@ -252,3 +252,36 @@ create table tbl_ator_atividade (
     foreign key (id_atividade)
     references	tbl_atividade(id)
 );
+
+-- ============================ TRIGGERS ============================
+
+DELIMITER $
+create trigger tgrDeleteFilme
+	before delete on tbl_filme
+		for each row
+			BEGIN
+				delete from tbl_filme_ator where id_filme = old.id;
+                delete from tbl_filme_genero where id_filme = old.id;
+                delete from tbl_filme_diretor where id_filme = old.id;
+            END$
+            
+create trigger tgrDeleteAtor
+	before delete on tbl_ator
+		for each row
+			BEGIN
+				delete from tbl_filme_ator where id_ator = old.id;
+                delete from tbl_ator_foto where id_ator = old.id;
+                delete from tbl_ator_atividade where id_ator = old.id;
+                delete from tbl_ator_nacionalidade where id_ator = old.id;
+            END$
+            
+create trigger tgrDeleteDiretor
+	before delete on tbl_diretor
+		for each row
+			BEGIN
+				delete from tbl_filme_diretor where id_diretor = old.id;
+                delete from tbl_diretor_foto where id_diretor = old.id;
+                delete from tbl_diretor_atividade where id_diretor = old.id;
+                delete from tbl_diretor_nacionalidade where id_diretor = old.id;
+            END$
+DELIMITER ;
